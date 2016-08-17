@@ -1,0 +1,14 @@
+<div>
+    <ion-row>
+        <ion-col width-10 class="navigator-icon" (click)="prev()" [ngClass]="{disable:!currentIndex}">
+            <ion-icon ios="ios-arrow-back" md="md-arrow-back"></ion-icon>
+        </ion-col>
+        <ion-col width-80>
+            <h2>{{model.subCategories[currentIndex].value}}</h2>
+            <span>{{model.subCategories[currentIndex].name}}</span>
+        </ion-col>
+        <ion-col width-10 class="navigator-icon" (click)="next()" [ngClass]="{disable:model.subCategories.length==currentIndex+1}">
+            <ion-icon ios="ios-arrow-forward" md="md-arrow-forward"></ion-icon>
+        </ion-col>
+    </ion-row>
+</div>

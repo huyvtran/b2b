@@ -1,0 +1,32 @@
+<ion-header>
+    <ion-navbar>
+        <button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>SP Quality Insights</ion-title>
+    </ion-navbar>
+    <div class="page-header">
+        <span class="title">CDETS Summary</span>
+    </div>
+</ion-header>
+<ion-content class="summary-page">
+    <collapsible-pane>
+        <span class="collapsible-pane-title">BUGS</span>
+        <div class="collapsible-pane-content">
+            <summary-detail [model]="selectedItem"></summary-detail>
+        </div>
+    </collapsible-pane>
+    <collapsible-pane>
+        <span class="collapsible-pane-title">By Customer Impact</span>
+        <div class="collapsible-pane-content">
+            <switch-view>
+                <div class="chart-view"><pie-chart></pie-chart></div>
+                <div class="list-view"><cap-list-view [model]="capList"></cap-list-view></div>
+            </switch-view>
+        </div>
+    </collapsible-pane>
+    <collapsible-pane>
+        <span class="collapsible-pane-title">Bug Trend</span>
+        <div class="collapsible-pane-content chart-container"><bar-chart></bar-chart></div>
+    </collapsible-pane>
+</ion-content>

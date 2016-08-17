@@ -1,0 +1,36 @@
+<ion-header>
+    <ion-navbar>
+        <button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+     <div class="page-header">
+        <span class="title">{{pageTitle}}</span>
+        <!-- <div>
+            <span style="display:inline-block;">Last refresh</span>
+            <span>{{lastRefreshed}}</span>
+        </div> -->
+    </div> 
+    </ion-navbar>
+   
+</ion-header>
+<ion-content class="summary-page">
+    <collapsible-pane [disableCollapsible]="true" (headerTapped)="headerTappedHandler($event)">
+        <span class="collapsible-pane-title">{{selectedItem.name}}</span>
+        <div class="collapsible-pane-content">
+            <summary-detail [model]="selectedItem" (selectionChanged)="selectionChangedHandler($event)"></summary-detail>
+        </div>
+    </collapsible-pane>
+    <collapsible-pane>
+        <span class="collapsible-pane-title">CAP Details: Service Provider</span>
+        <div class="collapsible-pane-content">
+            <switch-view>
+                <div class="chart-view chart-container"><pie-chart></pie-chart></div>
+                <div class="list-view"><cap-list-view [model]="capList"></cap-list-view></div>
+            </switch-view>
+        </div>
+    </collapsible-pane>
+    <collapsible-pane>
+        <span class="collapsible-pane-title">CAP Trend: Service Provider</span>
+        <div class="collapsible-pane-content chart-container"><bar-chart></bar-chart></div>
+    </collapsible-pane>
+</ion-content>

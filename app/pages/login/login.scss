@@ -1,0 +1,114 @@
+div.contentdiv {
+    position: relative;
+    background: url("img/login-background.png");
+    background-repeat: no-repeat;
+    padding: 35px;
+    background-origin: content-box;
+}
+.item-input.input-has-focus::after{
+	border-bottom-color: #ffffff !important;
+}
+.Service-Provider-Label{
+  color:#000000; font-size:20px; display: block; text-align: center;
+}
+.login-page{
+  ion-checkbox{
+    margin-right:10px;
+  }
+  .text-input{
+  text-align:center;
+  }
+
+  .item.item-checkbox .item-inner{
+    border:none;
+  }
+}
+@media all and (orientation:portrait) {
+ 
+  .screen{
+	position: relative;
+   // background: url('../../img/BG.png') no-repeat center center fixed;
+    -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+    background-size: cover; 
+    height:100%;
+
+    ion-item {
+     position: relative;
+     margin: 0 auto 10px auto;
+     //width: 68%;
+     //border-radius: 50px;
+     /* padding-right: 30px; */
+     padding-left: 16px;
+     font-size: 1.6rem;
+     font-weight: normal;
+     text-transform: none;
+     color: #000;
+     background-color: #fff;
+     box-shadow: none;
+
+    }
+}
+.logo{
+  text-align: center; 
+  padding:20px;
+}
+.screen-labels{
+  position: absolute;left: 0;top:25%;width: 100%;text-align: center;
+}
+.Back2Basics-Label{
+  color:#424242; margin-top:34px;display:block; font-size:35px; text-align: center;
+}
+.login-btn{
+  color:#0096d6; margin-top:20px;display:block;font-size:30px;
+}
+.cisco-logo{
+  left: 50%; margin-left: -49.5px;bottom: 3%;position: absolute; 
+}
+
+}
+@media all and (orientation:landscape) {
+
+  .screen{
+	position: relative;
+    background: url('../../img/BG.png') no-repeat center center fixed;
+    
+    height:100%;
+    padding:20px;
+    ion-item {
+     position: relative;
+     margin: 0 auto 10px auto;
+    // width: 80%;
+     border-radius: 50px;
+     /* padding-right: 30px; */
+     padding-left: 16px;
+     font-size: 1.6rem;
+     font-weight: normal;
+     text-transform: none;
+     color: #000;
+     background-color: #fff;
+     box-shadow: none;
+
+    }
+
+}
+ .logo{
+    height:100px;
+  text-align: center; 
+  //padding:20px;
+      width: 100px;
+    /* left: 50%; */
+    margin: 0 auto;
+}
+.Back2Basics-Label{
+  color:#0096d6; margin-top:0px;display:block; font-size:45px; text-align: center;
+}
+.login-btn{
+  color:#0096d6; margin-top:0px;display:block;font-size:21px;
+}
+.cisco-logo{
+  left: 50%; margin-left: -49.5px;bottom: 5px;position: absolute; 
+}
+
+}
