@@ -12,12 +12,12 @@ import { MenuController } from 'ionic-angular';
 export class HomePage {
 
 	cards = [];
-  lastRefreshed = ''; 
+  lastRefreshed = '';
   itemSelected = null;
-  pageTitle:string;   
-  constructor(private navCtrl:NavController, private b2bService:B2BService, private navParams: NavParams, private menuCtrl: MenuController) {          
-    let activeIndex = this.navParams.get('page');
-    this.pageTitle = activeIndex.name;
+  pageTitle:string;
+  constructor(private navCtrl:NavController, private b2bService:B2BService, private navParams: NavParams, private menuCtrl: MenuController) {
+    let product = this.navParams.get('page');
+    this.pageTitle = product.name;
     this.menuCtrl.swipeEnable(true);
     /*let loading = Loading.create({
         content: 'Please wait...'
@@ -25,11 +25,15 @@ export class HomePage {
       this.navCtrl.present(loading);
       loading.dismiss();
     */
-    b2bService.load().then(response => {      
-      this.cards = response.platforms[activeIndex.id-1].categories;      
+    //b2bService.load().then(response => {
+      //let product = response.products[activeIndex.ID-1];
+      this.cards = product.categories;
+       //this.cards.reverse();    // used for reversing the card order.
       this.lastRefreshed = new Date().toLocaleString()
-    })
+    //})
   }
+
+
 
   itemTapped(event, item) {
     this.navCtrl.push(PreferenceDetail,{
@@ -38,7 +42,7 @@ export class HomePage {
 
     }).then(res=>{
       this.itemSelected = null
-    });    
+    });
   }
 
   getItems(ev: any) {
@@ -54,5 +58,14 @@ export class HomePage {
       })
     }
   }
-  
+  correctName(label){
+    if(label.startsWith("SP ")){
+      var i = 3;
+      if(label.startsWith("SP -")){
+        i = 5;
+      }
+      return label.substring(i, label.length);
+    }
+    return label;
+  }
 }

@@ -14,8 +14,8 @@ import {NavParams} from 'ionic-angular';
 		  </thead>
 		  <tbody>
 			  <tr *ngFor="let m of model">
-			    <td>{{m.capId}}</td>
-			    <td>{{m.level}}</td>
+			    <td>{{m.caseNumber}}</td>
+			    <td>{{m.capLevel}}</td>
 			    <td>{{m.customer}}</td>
 			    <td>{{m.age}}</td>
 			  </tr>
@@ -34,3 +34,6 @@ export class CapListView  {
 		return this._model;
 	};
 }
+
+
+

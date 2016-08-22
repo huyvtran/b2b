@@ -1,9 +1,9 @@
 import { Component }        from '@angular/core';
-import { CHART_DIRECTIVES } from 'angular2-highcharts'; 
+import { CHART_DIRECTIVES } from 'angular2-highcharts';
 
 @Component({
     selector: 'bar-chart',
-    directives: [CHART_DIRECTIVES],    
+    directives: [CHART_DIRECTIVES],
     template: '<chart style="width:100%;height:200px" [options]="options"></chart>'
 })
 export class BarChart {
@@ -29,7 +29,7 @@ export class BarChart {
 	            }
 	        },
 	        yAxis: {
-	            min: 0,            
+	            min: 0,
 	            stackLabels: {
 	                enabled: false,
 	                style: {
@@ -38,7 +38,7 @@ export class BarChart {
 	                }
 	            }
 	        },
-	        
+
 	        tooltip: {
 	            headerFormat: '<b>{point.x}</b><br/>',
 	            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
@@ -57,14 +57,20 @@ export class BarChart {
 	        },
 	        series: [{
 	            name: 'A',
-	            data: [5, 3, 4, 7, 2]
+	            data: [308,]
 	        }, {
 	            name: 'M',
-	            data: [2, 2, 3, 2, 1]
+	            data: [123,316]
 	        }, {
 	            name: 'B',
-	            data: [3, 4, 4, 2, 5]
-	        }]
+	            data: [5,63,14,172,14,321,144,33,97,11,293]
+	        }, {
+	            name: 'ME',
+	            data: [175,718]
+	        }
+
+
+          ]
         };
     }
     options: Object;

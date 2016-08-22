@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 /*
@@ -11,12 +11,13 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class B2BService {
   data: any;
-  capListData:any
-  _platform:any
+  capListData:any;
+  trendsList:any;
+  _platform:any;
 
   constructor(private http: Http) {
     this.data = null;
-    this.capListData = null;
+    this.capListData = {};
   }
 
   load() {
@@ -27,41 +28,106 @@ export class B2BService {
 
     // don't have the data yet
     return new Promise((resolve, reject) => {
-      // We're using Angular Http provider to request the data,
-      // then on the response it'll map the JSON data to a parsed JS object.
-      // Next we process the data and resolve the promise with the new data.
-      //http://private-c58bd9-naveen4nkp.apiary-mock.com/getdashboard
-      this.http.get('mock-json/data.json')
-	  //this.http.get('http://wwwin-spb2b-stage.cisco.com/back2basics/webServices/getPlatformsSummary')
-        .map(res => res.json())
+    //this.http.get('mock-json/data.json')
+    var username = "skumar9@cisco.com";
+    var password = "Aug_2016";
+
+    var creds = "username=" + username + "&password=" + password;
+
+    var headers = new Headers();
+  
+    headers.append('Host', 'wwwin-spb2b.cisco.com')
+    headers.append('Authorization', 'Basic c2t1bWFyOTpBdWdfMjAxNg==');
+    headers.append('Cache-Control', 'no-cache')
+    this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld', {
+        headers: headers
+    })
+
+
+    .map(res => res.json())
         .subscribe(data => {
           // we've got back the raw data, now generate the core schedule data
           // and save the data for later reference
+          console.log("Got Data");
           this.data = data;
           resolve(this.data);
         },err => {
           // we've got back the raw data, now generate the core schedule data
           // and save the data for later reference
           //this.data = data;
-          reject(err);
+
+                    this.http.get('mock-json/data.json')
+                    .map(res => res.json())
+                        .subscribe(data => {
+                          // we've got back the raw data, now generate the core schedule data
+                          // and save the data for later reference
+                          console.log("THIS is STATIC DATA");
+                          this.data = data;
+                          resolve(this.data);
+                        },err => {
+                          // we've got back the raw data, now generate the core schedule data
+                          // and save the data for later reference
+                          //this.data = data;
+                          reject(err);
+                          });
+          //reject(err);
         });
     });
   }
 
-  loadCapList(){
-    if(this.capListData){
-      return Promise.resolve(this.capListData);
+  loadCapList(category, subCategory){
+    var productRef = "product_" + this._platform.ID;
+    if(this.capListData[productRef]){
+      if(this.capListData[productRef][category]){
+        if(this.capListData[productRef][category][subCategory]){
+          return Promise.resolve(this.capListData[productRef][category][subCategory]);
+        }
+      }else{
+          this.capListData[productRef][category] = {};
+      }
+    } else {      
+      this.capListData[productRef] = {};
+      this.capListData[productRef][category] = {};
     }
+
     return new Promise((resolve,reject)=>{
-      this.http.get('mock-json/cap-list.json')
+    var headers = new Headers();
+    headers.append('Host', 'wwwin-spb2b.cisco.com')
+    headers.append('Authorization', 'Basic c2t1bWFyOTpBdWdfMjAxNg==');
+    headers.append('Cache-Control', 'no-cache')
+     this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productSubCategoryDetails?productId='+ this._platform.ID +'&category='+category+'&subCategory='+subCategory, {
+        headers: headers
+      })
       .map(res => res.json())
       .subscribe(data => {
-        this.capListData = data;
-        resolve(this.capListData);
+        this.capListData[productRef][category][subCategory] = data;
+        resolve(this.capListData[productRef][category][subCategory]);
+        console.log("Got Data from API");
       },err => {
-        reject(err);
+        this.http.get('mock-json/caps_open.json')
+        .map(res => res.json())
+        .subscribe(data => {
+          console.log("Static Data");
+          this.capListData[productRef][category][subCategory] = data;
+          resolve(this.capListData[productRef][category][subCategory]);
+        },err => {
+         reject(err);
+        })
       })
     })
+  }
+
+  loadTrends(){   
+   return new Promise((resolve,reject)=>{
+     this.http.get('mock-json/TREND_data_provider.json')
+     .map(res => res.json())
+     .subscribe(data => {
+       this.trendsList = data;
+       resolve(this.trendsList);
+     },err => {
+       reject(err);
+     })
+   })
   }
 
   setSelectedPlatform(platform){
@@ -72,4 +138,3 @@ export class B2BService {
     return this._platform;
   }
 }
-

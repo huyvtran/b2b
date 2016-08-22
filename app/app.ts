@@ -12,14 +12,14 @@ import {CollapsiblePane} from './components/collapsible-pane/collapsible-pane';
 })
 class Back2Basic {
   @ViewChild(Nav) nav: Nav;
-  
+
   activePlateform:any;
   rootPage: any = LoginPage;
   plateforms: Array<{title: string}>;
 
   //preference = ['SP Quality Insights','MITG Communications','Mobility Business Group','NFV BU products','GSP Sales','Service Provider Video Software','Sale Connect','SE VT Show and Share'];
-  preference = ['CAPS','Calls','Cases','Defects','Deficiencies','Failure'];
-  
+  preference = ['CAPS','Cases','Defects ','Deficiencies','Customer Pain','Hardware Deficiencies'];
+
   constructor(
     private platform: Platform,
     private menu: MenuController,
@@ -29,7 +29,7 @@ class Back2Basic {
 
     // set our menu list
     this.b2bService.load().then(respone=>{
-      this.plateforms= respone.platforms;
+      this.plateforms= respone.products;
       this.activePlateform = this.plateforms[0];
       this.b2bService.setSelectedPlatform(this.activePlateform);
     });
@@ -41,16 +41,28 @@ class Back2Basic {
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
     });
-    
+
   }
 
   openPage(page) {
     // close the menu when clicking a link from the menu
     this.menu.close();
-    this.b2bService.setSelectedPlatform(page);    
+    this.b2bService.setSelectedPlatform(page);
     // navigate to the new page if it is not the current page
     this.nav.setRoot(HomePage,{page});
-  }  
+  }
+  //for removing SP and SP-
+  correctName(label){
+    if(label.startsWith("SP ")){
+      var i = 3;
+      if(label.startsWith("SP -")){
+        i = 5;
+      }
+      return label.substring(i, label.length);
+    }
+    return label;
+  }
+
 }
 
 ionicBootstrap(Back2Basic, [B2BService]);

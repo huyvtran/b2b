@@ -9,5 +9,30 @@
     .chart-container{
 		margin: 0 -16px;	
 	}
+
+    ion-item.item{
+        min-height: 4rem;
+
+        ion-label{
+            margin: 7px 8px 7px 0;
+        }
+
+        .item-inner{
+            border-bottom: none;
+        }
+    }
+
+    .list-view{
+        height: 110px;
+        overflow: auto;
+    }
+
+    summary-detail>div{
+        margin: -5px 0;
+    }
+
+    collapsible-pane:last-child .wrraper-container{
+        padding: 2px 16px;
+    }
 }
 

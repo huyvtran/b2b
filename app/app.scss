@@ -1,3 +1,6 @@
+ion-menu{
+    margin-top:57px;
+}
 .bar-button-default{
     background-color:rgb(66, 66, 66);
     color: #fff;
@@ -27,7 +30,7 @@
 
 
 .menu-list-container {
-    background-color: #424242;
+    background-color: #009edc;
 }
 
 .label {
@@ -56,4 +59,8 @@
 .checkmark{
     color:#424242;
     margin-right:5px;
+}
+ion-menu ion-item.item{
+    color: #fff;
+    background-color: #009edc;
 }

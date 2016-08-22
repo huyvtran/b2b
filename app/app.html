@@ -1,22 +1,22 @@
 <ion-menu [content]="content">
-    <ion-toolbar>
+    <!-- <ion-toolbar>
         <ion-title>Back2Basics</ion-title>
-    </ion-toolbar>
+    </ion-toolbar> -->
     <ion-content class="menu-list-container">
         <collapsible-pane [collapsed]="true">
             <span class="collapsible-pane-title">Product</span>
             <div class="collapsible-pane-content">
                 <ion-list class="navigation_icons">
-                    <ion-item *ngFor="let p of plateforms" (click)="openPage(p);activePlateform=p" class="menu-name" [ngClass]="{'active-menu':activePlateform.id==p.id}">
+                    <ion-item *ngFor="let p of plateforms" (click)="openPage(p);activePlateform=p" class="menu-name" [ngClass]="{'active-menu':activePlateform.ID==p.ID}">
                         <ion-icon name="checkmark" class="checkmark"></ion-icon>
-                        <ion-label>{{p.name}}</ion-label>
+                        <ion-label>{{correctName(p.name)}}</ion-label>
                     </ion-item>
                 </ion-list>
             </div>
         </collapsible-pane>
         <collapsible-pane [collapsed]="true">
             <span class="collapsible-pane-title">My Top 5 Customers</span>
-            <div class="collapsible-pane-content">                
+            <div class="collapsible-pane-content">
             </div>
         </collapsible-pane>
         <collapsible-pane [collapsed]="true">
@@ -30,10 +30,10 @@
                 </ion-list>
             </div>
         </collapsible-pane>
-        <ion-item class="menu-collapsible">Profile
-        </ion-item>
+        <!--<ion-item class="menu-collapsible">Profile
+        </ion-item> -->
         <div class="profile">
-            <img class="profile_icon" src="img/classprofile.jpg">
+            <img class="profile_icon" src="img/User-Icon.png">
             <ion-label class="label">My Profile</ion-label>
             <ion-label class="label">Help</ion-label>
             <ion-label class="label">Contact</ion-label>

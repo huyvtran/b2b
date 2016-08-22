@@ -14,10 +14,11 @@
 }
 .toolbar-background {
     border-color: #b2b2b2;
-    background: #009edc;
+    background: #fff;
 }
 .toolbar-title {
     color: #009edc;
+    font-size: large;
 }
 .info_search{
 	background-color: white;
@@ -31,25 +32,56 @@
     font-size: x-large;
 }
 .page-header{
-	color:#fff;
-	background-color:#009edc;
+	color:#009edc;
+	background-color:#fff;
 	height:48px;
 	display:table;
 	width:100%;
-	padding:0 20px;	
+	padding:0 20px;
 
 	span{
 		display: table-cell;
 		vertical-align: middle;
-		font-size: small;
-		&.title{
+		font-size: large;
+		&.title	{
 			font-size: large;
+			background-color: white;
+			color: #009edc;
+			text-align: center;
+    		padding-right: 20px;
 		}
 	}
 	div{
 		display: table-cell;
 		vertical-align: middle;
-	}	
+	}
+}
+.bar-button-default {
+	background-color: white //!important;
+}
+.header-info{
+	color:#009edc;
+	background-color:#fff;
+	height:48px;
+	display:table;
+	width:100%;
+
+
+	span{
+		display: table-cell;
+		vertical-align: middle;
+		font-size: large;
+		&.title	{
+			font-size: large;
+			background-color: #009edc;
+			color: white;
+			padding-left: 53px;
+		}
+	}
+	div{
+		display: table-cell;
+		vertical-align: middle;
+	}
 }
 .disable-hover.bar-button.bar-button-default.bar-button-menutoggle.bar-button-icon-only{
 	background-color: #009edc;
@@ -61,7 +93,7 @@
 ion-row > div.item-card{
 	flex:1;
 	border-right: 1px dotted gray;
-	text-align: center;	
+	text-align: center;
 
 	&:last-child{
 		border:none;
@@ -69,4 +101,35 @@ ion-row > div.item-card{
 }
 .warning{
     color:red;
+}
+@media only screen
+    and (max-device-width: 640px),
+    only screen and (max-device-width: 667px),
+    only screen and (max-width: 480px)
+{
+[padding] scroll-content{
+padding: 0px;
+
+
+ion-card{
+margin: 5px 12px;
+
+&:first-child{
+margin-top: 12px;
+}
+
+ion-card-header{
+padding: 8px;
+   font-size: 1.4rem;
+}
+
+ion-card-content{
+padding: 0px 9px 9px;
+}
+
+h1{
+font-size: 2rem;
+}
+}
+}
 }

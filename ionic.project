@@ -1,4 +1,10 @@
 {
   "name": "b2b",
   "app_id": ""
+  "proxies": [
+    {
+      "path": "/back2basics/webServices/productsSummaryOld",
+      "proxyUrl": "https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld"
+    }
+  ]
 }

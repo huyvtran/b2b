@@ -24,14 +24,14 @@ div.contentdiv {
   }
 }
 @media all and (orientation:portrait) {
- 
+
   .screen{
 	position: relative;
    // background: url('../../img/BG.png') no-repeat center center fixed;
     -webkit-background-size: cover;
    -moz-background-size: cover;
    -o-background-size: cover;
-    background-size: cover; 
+    background-size: cover;
     height:100%;
 
     ion-item {
@@ -51,7 +51,7 @@ div.contentdiv {
     }
 }
 .logo{
-  text-align: center; 
+  text-align: center;
   padding:20px;
 }
 .screen-labels{
@@ -64,7 +64,7 @@ div.contentdiv {
   color:#0096d6; margin-top:20px;display:block;font-size:30px;
 }
 .cisco-logo{
-  left: 50%; margin-left: -49.5px;bottom: 3%;position: absolute; 
+  left: 50%; margin-left: -49.5px;bottom: 5%;position: absolute; 
 }
 
 }
@@ -73,7 +73,7 @@ div.contentdiv {
   .screen{
 	position: relative;
     background: url('../../img/BG.png') no-repeat center center fixed;
-    
+
     height:100%;
     padding:20px;
     ion-item {
@@ -95,7 +95,7 @@ div.contentdiv {
 }
  .logo{
     height:100px;
-  text-align: center; 
+  text-align: center;
   //padding:20px;
       width: 100px;
     /* left: 50%; */
@@ -108,7 +108,7 @@ div.contentdiv {
   color:#0096d6; margin-top:0px;display:block;font-size:21px;
 }
 .cisco-logo{
-  left: 50%; margin-left: -49.5px;bottom: 5px;position: absolute; 
+  left: 50%; margin-left: -49.5px;bottom: 5px;position: absolute;
 }
 
 }
