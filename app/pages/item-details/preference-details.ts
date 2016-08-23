@@ -24,10 +24,6 @@ export class PreferenceDetail {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
     this.pageTitle = navParams.get('title');
-    
-    //this.b2bService.loadTrends().then(res=>{
-    //  this.trendsList = res['trendDetails'];
-   // })  
 
     this.b2bService.loadCapList(this.selectedItem.name, this.selectedItem.subCategories[0].name).then(res=>{
         this.capList = res.subCategoryDetails;
@@ -116,6 +112,8 @@ export class PreferenceDetail {
     return label;
   }
   // --------------------------
+
+
 
 
 }

@@ -29,13 +29,9 @@ export class B2BService {
     // don't have the data yet
     return new Promise((resolve, reject) => {
     //this.http.get('mock-json/data.json')
-    var username = "skumar9@cisco.com";
-    var password = "Aug_2016";
-
-    var creds = "username=" + username + "&password=" + password;
-
+    
     var headers = new Headers();
-  
+
     headers.append('Host', 'wwwin-spb2b.cisco.com')
     headers.append('Authorization', 'Basic c2t1bWFyOTpBdWdfMjAxNg==');
     headers.append('Cache-Control', 'no-cache')
@@ -85,7 +81,7 @@ export class B2BService {
       }else{
           this.capListData[productRef][category] = {};
       }
-    } else {      
+    } else {
       this.capListData[productRef] = {};
       this.capListData[productRef][category] = {};
     }
@@ -117,7 +113,7 @@ export class B2BService {
     })
   }
 
-  loadTrends(){   
+  loadTrends(){
    return new Promise((resolve,reject)=>{
      this.http.get('mock-json/TREND_data_provider.json')
      .map(res => res.json())

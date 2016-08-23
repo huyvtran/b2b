@@ -25,7 +25,7 @@ export class PieChart {
             },
             series: [{
                 type:'pie',
-                data: [{name:"A", y: 1},{name:"B", y: 11},{name:"M", y: 2},{name:"ME", y: 2}],
+                data: [{name:"ME", y: 2},{name:"M", y: 2},{name:"B", y: 11}, {name:"A",y:1}],
             }],
             plotOptions: {
                 pie: {

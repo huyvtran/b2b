@@ -4,7 +4,7 @@
     </ion-toolbar> -->
     <ion-content class="menu-list-container">
         <collapsible-pane [collapsed]="true">
-            <span class="collapsible-pane-title">Product</span>
+            <span class="collapsible-pane-title" >Product</span>
             <div class="collapsible-pane-content">
                 <ion-list class="navigation_icons">
                     <ion-item *ngFor="let p of plateforms" (click)="openPage(p);activePlateform=p" class="menu-name" [ngClass]="{'active-menu':activePlateform.ID==p.ID}">
@@ -15,9 +15,8 @@
             </div>
         </collapsible-pane>
         <collapsible-pane [collapsed]="true">
-            <span class="collapsible-pane-title">My Top 5 Customers</span>
-            <div class="collapsible-pane-content">
-            </div>
+            <span class="collapsible-pane-title" style="color:grey">My Top 5 Customers</span>
+            <div class="collapsible-pane-content" ></div>
         </collapsible-pane>
         <collapsible-pane [collapsed]="true">
             <span class="collapsible-pane-title">Preferences</span>
