@@ -19,10 +19,7 @@ export class CapDetails {
   capList = [];  
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService:B2BService, public platform: Platform ) {
     // If we navigated to this page, we will have an item available as a nav param
-    this.selectedItem = navParams.get('item');
-    this.b2bService.loadCapList().then(res=>{
-    	this.capList = res.capDetails;
-    })
+    this.selectedItem = navParams.get('item');    
   }
 
   headerTappedHandler(event){

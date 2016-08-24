@@ -112,7 +112,47 @@ export class B2BService {
       })
     })
   }
+  loadOtherList(category, subCategory){
+    var productRef = "product_" + this._platform.ID;
+    if(this.capListData[productRef]){
+      if(this.capListData[productRef][category]){
+        if(this.capListData[productRef][category][subCategory]){
+          return Promise.resolve(this.capListData[productRef][category][subCategory]);
+        }
+      }else{
+          this.capListData[productRef][category] = {};
+      }
+    } else {
+      this.capListData[productRef] = {};
+      this.capListData[productRef][category] = {};
+    }
 
+    return new Promise((resolve,reject)=>{
+    var headers = new Headers();
+    headers.append('Host', 'wwwin-spb2b.cisco.com')
+    headers.append('Authorization', 'Basic c2t1bWFyOTpBdWdfMjAxNg==');
+    headers.append('Cache-Control', 'no-cache')
+     this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productSubCategoryDetails?productId='+ this._platform.ID +'&category='+category+'&subCategory='+subCategory, {
+        headers: headers
+      })
+      .map(res => res.json())
+      .subscribe(data => {
+        this.capListData[productRef][category][subCategory] = data;
+        resolve(this.capListData[productRef][category][subCategory]);
+        console.log("Got Data from API");
+      },err => {
+        this.http.get('mock-json/'+category+'_'+subCategory+'.json')
+        .map(res => res.json())
+        .subscribe(data => {
+          console.log("Static Data");
+          this.capListData[productRef][category][subCategory] = data;
+          resolve(this.capListData[productRef][category][subCategory]);
+        },err => {
+         reject(err);
+        })
+      })
+    })
+  }
   loadTrends(){
    return new Promise((resolve,reject)=>{
      this.http.get('mock-json/TREND_data_provider.json')

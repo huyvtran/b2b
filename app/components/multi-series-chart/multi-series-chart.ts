@@ -4,7 +4,7 @@ import { CHART_DIRECTIVES } from 'angular2-highcharts';
 @Component({
     selector: 'multi-chart',
     directives: [CHART_DIRECTIVES],    
-    template: '<chart style="width:100%;height:200px" [options]="options"></chart>'
+    template: '<chart style="width:100%;height:150px" [options]="options"></chart>'
 })
 export class MultiSeriesChart {
 
@@ -38,7 +38,7 @@ export class MultiSeriesChart {
     		if(object['xAxis'].indexOf(data[i].date)==-1){
     			object['xAxis'].push(data[i].date);	
     		}
-    		object[data[i].trendType].push(data[i].value);
+    		object[data[i].trendType] && object[data[i].trendType].push(data[i].value);
     	}
 		return object;
     }
@@ -50,14 +50,15 @@ export class MultiSeriesChart {
 		        enabled: false
 		    },
 	        chart: {
-	            zoomType: 'xy'
+	            zoomType: 'xy',
+	            backgroundColor:'#f2f3f2'
 	        },
 	        title: {
 	        	text: '',
 			    style: {
 			        display: 'none'
 			    }
-	        },
+	        },	        
 	        xAxis: {
 	            categories: obj.xAxis,
 	            tickInterval:2
@@ -86,6 +87,7 @@ export class MultiSeriesChart {
 	            type: 'spline',
 	            color: '#009edc',           
 	            data: obj.Open,
+	            yAxis: 1,
 	            marker: {
                     enabled: false
                 }          

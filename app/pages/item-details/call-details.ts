@@ -20,9 +20,9 @@ export class CallDetails {
   constructor(private navCtrl: NavController, navParams: NavParams,private b2bService:B2BService) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
-    this.b2bService.loadCapList().then(res=>{
+    /*this.b2bService.loadCapList().then(res=>{
     	this.capList = res.caps;
-    })
+    })*/
   }  
 }
 

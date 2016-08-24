@@ -1,13 +1,32 @@
-import { Component }        from '@angular/core';
+import { Component, Input }        from '@angular/core';
 import { CHART_DIRECTIVES } from 'angular2-highcharts';
 
 @Component({
     selector: 'pie-chart',
     directives: [CHART_DIRECTIVES],
-    template: '<chart style="width:80%;height:200px" [options]="options"></chart>'
+    template: '<chart style="width:100%;height:178px" [options]="options"></chart>'
 })
 export class PieChart {
-    constructor() {
+    private _data=[];   
+    @Input()
+    set dataProvider(data){        
+        this._data = data;
+        if(this.dataProvider.length){
+            this.renderChart();
+        }
+    }
+
+    get dataProvider(){
+        return this._data;
+    }
+
+    constructor() {        
+        if(this.dataProvider.length){
+            this.renderChart();
+        }
+    }
+    
+    renderChart() {        
         this.options = {
             title: {
                 text: '',
@@ -15,6 +34,7 @@ export class PieChart {
                     display: 'none'
                 }
             },
+            colors: ['#4AF616', '#F64A16', '#0ECDFD', '#FFF000', '#F00E00', '#FFF0EE'],
             subtitle : { text : 'Level' },
             credits: {
                 enabled: false
@@ -25,24 +45,35 @@ export class PieChart {
             },
             series: [{
                 type:'pie',
-                data: [{name:"ME", y: 2},{name:"M", y: 2},{name:"B", y: 11}, {name:"A",y:1}],
+                colorByPoint: true,
+                data: this.dataProvider                
             }],
             plotOptions: {
                 pie: {
                     dataLabels: {
-                        enabled: true,
-                        format: "<span>{point.name}</span><br><em>{point.y}</em>",
-                        distance: -20,
-                        style: { fontFamily: '\'Lato\', sans-serif', lineHeight: '18px', fontSize: '17px', fontWeight:'normal' }
+                        enabled: false,
+                        formatter:function(){
+                            let str = this.point.name;
+                            if(str.length>8){
+                                str = str.match(/\b([A-Z])/g).join('');
+                            }
+                            return '<span>'+str+'</span><em>('+this.point.y+')</em>';  
+                        },
+                        distance: 10,
+                        style: { fontFamily: '\'Lato\', sans-serif', lineHeight: '16px', fontSize: '14px', fontWeight:'normal' }
                     },
                     showInLegend: true
                 }
             },
             legend: {
                 layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle',
-                floating: false
+                align: 'left',
+                verticalAlign: 'top',
+                useHTML:true,
+                labelFormatter: function() {
+                  let label = this.name.length>8?this.name.match(/\b([A-Z])/g).join(''):this.name;
+                  return label +" "+this.y;
+                }
             }
         };
     }

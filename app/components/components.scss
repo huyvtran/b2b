@@ -45,6 +45,17 @@ cap-list-view{
         }
     }
 }
+generic-list-view{
+    table{        
+        tr{
+            border-bottom:1px solid grey;            
+            td,th{
+                padding:5px;
+                text-align: left;
+            }
+        }
+    }
+}
 
 summary-detail{
     ion-col{

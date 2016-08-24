@@ -23,7 +23,7 @@
     }
 
     .list-view{
-        height: 110px;
+        height: 178px;
         overflow: auto;
     }
 
@@ -33,5 +33,17 @@
 
     collapsible-pane:last-child .wrraper-container{
         padding: 2px 16px;
+    }
+}
+
+.list-view {
+    table{        
+        tr{
+            border-bottom:1px solid grey;            
+            td,th{
+                padding:5px;
+                text-align: left;
+            }
+        }
     }
 }

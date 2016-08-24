@@ -22,23 +22,24 @@
     </div>
 </ion-header>
 <ion-content class="summary-page">
-    <collapsible-pane [disableCollapsible]="true" (headerTapped)="headerTappedHandler($event)">
+    <collapsible-pane [disableCollapsible]="true">
         <span class="collapsible-pane-title">{{selectedItem.name}}</span>
         <div class="collapsible-pane-content">
             <summary-detail [model]="selectedItem" (selectionChanged)="selectionChangedHandler($event)"></summary-detail>
         </div>
     </collapsible-pane>
     <collapsible-pane>
-        <span class="collapsible-pane-title">CAP Details: Service Provider</span>
+        <span class="collapsible-pane-title">{{tableHeaderText}}</span>
         <div class="collapsible-pane-content">
             <switch-view>
-                <div class="chart-view chart-container"><pie-chart></pie-chart></div>
-                <div class="list-view"><cap-list-view [model]="capList"></cap-list-view></div><!--max-height to set here overflow-->
+                <div class="chart-view chart-container"><pie-chart [dataProvider]="pieChartDataProvider"></pie-chart></div>
+                <div *ngIf='selectedItem.name==="CAPS"' class="list-view"><cap-list-view [model]="capList"></cap-list-view></div> <!--max-height to set here overflow-->
+                <div *ngIf='selectedItem.name!="CAPS"' class="list-view"><generic-list-view [model]="capList"></generic-list-view></div>
             </switch-view>
         </div>
     </collapsible-pane>
     <collapsible-pane>
-        <span class="collapsible-pane-title">CAP Trend: Service Provider</span>
+        <span class="collapsible-pane-title">{{chartHeaderText}}</span>
         <div class="collapsible-pane-content chart-container"><multi-chart [dataProvider]="trendsList"></multi-chart></div>
     </collapsible-pane>
 </ion-content>
