@@ -1,29 +1,27 @@
 <ion-header>
-    <ion-navbar >
+    <ion-navbar>
         <button menuToggle>
             <ion-icon name="menu" md="md-menu"></ion-icon>
             <!-- <img src="../../img/menu-icon.png"/> -->
         </button>
-       <div class="page-header">
-        <span class="title" [hidden]="enableSearch">Back To Basics</span>
-        <ion-input [hidden]="!enableSearch" type="username" placeholder="| Search here ..." style="background-color: white;
-            width: 82%; margin-top: 3px;color: black;"></ion-input>
-        <ion-icon class="info-icon" ios="ios-search" md="md-search" (click)="enableSearch = !enableSearch"></ion-icon>
-    </div>
-
+        <div class="page-header">
+            <span class="title" [hidden]="enableSearch">Back To Basics</span>
+            <!-- <ion-input [hidden]="!enableSearch" type="username" placeholder="| Search here ..." style="background-color: white;
+            width: 82%; margin-top: 3px;color: black;"></ion-input> -->
+            <ion-searchbar [hidden]="!enableSearch" (ionInput)="getItems($event)"></ion-searchbar>
+            <ion-icon class="info-icon" ios="ios-search" md="md-search" (click)="enableSearch = !enableSearch"></ion-icon>
+        </div>
     </ion-navbar>
     <div class="header-info">
         <span class="title">{{correctName(pageTitle)}}</span>
-        <div class="info-logo" style="background-color: #009edc; text-align: right;
+        <div (click)="showToast('Part of next release', 'bottom')"class="info-logo" style="background-color: #009edc; text-align: right;
     padding-right: 5px;">
-            <img style="width: 32%" src="./img/info-icon.png"/>
-
+            <img style="width: 32%" src="./img/info-icon.png" />
         </div>
     </div>
     <!-- <ion-searchbar [(ng-model)]="defaultSearch"></ion-searchbar> -->
 </ion-header>
 <ion-content padding class="getting-started">
-
     <ion-list>
         <ion-card *ngFor="let c of cards" (click)="itemTapped($event, c)">
             <ion-card-header class="card-header">

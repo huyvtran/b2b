@@ -4,15 +4,15 @@
             <ion-icon name="menu"></ion-icon>
         </button>
         <div class="page-header">
-            <span class="title" [hidden]="enableSearch">Back To Basics</span>
-            <ion-input [hidden]="!enableSearch" type="username" placeholder="Information area" style="background-color: white;
-            width: 82%; margin-top: 3px;color: black;"></ion-input>
-            <ion-icon class="info-icon" ios="ios-search" md="md-search" (click)="enableSearch = !enableSearch"></ion-icon>
+            <span class="title" >Back To Basics</span>
+            <!-- <ion-input type="username" placeholder="Information area" style="background-color: white;
+            width: 82%; margin-top: 3px;color: black;"></ion-input> -->
+            <ion-icon class="info-icon" ios="ios-search" md="md-search" (click)="showToast('Part of next release', 'bottom')"></ion-icon>
         </div>
     </ion-navbar>
     <div class="header-info">
         <span class="title">{{correctName(pageTitle)}}</span>
-        <div class="info-logo" style="background-color: #009edc; text-align: right;
+        <div (click)="showToast('Part of next release', 'bottom')" class="info-logo" style="background-color: #009edc; text-align: right;
     padding-right: 5px;">
             <img style="width: 32%" src="./img/info-icon.png" />
         </div>
@@ -20,15 +20,36 @@
 </ion-header>
 <ion-content class="summary-page">
     <collapsible-pane [disableCollapsible]="true">
-        <span class="collapsible-pane-title">{{selectedItem.name}}</span>
+        <span class="collapsible-pane-title">{{selectedItem.name.toUpperCase()}}</span>
         <div class="collapsible-pane-content">
             <summary-detail [model]="selectedItem" (selectionChanged)="selectionChangedHandler($event)"></summary-detail>
         </div>
     </collapsible-pane>
+    <div class="no-data" [hidden]="isVisible">
+        <img style="width: 16%" src="./img/a.png" />
+        <label style="color: grey; display: block">No Data Available</label>
+    </div>
     <collapsible-pane>
         <span class="collapsible-pane-title">{{tableHeaderText}}</span>
         <div class="collapsible-pane-content">
-            <switch-view>
+			<div class="list-view" *ngIf="selectedSubCategory=='Resolve Time'">
+				<table style="width:100%">
+					<thead>
+						<tr>
+							<th>CFD</th>
+							<th>SR Related</th>
+														 
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let m of casesList">                                
+							<td>{{m.subType}}</td>
+							<td>{{m.value}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div> 
+            <switch-view *ngIf="selectedSubCategory!='Resolve Time'">
                 <div class="chart-view chart-container">
                     <pie-chart *ngIf="pieChartDataProvider.length>1" [dataProvider]="pieChartDataProvider"></pie-chart>
                 </div>
@@ -36,8 +57,8 @@
                     <table style="width:100%">
                         <thead>
                             <tr>
-                                <th>Top Customers</th>
-                                <th>Interaction in Last 90 days</th>                                
+                                <th>Impact Characterization</th>
+                                <th>Deficiencies</th>                                
                             </tr>
                         </thead>
                         <tbody>
@@ -52,8 +73,8 @@
                     <table style="width:100%">
                         <thead>
                             <tr>
-                                <th>CFD</th>
-                                <th>SR Related</th>
+                                <th>Impact Characterization</th>
+                                <th>Resolution Time(Days)</th>
                                                              
                             </tr>
                         </thead>
@@ -69,8 +90,8 @@
                     <table style="width:100%">
                         <thead>
                             <tr>
-                                <th>CFD</th>
-                                <th>SR Related</th>
+                                <th>Critical Impact</th>
+                                <th># of Deficiencies</th>
                                                           
                             </tr>
                         </thead>

@@ -5,6 +5,8 @@ import {LoginPage} from './pages/login/login';
 import {B2BService} from './providers/b2b-service/b2b-service';
 import {HomePage} from './pages/home/home';
 import {CollapsiblePane} from './components/collapsible-pane/collapsible-pane';
+import {Toast} from 'ionic-native';
+declare var window: any;
 
 @Component({
   templateUrl: 'build/app.html',
@@ -16,6 +18,7 @@ class Back2Basic {
   activePlateform:any;
   rootPage: any = LoginPage;
   plateforms: Array<{title: string}>;
+
 
   //preference = ['SP Quality Insights','MITG Communications','Mobility Business Group','NFV BU products','GSP Sales','Service Provider Video Software','Sale Connect','SE VT Show and Share'];
   preference = ['CAPS','Cases','Defects ','Deficiencies','Customer Pain','Hardware Deficiencies'];
@@ -43,7 +46,13 @@ class Back2Basic {
     });
 
   }
-
+  showToast(message, position) {
+      Toast.show(message, "short", position).subscribe(
+          toast => {
+              console.log(toast);
+          }
+      );
+  }
   openPage(page) {
     // close the menu when clicking a link from the menu
     this.menu.close();
@@ -61,6 +70,9 @@ class Back2Basic {
       return label.substring(i, label.length);
     }
     return label;
+  }
+  exitApp(){
+     this.platform.exitApp();
   }
 
 }

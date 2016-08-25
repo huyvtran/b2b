@@ -41,7 +41,7 @@ export class PieChart {
             },
             chart:{
                 backgroundColor:'#f2f3f2',
-                marginBottom:-10
+                marginBottom:0
             },
             series: [{
                 type:'pie',
@@ -51,15 +51,15 @@ export class PieChart {
             plotOptions: {
                 pie: {
                     dataLabels: {
-                        enabled: false,
+                        enabled: true,
                         formatter:function(){
                             let str = this.point.name;
                             if(str.length>8){
                                 str = str.match(/\b([A-Z])/g).join('');
                             }
-                            return '<span>'+str+'</span><em>('+this.point.y+')</em>';  
+                            return '<em>'+this.point.y+'</em>';  
                         },
-                        distance: 10,
+                        distance: 8,
                         style: { fontFamily: '\'Lato\', sans-serif', lineHeight: '16px', fontSize: '14px', fontWeight:'normal' }
                     },
                     showInLegend: true
@@ -72,7 +72,7 @@ export class PieChart {
                 useHTML:true,
                 labelFormatter: function() {
                   let label = this.name.length>8?this.name.match(/\b([A-Z])/g).join(''):this.name;
-                  return label +" "+this.y;
+                  return label;
                 }
             }
         };

@@ -9,7 +9,7 @@ import {SwitchViewContainer} from '../../components/switch-view/switch-view';
 import {CapListView} from '../../components/cap-list-view/cap-list-view';
 import {GenericListView} from '../../components/generic-list-view/generic-list-view';
 import {B2BService} from '../../providers/b2b-service/b2b-service';
-
+import {Toast} from 'ionic-native';
 
 @Component({
   templateUrl: 'build/pages/item-details/preference-details.html',
@@ -23,9 +23,13 @@ export class PreferenceDetail {
   pieChartDataProvider = [];
   tableHeaderText:string;
   chartHeaderText:string;
+  isVisible: boolean;
+  subCategories:string;
+
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
+	  this.subCategories = "Open";
     this.pageTitle = navParams.get('title');
     this.initializeData({ value: 0 });
   }
@@ -36,11 +40,11 @@ export class PreferenceDetail {
       for (let i = 0; i < data.length; i++) {
           let t = data[i].capLevel || data[i].subType;
           if (tmpObj[t]) {
-              tmpObj[t].y += data[i].age;
+              tmpObj[t].y++;
           } else {
               tmpObj[t] = {
                   name: t,
-                  y: data[i].age
+                  y: 1
               }
           }
       }
@@ -55,6 +59,11 @@ export class PreferenceDetail {
       this.capList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
+      if(parseInt(this.selectedItem.subCategories[data.value].value, 10)>0){
+        this.isVisible=true;
+      }else{
+        this.isVisible=false;
+      }
       if(this.selectedItem.subCategories[data.value].name == "Resolve Time"){        
        
         this.chartHeaderText="Age Distribution of CAPs by Level"
@@ -66,8 +75,16 @@ export class PreferenceDetail {
 
     })
   }
+   showToast(message, position) {
+      Toast.show(message, "short", position).subscribe(
+          toast => {
+              console.log(toast);
+          }
+      );
+  }
   selectionChangedHandler(data) {
     this.initializeData(data);
+	this.subCategories = this.selectedItem.subCategories[data.value].name;
   }
 
   //for removing SP and SP-

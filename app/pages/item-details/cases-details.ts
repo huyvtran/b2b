@@ -7,7 +7,7 @@ import {SummaryDetail} from '../../components/summary-detail/summary-detail';
 import {CollapsiblePane} from '../../components/collapsible-pane/collapsible-pane';
 import {SwitchViewContainer} from '../../components/switch-view/switch-view';
 import {B2BService} from '../../providers/b2b-service/b2b-service';
-
+import {Toast} from 'ionic-native';
 
 @Component({
   templateUrl: 'build/pages/item-details/cases-details.html',
@@ -22,7 +22,7 @@ export class CasesDetails {
   pieChartDataProvider = [];
   tableHeaderText:string;
   chartHeaderText:string;
-
+  isVisible: boolean;
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
@@ -33,9 +33,14 @@ export class CasesDetails {
   initializeData(data) {
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
        this.chartHeaderText="Incoming and Open Case Trend";
+        if(parseInt(this.selectedItem.subCategories[data.value].value, 10)>0){
+        this.isVisible=true;
+      }else{
+        this.isVisible=false;
+      }
       if(this.selectedSubCategory == "Resolve Time"){        
         this.casesList = this.prepareDataForTable(res.subCategoryDetails);
-       
+        this.chartHeaderText="Cumulative Resolution Trend";
         this.tableHeaderText="Case "+"Resolution Time";
       }else{
         this.casesList = res.subCategoryDetails;
@@ -56,9 +61,9 @@ export class CasesDetails {
       var preparedData = [];
       for (let i = 0; i < data.length; i++) {
           let t = data[i].subType;
-          if (tmpObj[t]) {
+          if (tmpObj[t] && data[i].type != "Close Time") {
               tmpObj[t].y += (isNaN(data[i].value)?0:data[i].value);
-          } else {
+          } else if(data[i].type != "Close Time"){
               tmpObj[t] = {
                   name: t,
                   y: isNaN(data[i].value)?0:(+data[i].value)
@@ -66,7 +71,7 @@ export class CasesDetails {
           }
       }
       for (let i in tmpObj) {
-          preparedData.push(tmpObj[i]);
+          i != "Others" && preparedData.push(tmpObj[i]);
       }
       return preparedData;
   }
@@ -104,5 +109,12 @@ export class CasesDetails {
       return label.substring(i, label.length);
     }
     return label;
+  }
+   showToast(message, position) {
+      Toast.show(message, "short", position).subscribe(
+          toast => {
+              console.log(toast);
+          }
+      );
   }
 }

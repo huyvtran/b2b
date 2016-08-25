@@ -7,7 +7,7 @@ import {SummaryDetail} from '../../components/summary-detail/summary-detail';
 import {CollapsiblePane} from '../../components/collapsible-pane/collapsible-pane';
 import {SwitchViewContainer} from '../../components/switch-view/switch-view';
 import {B2BService} from '../../providers/b2b-service/b2b-service';
-
+import {Toast} from 'ionic-native';
 
 @Component({
   templateUrl: 'build/pages/item-details/hardware-return-details.html',
@@ -22,6 +22,7 @@ export class HardwareDetails {
   pieChartDataProvider = [];
   tableHeaderText:string;
   chartHeaderText:string;
+   isVisible: boolean;
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
@@ -34,6 +35,13 @@ export class HardwareDetails {
       this.casesList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       //this.trendsList = res.trendDetails;
+       if(parseInt(this.selectedItem.subCategories[data.value].value, 10)>0){
+        this.isVisible=true;
+      }else{
+        this.isVisible=false;
+      }
+
+      this.trendsList = res.trendDetails;
       if(this.selectedItem.subCategories[data.value].name == "Resolve Time"){        
        
         this.chartHeaderText="RMA Resolution Trend"
@@ -41,8 +49,8 @@ export class HardwareDetails {
       }
       else if(this.selectedItem.subCategories[data.value].name == "Open"){        
        
-         this.chartHeaderText="Resolution Trend"
-        this.tableHeaderText="Open "+"RMAs";
+         this.chartHeaderText="In Process RMA Trend"
+        this.tableHeaderText="In Process "+"RMAs";
       }
       else{
         this.chartHeaderText="Resolution Trend"
@@ -71,7 +79,7 @@ export class HardwareDetails {
           }
       }
       for (let i in tmpObj) {
-          preparedData.push(tmpObj[i]);
+          i != "Others" && preparedData.push(tmpObj[i]);
       }
       return preparedData;
   }
@@ -86,5 +94,13 @@ export class HardwareDetails {
       return label.substring(i, label.length);
     }
     return label;
+  }
+
+   showToast(message, position) {
+      Toast.show(message, "short", position).subscribe(
+          toast => {
+              console.log(toast);
+          }
+      );
   }
 }
