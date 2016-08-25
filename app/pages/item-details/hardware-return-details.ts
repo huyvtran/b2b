@@ -22,13 +22,15 @@ export class HardwareDetails {
   pieChartDataProvider = [];
   tableHeaderText:string;
   chartHeaderText:string;
+  selectedIndex:number;
    isVisible: boolean;
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
-    this.selectedSubCategory = this.selectedItem.subCategories[0].name;
+	this.selectedIndex = navParams.get('index');
+    this.selectedSubCategory = this.selectedItem.subCategories[this.selectedIndex].name;
     this.pageTitle = navParams.get('title');
-    this.initializeData({ value: 0 });
+    this.initializeData({ value: this.selectedIndex });
   }
   initializeData(data) {
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {

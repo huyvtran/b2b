@@ -22,7 +22,7 @@
     <collapsible-pane [disableCollapsible]="true">
         <span class="collapsible-pane-title">{{selectedItem.name.toUpperCase()}}</span>
         <div class="collapsible-pane-content">
-            <summary-detail [model]="selectedItem" (selectionChanged)="selectionChangedHandler($event)"></summary-detail>
+            <summary-detail [model]="selectedItem" [currentIndex]="selectedIndex" (selectionChanged)="selectionChangedHandler($event)"></summary-detail>
         </div>
     </collapsible-pane>
     <div class="no-data" [hidden]="isVisible">

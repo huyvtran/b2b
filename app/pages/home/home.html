@@ -23,13 +23,13 @@
 </ion-header>
 <ion-content padding class="getting-started">
     <ion-list>
-        <ion-card *ngFor="let c of cards" (click)="itemTapped($event, c)">
+        <ion-card *ngFor="let c of cards">
             <ion-card-header class="card-header">
                 {{c.name.toUpperCase()}}
             </ion-card-header>
             <ion-card-content>
                 <ion-row wrap>
-                    <div class="item-card" [hidden]="c.subCategories.length==0" *ngFor="let v of c.subCategories">
+                    <div (click)="itemTapped($event, c, i)" class="item-card" [hidden]="c.subCategories.length==0" *ngFor="let v of c.subCategories; let i = index">
                         <h1 [ngClass]="{warning:c.name=='CAPS'}">{{v.value}}</h1>
                         <span>{{v.name}}</span>
                     </div>

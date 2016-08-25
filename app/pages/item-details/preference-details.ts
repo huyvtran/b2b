@@ -25,13 +25,15 @@ export class PreferenceDetail {
   chartHeaderText:string;
   isVisible: boolean;
   subCategories:string;
-
+  selectedIndex:number;
+  
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
-	  this.subCategories = "Open";
-    this.pageTitle = navParams.get('title');
-    this.initializeData({ value: 0 });
+	this.selectedIndex = navParams.get('index');
+	this.subCategories = this.selectedItem.subCategories[this.selectedIndex].name;
+    this.pageTitle = navParams.get('title');	
+    this.initializeData({ value:  this.selectedIndex});
   }
 
    prepareChartData(data) {

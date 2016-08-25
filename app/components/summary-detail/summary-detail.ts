@@ -6,8 +6,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class SummaryDetail {
 
-  	public _model:Object;	
-  	public currentIndex = 0;
+  	private _model:Object;	
+  	private _currentIndex = 0;
 
   	@Output()selectionChanged = new EventEmitter();
 
@@ -18,6 +18,15 @@ export class SummaryDetail {
 	get model() { 
 		return this._model; 
 	}
+	
+	@Input()
+	set currentIndex(index:number) {		
+	    this._currentIndex = index || 0;
+	}
+	get currentIndex() { 
+		return this._currentIndex; 
+	}
+	
 	next(){
 		if(this.currentIndex + 1 == this.model['subCategories'].length){
 			return;

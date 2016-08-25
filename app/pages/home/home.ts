@@ -45,9 +45,10 @@ export class HomePage {
 
 
 
-  itemTapped(event, item) {    
+  itemTapped(event, item, index) {	  
     this.navCtrl.push(this.pages[item.name], {
       item: item,
+	  index:index,
       title: this.pageTitle
 
     }).then(res => {
