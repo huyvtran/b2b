@@ -35,7 +35,7 @@ export class CasesDetails {
   initializeData(data) {
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
        this.chartHeaderText="Incoming and Open Case Trend";
-        if(parseInt(this.selectedItem.subCategories[data.value].value, 10)>0){
+        if(isNaN(this.selectedItem.subCategories[data.value].value.replace('d','')) && parseInt(this.selectedItem.subCategories[data.value].value.replace('d',''))>0){
         this.isVisible=true;
       }else{
         this.isVisible=false;

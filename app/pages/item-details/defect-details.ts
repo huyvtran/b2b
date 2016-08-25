@@ -38,7 +38,9 @@ export class DefectDetails {
       this.casesList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
-       if(parseInt(this.selectedItem.subCategories[data.value].value, 10)>0){
+      var value=this.selectedItem.subCategories[data.value].value.replace('d','');
+      var intval=parseInt(this.selectedItem.subCategories[data.value].value.replace('d',''));
+      if(!isNaN(this.selectedItem.subCategories[data.value].value.replace('d','')) && parseInt(this.selectedItem.subCategories[data.value].value.replace('d',''))>0){
         this.isVisible=true;
       }else{
         this.isVisible=false;
