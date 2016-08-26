@@ -22,9 +22,9 @@
             <span class="collapsible-pane-title">Preferences</span>
             <div class="collapsible-pane-content">
                 <ion-list class="navigation_icons">
-                    <ion-item *ngFor="let p of preference" class="menu-name">
-                        <ion-label>{{p}}</ion-label>
-                        <ion-checkbox checked="true"></ion-checkbox>
+                    <ion-item *ngFor="let p of activePlateform.categories" class="menu-name">
+                        <ion-label>{{p.name}}</ion-label>
+                        <ion-checkbox [(ngModel)]="p.value"></ion-checkbox>
                     </ion-item>
                 </ion-list>
             </div>
@@ -33,10 +33,9 @@
         </ion-item> -->
         <div class="profile">
             <img class="profile_icon" src="img/User-Icon.png">
-            <ion-label (click)="showToast('It is not implemented yet', 'bottom')" style="color:grey" class="label">My Profile</ion-label>
-            <ion-label (click)="showToast('It is not implemented yet', 'bottom')" style="color:grey" class="label">Help</ion-label>
-            <ion-label (click)="showToast('It is not implemented yet', 'bottom')" style="color:grey"class="label">Contact</ion-label>
-            <ion-label (click)="exitApp()" class="label">Logout</ion-label>
+            <ion-label (click)="showToast('It is not implemented yet', 'center')" style="color:grey" class="label">My Profile</ion-label>
+            <ion-label (click)="openHelpPage()" style="color:grey" class="label">Help</ion-label>
+            <ion-label (click)="logout()" class="label">Logout</ion-label>
         </div>
     </ion-content>
 </ion-menu>

@@ -7,7 +7,7 @@
         </div> -->
         <div class="screen-labels" style="">
         <!-- <label class="Service-Provider-Label">Service Provider Business</label> -->
-        <label class="Back2Basics-Label">Back2Basics</label>
+        <label class="Back2Basics-Label">BackToBasics</label>
         </div>
 
         <div style="position: absolute;left: 0;top:40%;width: 100%;text-align: center;padding:10px;">
@@ -15,18 +15,18 @@
 			 <ion-item>
 
 			   <!--  <ion-input type="username" placeholder="Username"></ion-input> -->
-			    <ion-input placeholder="CEC ID"></ion-input>
+			    <ion-input placeholder="CEC ID" [(ngModel)]="credentials.username"></ion-input>
 
 			  </ion-item>
 
 			  <ion-item>
 
-			    <ion-input type="password" border-radius="10px" placeholder="***********"></ion-input>
+			    <ion-input type="password" border-radius="10px" placeholder="***********" [(ngModel)]="credentials.password"></ion-input>
 			  </ion-item>
 				<ion-item>
 
 			    <ion-label class= "remember-text">Remember me</ion-label>
-                        <ion-checkbox checked="true"></ion-checkbox>
+                        <ion-checkbox checked="true" [(ngModel)]="rememberMe"></ion-checkbox>
 
 
 			  </ion-item>

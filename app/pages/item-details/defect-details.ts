@@ -18,17 +18,19 @@ export class DefectDetails {
   pageTitle: any;
   casesList = [];
   trendsList = [];
-  selectedSubCategory:string;
+  selectedSubCategory: string;
   pieChartDataProvider = [];
-  tableHeaderText:string;
-  chartHeaderText:string;
-  selectedIndex:number;
-   isVisible: boolean;
+  tableHeaderText: string;
+  chartHeaderText: string;
+  selectedIndex: number;
+  isVisible: boolean;
+  info = "";
+  noDataText: string;
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
-	this.selectedIndex = navParams.get('index');
-	
+    this.selectedIndex = navParams.get('index');
+
     this.selectedSubCategory = this.selectedItem.subCategories[this.selectedIndex].name;
     this.pageTitle = navParams.get('title');
     this.initializeData({ value: this.selectedIndex });
@@ -38,27 +40,33 @@ export class DefectDetails {
       this.casesList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
-      var value=this.selectedItem.subCategories[data.value].value.replace('d','');
-      var intval=parseInt(this.selectedItem.subCategories[data.value].value.replace('d',''));
-      if(!isNaN(this.selectedItem.subCategories[data.value].value.replace('d','')) && parseInt(this.selectedItem.subCategories[data.value].value.replace('d',''))>0){
-        this.isVisible=true;
-      }else{
-        this.isVisible=false;
+
+      this.info = res.info || "No Info available";
+
+      var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
+      var subCategoryItemvalueInt = parseInt(this.selectedItem.subCategories[data.value].value.replace('d', ''));
+      if (subCategoryItemvalue == "N") {
+        this.noDataText = "Under Construction"
       }
-       if(this.selectedItem.subCategories[data.value].name == "Resolve Time"){        
-       
-        this.chartHeaderText="Cumulative Resolution Trend"
-        this.tableHeaderText="Defects "+"Resolution Time";
+      else if (subCategoryItemvalue == "U") {
+        this.noDataText = "Data Not Available";
       }
-      else if(this.selectedItem.subCategories[data.value].name == "Open"){        
-       
-        this.chartHeaderText="Incoming and Open Defect Trend";
-        this.tableHeaderText="Open "+"Defects";
+      this.setVisibilityOfNoDataScreen(subCategoryItemvalue, subCategoryItemvalueInt);
+
+      if (this.selectedItem.subCategories[data.value].name == "Resolve Time") {
+
+        this.chartHeaderText = "Cumulative Resolution Trend"
+        this.tableHeaderText = "Defects " + "Resolution Time";
       }
-      else{
-        this.chartHeaderText="Incoming and Open "+this.selectedItem.subCategories[data.value].name+" Trend";
-        this.tableHeaderText="Open "+this.selectedItem.subCategories[data.value].name+" Defects";
-      }  
+      else if (this.selectedItem.subCategories[data.value].name == "Open") {
+
+        this.chartHeaderText = "Incoming and Open Defect Trend";
+        this.tableHeaderText = "Open " + "Defects";
+      }
+      else {
+        this.chartHeaderText = "Incoming and Open " + this.selectedItem.subCategories[data.value].name + " Trend";
+        this.tableHeaderText = "Open " + this.selectedItem.subCategories[data.value].name + " Defects";
+      }
     })
   }
 
@@ -68,25 +76,25 @@ export class DefectDetails {
   }
 
   prepareChartData(data) {
-      var tmpObj = {};
-      var preparedData = [];
-      for (let i = 0; i < data.length; i++) {
-          let t = data[i].subType;
-          if (tmpObj[t]) {
-              data[i].value && data[i].value;
-              tmpObj[t].y += (isNaN(data[i].value)?0:data[i].value);
-          } else {
-              data[i].value = data[i].value;
-              tmpObj[t] = {
-                  name: t,
-                  y: isNaN(data[i].value)?0:(+data[i].value)
-              }
-          }
+    var tmpObj = {};
+    var preparedData = [];
+    for (let i = 0; i < data.length; i++) {
+      let t = data[i].subType;
+      if (tmpObj[t]) {
+        data[i].value && data[i].value;
+        tmpObj[t].y += (isNaN(data[i].value) ? 0 : data[i].value);
+      } else {
+        data[i].value = data[i].value;
+        tmpObj[t] = {
+          name: t,
+          y: isNaN(data[i].value) ? 0 : (+data[i].value)
+        }
       }
-      for (let i in tmpObj) {
-          i != "Others" && preparedData.push(tmpObj[i]);
-      }
-      return preparedData;
+    }
+    for (let i in tmpObj) {
+      i != "Others" && preparedData.push(tmpObj[i]);
+    }
+    return preparedData;
   }
 
   //for removing SP and SP-
@@ -100,11 +108,20 @@ export class DefectDetails {
     }
     return label;
   }
-   showToast(message, position) {
-      Toast.show(message, "short", position).subscribe(
-          toast => {
-              console.log(toast);
-          }
-      );
+  showToast(message, position) {
+    Toast.show(message, "short", position).subscribe(
+      toast => {
+        console.log(toast);
+      }
+    );
+  }
+
+ 
+  setVisibilityOfNoDataScreen(subCategoryValue, valueinInt) {
+    if (!isNaN(subCategoryValue)) {
+      this.isVisible = true;
+    } else {
+      this.isVisible = false;
+    }
   }
 }

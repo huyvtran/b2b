@@ -31,34 +31,17 @@
     </div>
     <collapsible-pane [hidden]="!isVisible">
         <span class="collapsible-pane-title">{{tableHeaderText}}</span>
-        <div class="collapsible-pane-content">
-			<div class="list-view" *ngIf="selectedSubCategory=='Resolve Time'">
-				<table style="width:100%">
-					<thead>
-						<tr>
-							<th>Customer Impact</th>
-							<th>Resolution time</th>
-														 
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="let m of casesList">                                
-							<td>{{m.subType}}</td>
-							<td>{{m.value}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div> 
-            <switch-view *ngIf="selectedSubCategory!='Resolve Time'">
+        <div class="collapsible-pane-content">			
+            <switch-view>
                 <div class="chart-view chart-container">
                     <pie-chart *ngIf="pieChartDataProvider.length>1" [dataProvider]="pieChartDataProvider"></pie-chart>
                 </div>
-                <div class="list-view" *ngIf="selectedSubCategory=='Open'">
+                <div class="list-view" *ngIf="selectedSubCategory=='Calls'">
                     <table style="width:100%">
                         <thead>
                             <tr>
-                                <th>Impact Characterization</th>
-                                <th># of Defects</th>                                
+                                <th>Top Customers</th>
+                                <th># of Interactions</th>                                
                             </tr>
                         </thead>
                         <tbody>
@@ -69,12 +52,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="list-view" *ngIf="selectedSubCategory=='Resolve Time'">
+                <div class="list-view" *ngIf="selectedSubCategory=='Risks'">
                     <table style="width:100%">
                         <thead>
                             <tr>
-                                <th>Impact Characterization</th>
-                                <th>Resolution time</th>
+                                <th>Customers</th>
+                            <th># of Risk Reports</th>
                                                              
                             </tr>
                         </thead>
@@ -86,20 +69,19 @@
                         </tbody>
                     </table>
                 </div> 
-                <div class="list-view" *ngIf="selectedSubCategory=='Critical Impact'">
+                <div class="list-view" *ngIf="selectedSubCategory=='Escalations'">
                     <table style="width:100%">
                         <thead>
                             <tr>
-                                <th>Critical Impact</th>
-                                <th># of Defects</th>
+                                <th>Customers</th>
+                                <th># of Escalations</th>
                                                           
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let m of casesList">                                
                                 <td>{{m.subType}}</td>
-                                <td>{{m.value}}</td>
-                             
+                                <td>{{m.value}}</td>                             
                             </tr>
                         </tbody>
                     </table>

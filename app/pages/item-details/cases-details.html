@@ -7,13 +7,12 @@
             <span class="title">Back To Basics</span>
             <!-- <ion-input  type="username" placeholder="Information area" style="background-color: white;
             width: 82%; margin-top: 3px;color: black;"></ion-input> -->
-            <ion-icon class="info-icon" ios="ios-search" md="md-search" (click)="showToast('Part of next release', 'bottom')"></ion-icon>
+            <ion-icon class="info-icon" ios="ios-search" md="md-search" (click)="showToast('Under Construction', 'center')"></ion-icon>
         </div>
     </ion-navbar>
     <div class="header-info">
         <span class="title">{{correctName(pageTitle)}}</span>
-        <div (click)="showToast('Part of next release', 'bottom')" class="info-logo" style="background-color: #009edc; text-align: right;
-    padding-right: 5px;">
+        <div (click)="showInfo=!showInfo" class="info-logo" style="background-color: #009edc; text-align: right; padding-right: 5px;">
             <img style="width: 32%" src="./img/info-icon.png" />
         </div>
     </div>
@@ -27,9 +26,9 @@
     </collapsible-pane>
     <div class="no-data" [hidden]="isVisible">
         <img style="width: 16%" src="./img/a.png" />
-        <label style="color: grey; display: block">No Data Available</label>
+        <label style="color: grey; display: block">{{noDataText}}</label>
     </div>
-    <collapsible-pane>
+    <collapsible-pane [hidden]="!isVisible">
         <span class="collapsible-pane-title">{{tableHeaderText}}</span>
         <div class="collapsible-pane-content">
             <switch-view>
@@ -73,10 +72,13 @@
             </switch-view>
         </div>
     </collapsible-pane>
-    <collapsible-pane>
+    <collapsible-pane [hidden]="!isVisible">
         <span class="collapsible-pane-title">{{chartHeaderText}}</span>
         <div class="collapsible-pane-content chart-container">
             <multi-chart [dataProvider]="trendsList"></multi-chart>
         </div>
     </collapsible-pane>
+    <div class="info-slider" [ngClass]="{'info-open':showInfo}">
+        <div [innerHTML]="info"></div>
+    </div>
 </ion-content>

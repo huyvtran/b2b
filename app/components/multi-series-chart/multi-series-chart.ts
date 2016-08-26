@@ -46,9 +46,6 @@ export class MultiSeriesChart {
 	set dataProvider(data){		
 		this._data = data;
 		this.renderChart();
-		if(this.dataProvider.length){
-			
-		}
 	}
 
 	get dataProvider(){

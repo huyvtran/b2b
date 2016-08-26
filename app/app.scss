@@ -50,12 +50,6 @@ ion-menu{
     }
 }
 
-.active-menu {
-    background-color: #009edc;
-    ion-icon{
-        color:#fff;
-    }
-}
 .checkmark{
     color:#424242;
     margin-right:5px;
@@ -63,4 +57,31 @@ ion-menu{
 ion-menu ion-item.item{
     color: #fff;
     background-color: #009edc;
+    &.active-menu {
+        background-color: #fff;
+        color:#009edc;
+        ion-icon{
+            color:#009edc;
+        }
+    }
+}
+
+.info-slider{
+    position: absolute;    
+    background-color: #f2f3f2;
+    top: 0;
+    left: 800px;
+    right: 0;
+    bottom: 0;
+    padding:20px 10px;
+    transition: left 0.2s linear;
+	div{
+		display:none;
+	}
+    &.info-open {
+        left: 100px;
+		div{
+			display:block;
+		}
+    }
 }

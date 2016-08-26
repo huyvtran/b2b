@@ -34,7 +34,6 @@ export class PieChart {
                     display: 'none'
                 }
             },
-            colors: ['#4AF616', '#F64A16', '#0ECDFD', '#FFF000', '#F00E00', '#FFF0EE'],
             subtitle : { text : 'Level' },
             credits: {
                 enabled: false

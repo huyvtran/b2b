@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import {AuthService} from '../auth-service/auth-service';
 
 /*
   Generated class for the B2BService provider.
@@ -14,8 +15,9 @@ export class B2BService {
   capListData:any;
   trendsList:any;
   _platform:any;
+  _selectedPrefrences=[];
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private authService:AuthService) {
     this.data = null;
     this.capListData = {};
   }
@@ -29,11 +31,11 @@ export class B2BService {
     // don't have the data yet
     return new Promise((resolve, reject) => {
     //this.http.get('mock-json/data.json')
-    
+
     var headers = new Headers();
 
     headers.append('Host', 'wwwin-spb2b.cisco.com')
-    headers.append('Authorization', 'Basic c2t1bWFyOTpBdWdfMjAxNg==');
+    headers.append('Authorization', this.authService.getAuthorization());
     headers.append('Cache-Control', 'no-cache')
     this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld', {
         headers: headers
@@ -72,6 +74,10 @@ export class B2BService {
   }
 
   loadCapList(category, subCategory){
+    //category = category.toLowerCase();
+    //subCategory = subCategory.toLowerCase();
+    category = category;
+    subCategory = subCategory;
     var productRef = "product_" + this._platform.ID;
     if(this.capListData[productRef]){
       if(this.capListData[productRef][category]){
@@ -89,7 +95,7 @@ export class B2BService {
     return new Promise((resolve,reject)=>{
     var headers = new Headers();
     headers.append('Host', 'wwwin-spb2b.cisco.com')
-    headers.append('Authorization', 'Basic c2t1bWFyOTpBdWdfMjAxNg==');
+    headers.append('Authorization', this.authService.getAuthorization());
     headers.append('Cache-Control', 'no-cache')
      this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productSubCategoryDetails?productId='+ this._platform.ID +'&category='+category+'&subCategory='+subCategory, {
         headers: headers
@@ -100,7 +106,9 @@ export class B2BService {
         resolve(this.capListData[productRef][category][subCategory]);
         console.log("Got Data from API");
       },err => {
-        this.http.get('mock-json/caps_open.json')
+        subCategory = subCategory.replace(" ","_");
+        category = category.replace(" ","_");
+        this.http.get('mock-json/'+category+'_'+subCategory+'.json')
         .map(res => res.json())
         .subscribe(data => {
           console.log("Static Data");
@@ -113,6 +121,10 @@ export class B2BService {
     })
   }
   loadOtherList(category, subCategory){
+
+    category = category.toLowerCase();
+    subCategory = subCategory.toLowerCase();
+
     var productRef = "product_" + this._platform.ID;
     if(this.capListData[productRef]){
       if(this.capListData[productRef][category]){
@@ -130,7 +142,7 @@ export class B2BService {
     return new Promise((resolve,reject)=>{
     var headers = new Headers();
     headers.append('Host', 'wwwin-spb2b.cisco.com')
-    headers.append('Authorization', 'Basic c2t1bWFyOTpBdWdfMjAxNg==');
+    headers.append('Authorization', this.authService.getAuthorization());
     headers.append('Cache-Control', 'no-cache')
      this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productSubCategoryDetails?productId='+ this._platform.ID +'&category='+category+'&subCategory='+subCategory, {
         headers: headers
@@ -141,10 +153,13 @@ export class B2BService {
         resolve(this.capListData[productRef][category][subCategory]);
         console.log("Got Data from API");
       },err => {
+        subCategory = subCategory.replace(" ","_");
+        category = category.replace(" ","_");
         this.http.get('mock-json/'+category+'_'+subCategory+'.json')
         .map(res => res.json())
         .subscribe(data => {
           console.log("Static Data");
+          category = category.replace("_"," ");
           this.capListData[productRef][category][subCategory] = data;
           resolve(this.capListData[productRef][category][subCategory]);
         },err => {
@@ -172,5 +187,13 @@ export class B2BService {
 
   getSelectedPlatform(){
     return this._platform;
+  }
+
+  setSelectedPrefrences(prefrences){
+    this._selectedPrefrences = prefrences;
+  }
+
+  getSelectedPrefrences(){
+    return this._selectedPrefrences;
   }
 }

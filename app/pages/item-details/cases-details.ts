@@ -18,38 +18,46 @@ export class CasesDetails {
   pageTitle: any;
   casesList = [];
   trendsList = [];
-  selectedSubCategory:string;
+  selectedSubCategory: string;
   pieChartDataProvider = [];
-  tableHeaderText:string;
-  chartHeaderText:string;
-  selectedIndex:number;
-  isVisible: boolean;
+  tableHeaderText: string;
+  chartHeaderText: string;
+  selectedIndex: number;
+  isVisible: boolean = true;
+  info = "";
+  noDataText: string;
+
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
-	this.selectedIndex = navParams.get('index');
+    this.selectedIndex = navParams.get('index');
     this.selectedSubCategory = this.selectedItem.subCategories[this.selectedIndex].name;
-    this.pageTitle = navParams.get('title');	
+    this.pageTitle = navParams.get('title');
     this.initializeData({ value: this.selectedIndex });
   }
   initializeData(data) {
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
-       this.chartHeaderText="Incoming and Open Case Trend";
-        if(isNaN(this.selectedItem.subCategories[data.value].value.replace('d','')) && parseInt(this.selectedItem.subCategories[data.value].value.replace('d',''))>0){
-        this.isVisible=true;
-      }else{
-        this.isVisible=false;
+      this.chartHeaderText = "Incoming and Open Case Trend";
+      var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');      
+      if (subCategoryItemvalue == "N") {
+        this.noDataText = "Under Construction"
       }
-      if(this.selectedSubCategory == "Resolve Time"){        
+      else if (subCategoryItemvalue == "U") {
+        this.noDataText = "Data Not Available";
+      }
+      this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
+
+      if (this.selectedSubCategory == "Resolve Time") {
         this.casesList = this.prepareDataForTable(res.subCategoryDetails);
-        this.chartHeaderText="Cumulative Resolution Trend";
-        this.tableHeaderText="Case "+"Resolution Time";
-      }else{
+        this.chartHeaderText = "Cumulative Resolution Trend";
+        this.tableHeaderText = "Case " + "Resolution Time";
+      } else {
         this.casesList = res.subCategoryDetails;
-        this.tableHeaderText=this.selectedSubCategory +" Cases";
-      }      
+        this.tableHeaderText = this.selectedSubCategory + " Cases";
+      }
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
+      this.info = res.info || "No Info available";
     })
   }
 
@@ -59,44 +67,44 @@ export class CasesDetails {
   }
 
   prepareChartData(data) {
-      var tmpObj = {};
-      var preparedData = [];
-      for (let i = 0; i < data.length; i++) {
-          let t = data[i].subType;
-          if (tmpObj[t] && data[i].type != "Close Time") {
-              tmpObj[t].y += (isNaN(data[i].value)?0:data[i].value);
-          } else if(data[i].type != "Close Time"){
-              tmpObj[t] = {
-                  name: t,
-                  y: isNaN(data[i].value)?0:(+data[i].value)
-              }
-          }
-      }
-      for (let i in tmpObj) {
-          i != "Others" && preparedData.push(tmpObj[i]);
-      }
-      return preparedData;
-  }
-
-  prepareDataForTable(data){
     var tmpObj = {};
     var preparedData = [];
     for (let i = 0; i < data.length; i++) {
-        let t = data[i].subType;
-        if (tmpObj[t]) {
-            if(!tmpObj[t][data[i].type.replace(/ /g,'')]){
-              tmpObj[t][data[i].type.replace(/ /g,'')] = 0;
-            }
-            tmpObj[t][data[i].type.replace(/ /g,'')] += (isNaN(data[i].value)?0:data[i].value);
-        } else {
-            tmpObj[t] = {
-                subType: t
-            }
-            tmpObj[t][data[i].type.replace(/ /g,'')] = (isNaN(data[i].value)?0:data[i].value)
+      let t = data[i].subType;
+      if (tmpObj[t] && data[i].type != "Close Time") {
+        tmpObj[t].y += (isNaN(data[i].value) ? 0 : data[i].value);
+      } else if (data[i].type != "Close Time") {
+        tmpObj[t] = {
+          name: t,
+          y: isNaN(data[i].value) ? 0 : (+data[i].value)
         }
+      }
     }
     for (let i in tmpObj) {
-        preparedData.push(tmpObj[i]);
+      i != "Others" && preparedData.push(tmpObj[i]);
+    }
+    return preparedData;
+  }
+
+  prepareDataForTable(data) {
+    var tmpObj = {};
+    var preparedData = [];
+    for (let i = 0; i < data.length; i++) {
+      let t = data[i].subType;
+      if (tmpObj[t]) {
+        if (!tmpObj[t][data[i].type.replace(/ /g, '')]) {
+          tmpObj[t][data[i].type.replace(/ /g, '')] = 0;
+        }
+        tmpObj[t][data[i].type.replace(/ /g, '')] += (isNaN(data[i].value) ? 0 : data[i].value);
+      } else {
+        tmpObj[t] = {
+          subType: t
+        }
+        tmpObj[t][data[i].type.replace(/ /g, '')] = (isNaN(data[i].value) ? 0 : data[i].value)
+      }
+    }
+    for (let i in tmpObj) {
+      preparedData.push(tmpObj[i]);
     }
     return preparedData;
   }
@@ -112,11 +120,20 @@ export class CasesDetails {
     }
     return label;
   }
-   showToast(message, position) {
-      Toast.show(message, "short", position).subscribe(
-          toast => {
-              console.log(toast);
-          }
-      );
+  showToast(message, position) {
+    Toast.show(message, "short", position).subscribe(
+      toast => {
+        console.log(toast);
+      }
+    );
+  }
+
+ 
+  setVisibilityOfNoDataScreen(subCategoryValue) {
+    if (!isNaN(subCategoryValue)) {
+      this.isVisible = true;
+    } else {
+      this.isVisible = false;
+    }
   }
 }
