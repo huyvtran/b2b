@@ -13,12 +13,8 @@
         <div style="position: absolute;left: 0;top:40%;width: 100%;text-align: center;padding:10px;">
 
 			 <ion-item>
-
-			   <!--  <ion-input type="username" placeholder="Username"></ion-input> -->
 			    <ion-input placeholder="cec id" [(ngModel)]="credentials.username"></ion-input>
-
 			  </ion-item>
-
 			  <ion-item>
 
 			    <ion-input type="password" border-radius="10px" placeholder="***********" [(ngModel)]="credentials.password"></ion-input>
@@ -31,7 +27,7 @@
 
 			  </ion-item>
 
-			  <button (click)="itemTapped($event)" style="border-radius: 20px"class="button button-block button-positive">
+			  <button (click)="itemTapped($event)" style="border-radius:20px;width:50%;margin:auto; "class="button button-block button-positive">
  Login</button>
 
             <!-- <label (click)="itemTapped($event)" class="login-btn">Sign In</label> ion-information-circled-->

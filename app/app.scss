@@ -75,6 +75,7 @@ ion-menu ion-item.item{
     bottom: 0;
     padding:20px 10px;
     transition: left 0.2s linear;
+	overflow-y:auto;
 	div{
 		display:none;
 	}

@@ -33,7 +33,7 @@ export class HomePage {
 
   constructor(private navCtrl: NavController, private b2bService: B2BService, private navParams: NavParams, private menuCtrl: MenuController) {
     this.page = this.navParams.get('page');
-    this.info = this.navParams.get('info') || "No Info available";
+    this.info = this.prepareInfoData(this.page, this.navParams.get('info')) || "No Info available";
     this.pageTitle = this.page.name;
     this.menuCtrl.swipeEnable(true);
 
@@ -96,5 +96,19 @@ export class HomePage {
   onCancel(){
     this.initializeItems();
     this.enableSearch = false;
+  }
+  
+  prepareInfoData(data, _info){
+	  let info = "";
+	  info += '<b>Last Refreshed: </b>'+(new Date(data.lastRefreshDate)).toLocaleString()+'</br></br>';
+	  if(data.aggregationDetails.length>1){
+		  info += '<b>Aggregated view for:</b><ol>';
+		  for(let i=0;i<data.aggregationDetails.length;i++){
+			info += '<li>'+data.aggregationDetails[i]+'</li>';  
+		  }
+		  info += '</ol></br>';		  
+	  }
+	  info += _info;
+	  return info;
   }
 }

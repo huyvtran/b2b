@@ -102,34 +102,34 @@ ion-row > div.item-card{
 .warning{
     color:red;
 }
+.disabled-metric{
+	color:#ccc;
+	h1{
+		color:#ccc !important;
+	}
+}
 @media only screen
     and (max-device-width: 640px),
     only screen and (max-device-width: 667px),
     only screen and (max-width: 480px)
 {
-[padding] scroll-content{
-padding: 0px;
-
-
-ion-card{
-margin: 5px 12px;
-
-&:first-child{
-margin-top: 12px;
-}
-
-ion-card-header{
-padding: 8px;
-   font-size: 1.4rem;
-}
-
-ion-card-content{
-padding: 0px 9px 9px;
-}
-
-h1{
-font-size: 2rem;
-}
-}
-}
+	[padding] scroll-content{
+		padding: 0px;
+		ion-card{
+			margin: 5px 12px;
+			&:first-child{
+				margin-top: 12px;
+			}
+			ion-card-header{
+				padding: 8px;
+				font-size: 1.4rem;
+			}
+			ion-card-content{
+				padding: 0px 9px 9px;
+			}
+			h1{
+				font-size: 2rem;
+			}
+		}
+	}
 }

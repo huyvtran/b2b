@@ -37,7 +37,7 @@ export class LoginPage {
       //this.gotoHomePage();
     }, err => {
       loading.dismiss();
-     var loginErrorMessage = err.error_description;
+	var loginErrorMessage = err.error_description;
       if(err.error_description.indexOf('fail to process username & password') !=-1){
        loginErrorMessage = 'Username or Password is Invalid.';
       }

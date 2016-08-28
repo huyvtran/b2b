@@ -59,7 +59,7 @@ class Back2Basic {
   }
 
   gotoHomePage() {
-    this.nav.setRoot(HomePage, { page: this.b2bService.getSelectedPlatform(),info:this.b2bService.getSelectedPlatform()['info'] });
+    this.nav.setRoot(HomePage, { page: this.b2bService.getSelectedPlatform(),info:this.info });
   }
 
   initializeApp() {
