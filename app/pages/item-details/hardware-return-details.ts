@@ -40,7 +40,7 @@ export class HardwareDetails {
       this.casesList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
 
-      this.info = res.info || "No Info available";
+      this.info = res.info;
 
       //this.trendsList = res.trendDetails;
       var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');

@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {ionicBootstrap, Platform, MenuController, Nav, Events } from 'ionic-angular';
+import {ionicBootstrap, Platform, MenuController, Nav, Events, Loading } from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {LoginPage} from './pages/login/login';
 import {B2BService} from './providers/b2b-service/b2b-service';
@@ -20,7 +20,7 @@ class Back2Basic {
   activePlateform: any = {
     categories: []
   };
-  rootPage: any = LoginPage;
+  rootPage: any;
   plateforms: Array<{ title: string }>;
   private info = ""
 
@@ -33,16 +33,25 @@ class Back2Basic {
     public events: Events,
     private authService:AuthService
   ) {
-    this.initializeApp();
+    this.initializeApp();    
 
-    if(this.authService.getAuthorization()) {
-      this.loadData();
-    }
-
-    this.events.subscribe('user:auth', (userEventData) => {
-      // userEventData is an array of parameters, so grab our first and only arg
+    this.events.subscribe('user:authed', () => {
+      // arg is an array of parameters, so grab our first and only arg
       this.loadData();
     });
+  }
+
+  ngOnInit() {
+    if(this.authService.isAuthenticated()) {
+      let loading = Loading.create({
+        content: 'Loading Data...',
+        dismissOnPageChange: true
+      });
+      this.nav.present(loading);
+      this.loadData();
+    } else {
+      this.rootPage = LoginPage;
+    }
   }
 
   loadData() {
@@ -55,7 +64,7 @@ class Back2Basic {
       this.b2bService.setSelectedPlatform(this.activePlateform);
       this.info = respone.info || "";
       this.gotoHomePage();
-    });  
+    });
   }
 
   gotoHomePage() {

@@ -28,18 +28,18 @@ export class LoginPage {
 
   authenticate() {
     let loading = Loading.create({
-      content: 'Logging in...'
+      content: 'Logging in...',
+      dismissOnPageChange: true
     });
     this.navCtrl.present(loading);
     this.authService.authenticate(this.credentials, this.rememberMe).then(data => {
-      loading.dismiss();
-      this.events.publish('user:auth');
-      //this.gotoHomePage();
+      loading.data.content = 'Loading Data...';
+      this.events.publish('user:authed');
     }, err => {
       loading.dismiss();
-	var loginErrorMessage = err.error_description;
-      if(err.error_description.indexOf('fail to process username & password') !=-1){
-       loginErrorMessage = 'Username or Password is Invalid.';
+	    var loginErrorMessage = err.error_description;
+      if(err.error_description.indexOf('fail to process username & password') != -1) {
+        loginErrorMessage = 'Username or Password is Invalid.';
       }
 
       let alert = Alert.create({
@@ -49,9 +49,5 @@ export class LoginPage {
       });
       this.navCtrl.present(alert);
     });
-  }
-
-  gotoHomePage() {
-    this.navCtrl.setRoot(HomePage, { page: this.b2bService.getSelectedPlatform(),info:this.b2bService.getSelectedPlatform()['info'] });
   }
 }

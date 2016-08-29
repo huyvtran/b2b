@@ -54,20 +54,16 @@ export class B2BService {
           // and save the data for later reference
           //this.data = data;
 
-                    this.http.get('mock-json/data.json')
-                    .map(res => res.json())
-                        .subscribe(data => {
-                          // we've got back the raw data, now generate the core schedule data
-                          // and save the data for later reference
-                          console.log("THIS is STATIC DATA");
-                          this.data = data;
-                          resolve(this.data);
-                        },err => {
-                          // we've got back the raw data, now generate the core schedule data
-                          // and save the data for later reference
-                          //this.data = data;
-                          reject(err);
-                          });
+          headers.append('Host', 'wwwin-spb2b.cisco.com')
+          headers.append('Authorization', 'Basic c2t1bWFyOTpBdWdfMjAxNg==');
+          headers.append('Cache-Control', 'no-cache')
+          //headers.append('Access-Control-Allow-Origin', 'true');
+          //headers.append('Access-Control-Allow-Origin', 'POST, GET, OPTIONS, PUT');
+          //headers.append('Accept', 'application/json');
+          this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld', {
+          headers: headers
+          })
+
           //reject(err);
         });
     });

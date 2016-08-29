@@ -57,7 +57,7 @@ export class CasesDetails {
       }
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
-      this.info = res.info || "No Info available";
+      this.info = res.info;
     })
   }
 

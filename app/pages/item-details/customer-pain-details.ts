@@ -40,7 +40,7 @@ export class CustomerPainDetails {
       this.casesList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
-      this.info = res.info || "No Info available";
+      this.info = res.info;
       var subCategoryItemvalue=this.selectedItem.subCategories[data.value].value.replace('d','');
       var subCategoryItemvalueInt=parseInt(this.selectedItem.subCategories[data.value].value.replace('d',''));
       if(subCategoryItemvalue=="N"){

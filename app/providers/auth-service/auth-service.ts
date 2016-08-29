@@ -12,8 +12,10 @@ import 'rxjs/add/operator/map';
 export class AuthService {
   data: any;
   authorization: string;
+  OAUTH_URL: string = 'https://cloudsso.cisco.com/as/token.oauth2';
   props: Array<string> = ['access_token', 'refresh_token', 'token_type', 'expires_in'];
   propsPrefix: string = '$b2b$';
+  ENV: string = 'cisco'; // dev, cisco, prod
 
   constructor(private http: Http) {
     this.data = null;
@@ -21,6 +23,8 @@ export class AuthService {
   }
 
   authenticate(credentials, rememberMe) {
+    if(credentials.username) credentials.username = credentials.username.trim();
+
     let creds = "client_id=m6hgwkg3893tycmttefe7wsn&client_secret=m7qpUM3YrACgEZtcHx4RGVgw&grant_type=password&username=" + credentials.username + "&password=" + credentials.password;
 
     if (this.data) {
@@ -37,11 +41,15 @@ export class AuthService {
       let options = new RequestOptions({
         headers: headers
       });
-      this.http.post('https://cloudsso.cisco.com/as/token.oauth2', creds, options)
+      this.http.post(this.OAUTH_URL, creds, options)
         .map(res => res.json())
         .subscribe(data => {
           // we've got back the raw data, now generate the core schedule data
           // and save the data for later reference
+          if(this.ENV === 'cisco') {
+            data.token_type = 'Basic';
+            data.access_token = window.btoa(credentials.username + ':' + credentials.password);
+          }          
           this.data = data;
           this.saveData(this.data, rememberMe);
           this.loadData();
@@ -60,11 +68,11 @@ export class AuthService {
   }
 
   saveData(data, rememberMe) {
-    if (data) {
-      let storage = rememberMe ? localStorage : sessionStorage;
-      for(let name in data) {
-        this.save(storage, name, data[name]);
-      }
+    if (!data) return;
+
+    let storage = rememberMe ? localStorage : sessionStorage;
+    for(let name in data) {
+      this.save(storage, name, data[name]);
     }
   }
 
@@ -74,6 +82,10 @@ export class AuthService {
     } else {
       this.authorization = null;
     }
+  }
+
+  isAuthenticated() {
+    return this.authorization ? true : false;
   }
 
   getAuthorization() {

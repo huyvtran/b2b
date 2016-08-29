@@ -12,7 +12,7 @@
     </ion-navbar>
     <div class="header-info">
         <span class="title">{{correctName(pageTitle)}}</span>
-        <div (click)="showInfo=!showInfo" class="info-logo" style="background-color: #009edc; text-align: right;padding-right: 5px;">
+        <div [hidden]="!info" (click)="showInfo=!showInfo" class="info-logo" style="background-color: #009edc; text-align: right;padding-right: 5px;">
             <img style="width: 32%" src="./img/info-icon.png" />
         </div>
     </div>
