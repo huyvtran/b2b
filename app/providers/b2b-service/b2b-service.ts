@@ -34,8 +34,9 @@ export class B2BService {
 
     var headers = new Headers();
 
-    headers.append('Host', 'wwwin-spb2b.cisco.com')
+    //headers.append('Host', 'wwwin-spb2b.cisco.com')
     headers.append('Authorization', this.authService.getAuthorization());
+    console.log(this.authService.getAuthorization()+" authorization data -----");
     headers.append('Cache-Control', 'no-cache')
     this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld', {
         headers: headers
@@ -53,17 +54,16 @@ export class B2BService {
           // we've got back the raw data, now generate the core schedule data
           // and save the data for later reference
           //this.data = data;
+          console.log("This is static data");
 
+          //in case data url auth fail in any scenario.....
           headers.append('Host', 'wwwin-spb2b.cisco.com')
           headers.append('Authorization', 'Basic c2t1bWFyOTpBdWdfMjAxNg==');
           headers.append('Cache-Control', 'no-cache')
-          //headers.append('Access-Control-Allow-Origin', 'true');
-          //headers.append('Access-Control-Allow-Origin', 'POST, GET, OPTIONS, PUT');
-          //headers.append('Accept', 'application/json');
           this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld', {
           headers: headers
           })
-
+          //------------------------------------------------
           //reject(err);
         });
     });

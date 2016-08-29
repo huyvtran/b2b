@@ -49,10 +49,12 @@ export class AuthService {
           if(this.ENV === 'cisco') {
             data.token_type = 'Basic';
             data.access_token = window.btoa(credentials.username + ':' + credentials.password);
-          }          
+          }
           this.data = data;
           this.saveData(this.data, rememberMe);
           this.loadData();
+          //this.authorization = this.data.token_type + ' ' + this.data.access_token;
+          console.log(this.data,this.authorization + "this is 57 line in auth service ");
           resolve(this.data);
         }, err => {
           if (err._body.type == 'error') {
@@ -89,7 +91,8 @@ export class AuthService {
   }
 
   getAuthorization() {
-    return this.authorization;
+    console.log(this.data,this.authorization + "this isn auth service return block  ------");
+    return this.authorization ? this.authorization : "Basic c2t1bWFyOTpBdWdfMjAxNg==";
   }
 
   logout() {
