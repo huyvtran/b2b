@@ -118,8 +118,8 @@ export class B2BService {
   }
   loadOtherList(category, subCategory){
 
-    category = category.toLowerCase();
-    subCategory = subCategory.toLowerCase();
+    //category = category.toLowerCase();
+    //subCategory = subCategory.toLowerCase();
 
     var productRef = "product_" + this._platform.ID;
     if(this.capListData[productRef]){

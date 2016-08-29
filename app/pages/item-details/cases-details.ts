@@ -38,7 +38,7 @@ export class CasesDetails {
   initializeData(data) {
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
       this.chartHeaderText = "Incoming and Open Case Trend";
-      var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');      
+      var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
       if (subCategoryItemvalue == "N") {
         this.noDataText = "Under Construction"
       }
@@ -58,6 +58,7 @@ export class CasesDetails {
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
       this.info = res.info;
+      console.log(this.info);
     })
   }
 
@@ -128,7 +129,7 @@ export class CasesDetails {
     );
   }
 
- 
+
   setVisibilityOfNoDataScreen(subCategoryValue) {
     if (!isNaN(subCategoryValue)) {
       this.isVisible = true;

@@ -19,7 +19,7 @@ export class HomePage {
   lastRefreshed = '';
   itemSelected = null;
   pageTitle: string;
-  enableSearch:boolean = false;  
+  enableSearch:boolean = false;
   public page:any;
   private pages = {
     "Cases":CasesDetails,
@@ -28,8 +28,8 @@ export class HomePage {
     "Deficiencies": DeficienciesDetails,
     "Customer Pain":CustomerPainDetails,
     "Hardware Returns":HardwareDetails
-  }  
-  info = "";  
+  }
+  info = "";
 
   constructor(private navCtrl: NavController, private b2bService: B2BService, private navParams: NavParams, private menuCtrl: MenuController) {
     this.page = this.navParams.get('page');
@@ -42,14 +42,14 @@ export class HomePage {
       });
       this.navCtrl.present(loading);
       loading.dismiss();
-    */    
+    */
     this.initializeItems();
     this.lastRefreshed = new Date().toLocaleString();
   }
 
 
 
-  itemTapped(event, item, index) {	  
+  itemTapped(event, item, index) {
     this.navCtrl.push(this.pages[item.name], {
       item: item,
 	  index:index,
@@ -60,7 +60,7 @@ export class HomePage {
     });
   }
 
-  initializeItems(){    
+  initializeItems(){
     this.page.categories.forEach(function(item){
       item.visible = true;
     });
@@ -97,16 +97,24 @@ export class HomePage {
     this.initializeItems();
     this.enableSearch = false;
   }
-  
+
   prepareInfoData(data, _info){
 	  let info = "";
-	  info += '<b>Last Refreshed: </b>'+(new Date(data.lastRefreshDate)).toLocaleString()+'</br></br>';
-	  if(data.aggregationDetails.length>1){
+    //BUG -the data is showing random behaviour on IOS so changing according to below one and its works fine.
+    //var arr = "2010-03-15 10:30:00".split(/[- :]/),    //2016-08-27 22:20:46.0  -- actuall comming in data json
+    var arr =data.lastRefreshDate.split(/[- :]/),
+    date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
+    info += '<b>Last Refreshed: </b>'+(date).toLocaleString()+'</br></br>';
+    //---------------------------------------
+    console.log(date);
+	  //info += '<b>Last Refreshed: </b>'+(new Date(data.lastRefreshDate)).toLocaleString()+'</br></br>';
+    console.log(info + "----------inside info -------------");
+    if(data.aggregationDetails.length>1){
 		  info += '<b>Aggregated view for:</b><ol>';
 		  for(let i=0;i<data.aggregationDetails.length;i++){
-			info += '<li>'+data.aggregationDetails[i]+'</li>';  
+			info += '<li>'+data.aggregationDetails[i]+'</li>';
 		  }
-		  info += '</ol></br>';		  
+		  info += '</ol></br>';
 	  }
 	  info += _info;
 	  return info;
