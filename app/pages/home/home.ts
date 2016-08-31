@@ -19,15 +19,15 @@ export class HomePage {
   lastRefreshed = '';
   itemSelected = null;
   pageTitle: string;
-  enableSearch:boolean = false;
-  public page:any;
+  enableSearch: boolean = false;
+  public page: any;
   private pages = {
-    "Cases":CasesDetails,
-    "CAPS":PreferenceDetail,
-    "Defects":DefectDetails,
+    "Cases": CasesDetails,
+    "CAPS": PreferenceDetail,
+    "Defects": DefectDetails,
     "Deficiencies": DeficienciesDetails,
-    "Customer Pain":CustomerPainDetails,
-    "Hardware Returns":HardwareDetails
+    "Customer Pain": CustomerPainDetails,
+    "Hardware Returns": HardwareDetails
   }
   info = "";
 
@@ -36,23 +36,21 @@ export class HomePage {
     this.info = this.prepareInfoData(this.page, this.navParams.get('info')) || "No Info available";
     this.pageTitle = this.page.name;
     this.menuCtrl.swipeEnable(true);
-
-    /*let loading = Loading.create({
-      content: 'Please wait...'
-      });
-      this.navCtrl.present(loading);
-      loading.dismiss();
-    */
     this.initializeItems();
     this.lastRefreshed = new Date().toLocaleString();
   }
 
 
-
+  /**
+  * handler for card click.
+  * @item: object of card, which is tapped.
+  * @index: index of card in list
+  */
   itemTapped(event, item, index) {
+    // Navigating to card detail page 
     this.navCtrl.push(this.pages[item.name], {
       item: item,
-	  index:index,
+      index: index,
       title: this.pageTitle
 
     }).then(res => {
@@ -60,27 +58,35 @@ export class HomePage {
     });
   }
 
-  initializeItems(){
-    this.page.categories.forEach(function(item){
+  /**
+  * Added 'visible' property in card object, which is being used for filtering
+  */
+  initializeItems() {
+    this.page.categories.forEach(function(item) {
       item.visible = true;
     });
   }
-
+  /*
+  ** Filtering items based on the search input from the user.
+  */
+  /**
+  * Card Filter based on preference selected
+  */
   getItems(ev: any) {
     this.initializeItems();
     var val = ev.target.value;
     if (val && val.trim() != '') {
-      this.page.categories.forEach(function(item){
+      this.page.categories.forEach(function(item) {
         item.visible = (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
       })
     }
   }
   showToast(message, position) {
-      Toast.show(message, "short", position).subscribe(
-          toast => {
-              console.log(toast);
-          }
-      );
+    Toast.show(message, "short", position).subscribe(
+      toast => {
+        console.log(toast);
+      }
+    );
   }
   correctName(label) {
     if (label.startsWith("SP ")) {
@@ -92,31 +98,39 @@ export class HomePage {
     }
     return label;
   }
-
-  onCancel(){
+  /*
+  ** Clearing Search data
+  */
+  /**
+  * Clear search
+  */
+  onCancel() {
     this.initializeItems();
     this.enableSearch = false;
   }
 
-  prepareInfoData(data, _info){
-	  let info = "";
+  /**
+  * Preparing HTML string for info 
+  */
+  prepareInfoData(data, _info) {
+    let info = "";
     //BUG -the data is showing random behaviour on IOS so changing according to below one and its works fine.
     //var arr = "2010-03-15 10:30:00".split(/[- :]/),    //2016-08-27 22:20:46.0  -- actuall comming in data json
-    var arr =data.lastRefreshDate.split(/[- :]/),
-    date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
-    info += '<b>Last Refreshed: </b>'+(date).toLocaleString()+'</br></br>';
+    var arr = data.lastRefreshDate.split(/[- :]/),
+      date = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
+    info += '<b>Last Refreshed: </b>' + (date).toLocaleString() + '</br></br>';
     //---------------------------------------
     console.log(date);
-	  //info += '<b>Last Refreshed: </b>'+(new Date(data.lastRefreshDate)).toLocaleString()+'</br></br>';
+    //info += '<b>Last Refreshed: </b>'+(new Date(data.lastRefreshDate)).toLocaleString()+'</br></br>';
     console.log(info + "----------inside info -------------");
-    if(data.aggregationDetails.length>1){
-		  info += '<b>Aggregated view for:</b><ol>';
-		  for(let i=0;i<data.aggregationDetails.length;i++){
-			info += '<li>'+data.aggregationDetails[i]+'</li>';
-		  }
-		  info += '</ol></br>';
-	  }
-	  info += _info;
-	  return info;
+    if (data.aggregationDetails.length > 1) {
+      info += '<b>Aggregated view for:</b><ol>';
+      for (let i = 0; i < data.aggregationDetails.length; i++) {
+        info += '<li>' + data.aggregationDetails[i] + '</li>';
+      }
+      info += '</ol></br>';
+    }
+    info += _info;
+    return info;
   }
 }

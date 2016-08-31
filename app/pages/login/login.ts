@@ -6,8 +6,7 @@ import {AuthService} from '../../providers/auth-service/auth-service';
 import { MenuController, Events } from 'ionic-angular';
 
 @Component({
-  templateUrl: 'build/pages/login/login.html',
-  providers: [AuthService]
+  templateUrl: 'build/pages/login/login.html'
 })
 export class LoginPage {
   credentials: Object = {};
@@ -17,9 +16,6 @@ export class LoginPage {
     // If we navigated to this page, we will have an item available as a nav param
     this.credentials = {};
     this.menuCtrl.swipeEnable(false);
-  }
-
-  onPageWillEnter() {
   }
 
   itemTapped(event, item) {

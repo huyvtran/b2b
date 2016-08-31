@@ -41,18 +41,23 @@ export class DeficienciesDetails {
 
       this.info = res.info;
 
-      //this.trendsList = res.trendDetails;
+      //Replacing 'd' with blank to display data for values having 'd' in it and 
+      //check if it can be converted to a valid number or not. 
       var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
-      var subCategoryItemvalueInt = parseInt(this.selectedItem.subCategories[data.value].value.replace('d', ''));
+       
+       //Cases to check what text to display on No Data Screen
+
       if (subCategoryItemvalue == "N") {
         this.noDataText = "Under Construction"
       }
       else if (subCategoryItemvalue == "U") {
         this.noDataText = "Data Not Available";
       }
-      this.setVisibilityOfNoDataScreen(subCategoryItemvalue, subCategoryItemvalueInt);
+      this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
 
       this.trendsList = res.trendDetails;
+
+      //Managing Header text for table and chart
       if (this.selectedItem.subCategories[data.value].name == "Resolve Time") {
 
         this.chartHeaderText = "Cumulative Resolution Trend"
@@ -106,7 +111,11 @@ export class DeficienciesDetails {
     }
     return label;
   }
-
+  /*
+  ** Displaying a toast message on the screen
+  @params message: message which needs to be displayed
+          position: position on screen , center, bottom. 
+  */
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(
       toast => {
@@ -118,7 +127,7 @@ export class DeficienciesDetails {
 
  
   
-  setVisibilityOfNoDataScreen(subCategoryValue, valueinInt) {
+  setVisibilityOfNoDataScreen(subCategoryValue) {
     if (!isNaN(subCategoryValue)) {
       this.isVisible = true;
     } else {

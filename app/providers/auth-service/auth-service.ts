@@ -27,11 +27,6 @@ export class AuthService {
 
     let creds = "client_id=m6hgwkg3893tycmttefe7wsn&client_secret=m7qpUM3YrACgEZtcHx4RGVgw&grant_type=password&username=" + credentials.username + "&password=" + credentials.password;
 
-    if (this.data) {
-      // already loaded data
-      return Promise.resolve(this.data);
-    }
-
     this.clearStorage();
 
     // don't have the data yet
@@ -53,8 +48,6 @@ export class AuthService {
           this.data = data;
           this.saveData(this.data, rememberMe);
           this.loadData();
-          //this.authorization = this.data.token_type + ' ' + this.data.access_token;
-          console.log(this.data,this.authorization + "this is 57 line in auth service ");
           resolve(this.data);
         }, err => {
           if (err._body.type == 'error') {
@@ -87,12 +80,11 @@ export class AuthService {
   }
 
   isAuthenticated() {
-    return this.authorization ? true : false;
+    return this.getAuthorization() ? true : false;
   }
 
   getAuthorization() {
-    console.log(this.data,this.authorization + "this isn auth service return block  ------");
-    return this.authorization ? this.authorization : "Basic c2t1bWFyOTpBdWdfMjAxNg==";
+    return this.authorization;
   }
 
   logout() {

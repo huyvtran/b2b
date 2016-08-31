@@ -79,6 +79,11 @@ class Back2Basic {
     });
 
   }
+    /*
+  ** Displaying a toast message on the screen
+  @params message: message which needs to be displayed
+          position: position on screen , center, bottom. 
+  */
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(
       toast => {
@@ -86,6 +91,9 @@ class Back2Basic {
       }
     );
   }
+  /*
+  ** Open any Page baed on the click performed.
+  */
   openPage(page) {
     // close the menu when clicking a link from the menu
     this.menu.close();
@@ -115,14 +123,18 @@ class Back2Basic {
     }
     return label;
   }
-
+  /*
+  ** Go to login Page
+  */
   logout() {
     this.authService.logout();
     this.menu.close();
     this.nav.push(LoginPage);
     //this.platform.exitApp();
   }
-
+  /*
+  ** Go to Help Page
+  */
   openHelpPage() {
     // close the menu when clicking a link from the menu
     this.menu.close();

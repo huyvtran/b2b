@@ -38,7 +38,11 @@ export class CasesDetails {
   initializeData(data) {
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
       this.chartHeaderText = "Incoming and Open Case Trend";
+      //Replacing 'd' with blank to display data for values having 'd' in it and 
+      //check if it can be converted to a valid number or not. 
       var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
+
+      //Cases to check what text to display on No Data Screen
       if (subCategoryItemvalue == "N") {
         this.noDataText = "Under Construction"
       }
@@ -46,7 +50,8 @@ export class CasesDetails {
         this.noDataText = "Data Not Available";
       }
       this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
-
+      
+      //Managing Header text for table and chart
       if (this.selectedSubCategory == "Resolve Time") {
         this.casesList = this.prepareDataForTable(res.subCategoryDetails);
         this.chartHeaderText = "Cumulative Resolution Trend";
@@ -121,6 +126,11 @@ export class CasesDetails {
     }
     return label;
   }
+    /*
+  ** Displaying a toast message on the screen
+  @params message: message which needs to be displayed
+          position: position on screen , center, bottom. 
+  */
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(
       toast => {
@@ -129,7 +139,9 @@ export class CasesDetails {
     );
   }
 
-
+  /*
+  ** Handling the visibility of NO Data Screen when we have no data to display.
+  */
   setVisibilityOfNoDataScreen(subCategoryValue) {
     if (!isNaN(subCategoryValue)) {
       this.isVisible = true;
