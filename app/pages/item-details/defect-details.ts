@@ -36,41 +36,45 @@ export class DefectDetails {
     this.initializeData({ value: this.selectedIndex });
   }
   initializeData(data) {
+    this.casesList = [];
+    this.pieChartDataProvider = [];
+    this.trendsList = [];
+    this.info = "";   
+
+    //Replacing 'd' with blank to display data for values having 'd' in it and 
+    //check if it can be converted to a valid number or not. 
+    var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
+    
+    //Cases to check what text to display on No Data Screen
+
+    if (subCategoryItemvalue == "N") {
+      this.noDataText = "Under Construction"
+    }
+    else if (subCategoryItemvalue == "U") {
+      this.noDataText = "Data Not Available";
+    }
+    this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
+    
+    //Managing Header text for table and chart
+    if (this.selectedItem.subCategories[data.value].name == "Resolve Time") {
+
+      this.chartHeaderText = "Cumulative Resolution Trend"
+      this.tableHeaderText = "Defects " + "Resolution Time";
+    }
+    else if (this.selectedItem.subCategories[data.value].name == "Open") {
+
+      this.chartHeaderText = "Incoming and Open Defect Trend";
+      this.tableHeaderText = "Open " + "Defects";
+    }
+    else {
+      this.chartHeaderText = "Incoming and Open " + this.selectedItem.subCategories[data.value].name + " Trend";
+      this.tableHeaderText = "Open " + this.selectedItem.subCategories[data.value].name + " Defects";
+    }
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
       this.casesList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
-
-      this.info = res.info;
-      //Replacing 'd' with blank to display data for values having 'd' in it and 
-      //check if it can be converted to a valid number or not. 
-      var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
-      
-      //Cases to check what text to display on No Data Screen
-
-      if (subCategoryItemvalue == "N") {
-        this.noDataText = "Under Construction"
-      }
-      else if (subCategoryItemvalue == "U") {
-        this.noDataText = "Data Not Available";
-      }
-      this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
-      
-      //Managing Header text for table and chart
-      if (this.selectedItem.subCategories[data.value].name == "Resolve Time") {
-
-        this.chartHeaderText = "Cumulative Resolution Trend"
-        this.tableHeaderText = "Defects " + "Resolution Time";
-      }
-      else if (this.selectedItem.subCategories[data.value].name == "Open") {
-
-        this.chartHeaderText = "Incoming and Open Defect Trend";
-        this.tableHeaderText = "Open " + "Defects";
-      }
-      else {
-        this.chartHeaderText = "Incoming and Open " + this.selectedItem.subCategories[data.value].name + " Trend";
-        this.tableHeaderText = "Open " + this.selectedItem.subCategories[data.value].name + " Defects";
-      }
+      this.info = res.info;      
     })
   }
 

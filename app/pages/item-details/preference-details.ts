@@ -58,37 +58,40 @@ export class PreferenceDetail {
   }
 
   initializeData(data) {
-    this.b2bService.loadCapList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
+    this.capList = [];
+    this.pieChartDataProvider = [];
+    this.trendsList = [];
+    this.info = "";
+    var subCategoryItemvalue=this.selectedItem.subCategories[data.value].value.replace('d','');    
+    //Cases to check what text to display on No Data Screen
+    if(subCategoryItemvalue=="N"){
+      this.noDataText="Under Construction"
+    }
+    else if(subCategoryItemvalue=="U") {
+      this.noDataText="Data Not Available";
+    }
+    this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
+    //Managing Header text for table and chart
+    if(this.selectedItem.subCategories[data.value].name == "Resolve Time"){               
+      this.chartHeaderText="Age Distribution of CAPs by Level"
+      this.tableHeaderText="CAP "+"Resolution Time";
+    }else{
+      this.chartHeaderText="Incoming and Open Cap Trend";
+      this.tableHeaderText=this.selectedItem.subCategories[data.value].name +" CAPs";
+    } 
+
+    this.b2bService.loadCapList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {      
       this.capList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
       this.info = res.info;      
-      var subCategoryItemvalue=this.selectedItem.subCategories[data.value].value.replace('d','');
-    
-      //Cases to check what text to display on No Data Screen
-
-      if(subCategoryItemvalue=="N"){
-        this.noDataText="Under Construction"
-      }
-      else if(subCategoryItemvalue=="U") {
-        this.noDataText="Data Not Available";
-      }
-      this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
-      //Managing Header text for table and chart
-      if(this.selectedItem.subCategories[data.value].name == "Resolve Time"){               
-        this.chartHeaderText="Age Distribution of CAPs by Level"
-        this.tableHeaderText="CAP "+"Resolution Time";
-      }else{
-        this.chartHeaderText="Incoming and Open Cap Trend";
-        this.tableHeaderText=this.selectedItem.subCategories[data.value].name +" CAPs";
-
-      }  
+      
     })
   }
-    /*
-  ** Displaying a toast message on the screen
-  @params message: message which needs to be displayed
-          position: position on screen , center, bottom. 
+  /**
+  *  Displaying a toast message on the screen
+  *  @params message: message which needs to be displayed
+  *  position: position on screen , center, bottom. 
   */
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(

@@ -44,7 +44,7 @@ class Back2Basic {
   ngOnInit() {
     if(this.authService.isAuthenticated()) {
       let loading = Loading.create({
-        content: 'Loading Data...',
+        content: 'Loading data...',
         dismissOnPageChange: true
       });
       this.nav.present(loading);

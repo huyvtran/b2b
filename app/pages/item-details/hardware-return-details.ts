@@ -36,43 +36,47 @@ export class HardwareDetails {
     this.initializeData({ value: this.selectedIndex });
   }
   initializeData(data) {
+    this.casesList = [];
+    this.pieChartDataProvider = [];
+    this.info = "";    
+    this.trendsList = []; 
+    
+    //Replacing 'd' with blank to display data for values having 'd' in it and 
+    //check if it can be converted to a valid number or not. 
+    var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
+    
+    //Cases to check what text to display on No Data Screen
+
+    if (subCategoryItemvalue == "N") {
+      this.noDataText = "Under Construction"
+
+    }
+    else if (subCategoryItemvalue == "U") {
+      this.noDataText = "Data Not Available";
+    }
+    this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
+
+    
+    //Managing Header text for table and chart
+    if (this.selectedItem.subCategories[data.value].name == "Resolve Time") {
+
+      this.chartHeaderText = "RMA Resolution Trend"
+      this.tableHeaderText = "RMA " + "Resolution Time";
+    }
+    else if (this.selectedItem.subCategories[data.value].name == "Open") {
+
+      this.chartHeaderText = "In Process RMA Trend"
+      this.tableHeaderText = "In Process " + "RMAs";
+    }
+    else {
+      this.chartHeaderText = "Resolution Trend"
+      this.tableHeaderText = "Open " + this.selectedItem.subCategories[data.value].name;
+    }
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
       this.casesList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
-
       this.info = res.info;
-
-      //Replacing 'd' with blank to display data for values having 'd' in it and 
-      //check if it can be converted to a valid number or not. 
-      var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
-      
-      //Cases to check what text to display on No Data Screen
-
-      if (subCategoryItemvalue == "N") {
-        this.noDataText = "Under Construction"
-
-      }
-      else if (subCategoryItemvalue == "U") {
-        this.noDataText = "Data Not Available";
-      }
-      this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
-
       this.trendsList = res.trendDetails;
-      //Managing Header text for table and chart
-      if (this.selectedItem.subCategories[data.value].name == "Resolve Time") {
-
-        this.chartHeaderText = "RMA Resolution Trend"
-        this.tableHeaderText = "RMA " + "Resolution Time";
-      }
-      else if (this.selectedItem.subCategories[data.value].name == "Open") {
-
-        this.chartHeaderText = "In Process RMA Trend"
-        this.tableHeaderText = "In Process " + "RMAs";
-      }
-      else {
-        this.chartHeaderText = "Resolution Trend"
-        this.tableHeaderText = "Open " + this.selectedItem.subCategories[data.value].name;
-      }
     })
   }
 

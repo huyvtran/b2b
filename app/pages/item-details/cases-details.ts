@@ -36,22 +36,29 @@ export class CasesDetails {
     this.initializeData({ value: this.selectedIndex });
   }
   initializeData(data) {
-    this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
-      this.chartHeaderText = "Incoming and Open Case Trend";
-      //Replacing 'd' with blank to display data for values having 'd' in it and 
-      //check if it can be converted to a valid number or not. 
-      var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
+    this.pieChartDataProvider = [];
+    this.trendsList = [];
+    this.info = "";
+    this.casesList = [];
+    //Managing Header text for table and chart
+    this.chartHeaderText = "Incoming and Open Case Trend";
+    //Replacing 'd' with blank to display data for values having 'd' in it and 
+    //check if it can be converted to a valid number or not. 
+    var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
 
-      //Cases to check what text to display on No Data Screen
-      if (subCategoryItemvalue == "N") {
-        this.noDataText = "Under Construction"
-      }
-      else if (subCategoryItemvalue == "U") {
-        this.noDataText = "Data Not Available";
-      }
-      this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
-      
-      //Managing Header text for table and chart
+    //Cases to check what text to display on No Data Screen
+    if (subCategoryItemvalue == "N") {
+      this.noDataText = "Under Construction"
+    }
+    else if (subCategoryItemvalue == "U") {
+      this.noDataText = "Data Not Available";
+    }
+    this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
+
+    this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
+      this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
+      this.trendsList = res.trendDetails;
+      this.info = res.info;
       if (this.selectedSubCategory == "Resolve Time") {
         this.casesList = this.prepareDataForTable(res.subCategoryDetails);
         this.chartHeaderText = "Cumulative Resolution Trend";
@@ -60,9 +67,6 @@ export class CasesDetails {
         this.casesList = res.subCategoryDetails;
         this.tableHeaderText = this.selectedSubCategory + " Cases";
       }
-      this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
-      this.trendsList = res.trendDetails;
-      this.info = res.info;
       console.log(this.info);
     })
   }

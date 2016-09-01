@@ -29,7 +29,7 @@ export class LoginPage {
     });
     this.navCtrl.present(loading);
     this.authService.authenticate(this.credentials, this.rememberMe).then(data => {
-      loading.data.content = 'Loading Data...';
+      loading.data.content = 'Loading data...';
       this.events.publish('user:authed');
     }, err => {
       loading.dismiss();
