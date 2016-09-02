@@ -13,6 +13,8 @@ export class AuthService {
   data: any;
   authorization: string;
   OAUTH_URL: string = 'https://cloudsso.cisco.com/as/token.oauth2';
+  //OAUTH_URL: string = 'https://cloudsso-test.cisco.com/as/token.oauth2';
+
   props: Array<string> = ['access_token', 'refresh_token', 'token_type', 'expires_in'];
   propsPrefix: string = '$b2b$';
   ENV: string = 'cisco'; // dev, cisco, prod
@@ -26,6 +28,8 @@ export class AuthService {
     if(credentials.username) credentials.username = credentials.username.trim();
 
     let creds = "client_id=m6hgwkg3893tycmttefe7wsn&client_secret=m7qpUM3YrACgEZtcHx4RGVgw&grant_type=password&username=" + credentials.username + "&password=" + credentials.password;
+    //let creds = "client_id=BackToBasics&client_secret=hl4w1j2QU2shnRjIf5Ir2naDOs5IhDFo1zSIgpeGVIC6ogDbmllgQ3DFUwSgjUXl&grant_type=password&username=" + credentials.username + "&password=" + credentials.password +"&scope=" + "Read Write";
+    //let creds = "client_id=BackToBasics&client_secret=hl4w1j2QU2shnRjIf5Ir2naDOs5IhDFo1zSIgpeGVIC6ogDbmllgQ3DFUwSgjUXl&grant_type=password&username=" + credentials.username + "&password=" + credentials.password ;
 
     this.clearStorage();
 
