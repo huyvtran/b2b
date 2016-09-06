@@ -12,8 +12,8 @@ import 'rxjs/add/operator/map';
 export class AuthService {
   data: any;
   authorization: string;
-  OAUTH_URL: string = 'https://cloudsso.cisco.com/as/token.oauth2';
-  //OAUTH_URL: string = 'https://cloudsso-test.cisco.com/as/token.oauth2';
+  //OAUTH_URL: string = 'https://cloudsso.cisco.com/as/token.oauth2';
+  OAUTH_URL: string = 'https://cloudsso-test.cisco.com/as/token.oauth2';
 
   props: Array<string> = ['access_token', 'refresh_token', 'token_type', 'expires_in'];
   propsPrefix: string = '$b2b$';

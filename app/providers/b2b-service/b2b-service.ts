@@ -98,7 +98,7 @@ export class B2BService {
         console.log("Got Data from API");
       },err => {
         /*
-        Modifications in variable name to add underscore in place of space to make it 
+        Modifications in variable name to add underscore in place of space to make it
         in sync with json file name. This change is done only for static data.
         */
         subCategory = subCategory.replace(" ","_");
@@ -148,7 +148,7 @@ export class B2BService {
         console.log("Got Data from API");
       },err => {
         /*
-        Modifications in variable name to add underscore in place of space to make it 
+        Modifications in variable name to add underscore in place of space to make it
         in sync with json file name. This change is done only for static data.
         */
         subCategory = subCategory.replace(" ","_");
@@ -166,7 +166,7 @@ export class B2BService {
       })
     })
   }
-  
+
 
   setSelectedPlatform(platform){
     this._platform = platform;
