@@ -1,13 +1,17 @@
 import {Component, ViewChild} from '@angular/core';
-import {ionicBootstrap, Platform, MenuController, Nav, Events, Loading } from 'ionic-angular';
+import {ionicBootstrap, Platform, MenuController, Nav, Events, Loading, Alert} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {LoginPage} from './pages/login/login';
 import {B2BService} from './providers/b2b-service/b2b-service';
 import {AuthService} from './providers/auth-service/auth-service';
+import {NetworkService} from './providers/network-service';
 import {HomePage} from './pages/home/home';
+import {LandingPage} from './pages/landing/landing';
 import {HelpPage} from './pages/help/help';
 import {CollapsiblePane} from './components/collapsible-pane/collapsible-pane';
 import {Toast} from 'ionic-native';
+import {enableProdMode} from '@angular/core';
+enableProdMode();
 declare var window: any;
 
 @Component({
@@ -20,7 +24,7 @@ class Back2Basic {
   activePlateform: any = {
     categories: []
   };
-  rootPage: any;
+  rootPage: any = LandingPage;
   plateforms: Array<{ title: string }>;
   private info = ""
 
@@ -31,7 +35,8 @@ class Back2Basic {
     private menu: MenuController,
     public b2bService: B2BService,
     public events: Events,
-    private authService:AuthService
+    private authService:AuthService,
+    private netService:NetworkService
   ) {
     this.initializeApp();    
 
@@ -42,6 +47,32 @@ class Back2Basic {
   }
 
   ngOnInit() {
+    this.checkConn();
+  }
+
+  checkConn() {
+    this.netService.checkConnection().then(res => {
+      this.checkAuth();
+    }, err => {
+      let alert = Alert.create({
+        title: '',
+        message: err.error_description,
+		enableBackdropDismiss: false,
+        buttons: [
+		  {
+			text: 'OK',
+			role: 'cancel',
+			handler: () => {
+			   this.exitApp();
+			}
+		  }
+		]
+      });
+      this.nav.present(alert);
+    });
+  }
+
+  checkAuth() {
     if(this.authService.isAuthenticated()) {
       let loading = Loading.create({
         content: 'Loading data...',
@@ -75,7 +106,7 @@ class Back2Basic {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      StatusBar.styleDefault();
+	  StatusBar.styleDefault();
     });
 
   }
@@ -130,7 +161,13 @@ class Back2Basic {
     this.authService.logout();
     this.menu.close();
     this.nav.push(LoginPage);
-    //this.platform.exitApp();
+  }
+
+  /*
+  ** Exit Application
+  */
+  exitApp() {
+    this.platform.exitApp();
   }
   /*
   ** Go to Help Page
@@ -143,4 +180,4 @@ class Back2Basic {
 
 }
 
-ionicBootstrap(Back2Basic, [B2BService, AuthService]);
+ionicBootstrap(Back2Basic, [B2BService, AuthService, NetworkService]);

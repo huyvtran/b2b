@@ -34,8 +34,7 @@ export class B2BService {
 
     var headers = new Headers();
     headers.append('Authorization', this.authService.getAuthorization());
-    headers.append('Cache-Control', 'no-cache');
-    console.log(headers);
+    headers.append('Cache-Control', 'no-cache')
     this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld', {
         headers: headers
     })
@@ -51,7 +50,15 @@ export class B2BService {
         },err => {
           // we've got back the raw data, now generate the core schedule data
           // and save the data for later reference
+          //this.data = data;
           console.log("This is static data");
+
+          //in case data url auth fail in any scenario.....
+          headers.append('Authorization', 'Basic c2t1bWFyOTpBdWdfMjAxNg==');
+          headers.append('Cache-Control', 'no-cache')
+          this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld', {
+          headers: headers
+          })
           //------------------------------------------------
           //reject(err);
         });
@@ -91,7 +98,7 @@ export class B2BService {
         console.log("Got Data from API");
       },err => {
         /*
-        Modifications in variable name to add underscore in place of space to make it
+        Modifications in variable name to add underscore in place of space to make it 
         in sync with json file name. This change is done only for static data.
         */
         subCategory = subCategory.replace(" ","_");
@@ -141,7 +148,7 @@ export class B2BService {
         console.log("Got Data from API");
       },err => {
         /*
-        Modifications in variable name to add underscore in place of space to make it
+        Modifications in variable name to add underscore in place of space to make it 
         in sync with json file name. This change is done only for static data.
         */
         subCategory = subCategory.replace(" ","_");
@@ -159,7 +166,7 @@ export class B2BService {
       })
     })
   }
-
+  
 
   setSelectedPlatform(platform){
     this._platform = platform;
