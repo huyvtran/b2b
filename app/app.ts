@@ -7,7 +7,7 @@ import {AuthService} from './providers/auth-service/auth-service';
 import {HomePage} from './pages/home/home';
 import {HelpPage} from './pages/help/help';
 import {CollapsiblePane} from './components/collapsible-pane/collapsible-pane';
-import {Toast, InAppBrowser} from 'ionic-native';
+import {Toast} from 'ionic-native';
 declare var window: any;
 
 @Component({
@@ -33,13 +33,12 @@ class Back2Basic {
     public events: Events,
     private authService:AuthService
   ) {
-    this.initializeApp();
+    this.initializeApp();    
 
     this.events.subscribe('user:authed', () => {
       // arg is an array of parameters, so grab our first and only arg
       this.loadData();
     });
-
   }
 
   ngOnInit() {
@@ -77,17 +76,13 @@ class Back2Basic {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
-      console.log(InAppBrowser);
-      //let browser = new InAppBrowser();
-      let browser = InAppBrowser.open('https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld', '_self','location=no');
-      console.log(browser);
     });
 
   }
     /*
   ** Displaying a toast message on the screen
   @params message: message which needs to be displayed
-          position: position on screen , center, bottom.
+          position: position on screen , center, bottom. 
   */
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(
