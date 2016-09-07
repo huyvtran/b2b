@@ -34,8 +34,8 @@ export class NetworkService {
           resolve();
         }, err => {
           if (err == this.VPN_NOT_CONNECTED || err.status == 0) {
-            let errorMsg = 'Cisco VPN not connected !';
-            if(this.platform.is('ios')) errorMsg = 'Cisco VPN not connected ! Please kill the application and start again.';
+            let errorMsg = 'Please ensure connectivity to Cisco Network !';
+            if(this.platform.is('ios')) errorMsg = 'Please ensure connectivity to Cisco Network';
             reject({
               'error': 'error',
               'error_description': errorMsg
