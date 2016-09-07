@@ -30,21 +30,20 @@ export class CapListView  {
 
 	@Input()
 	set model(model){   // model.sort belwo will provide a sorting logic for alphabets
-		this._model = model.sort(function(a, b) {
-  var nameA = a.capLevel.toUpperCase(); // ignore upper and lowercase
-  var nameB = b.capLevel.toUpperCase(); // ignore upper and lowercase
-  if (nameA > nameB) {
-    return -1;
-  }
-  if (nameA < nameB) {
-    return 1;
-  }
+		this._model = model;
+		/*.sort(function(a, b) {
+		  var nameA = a.capLevel.toUpperCase(); // ignore upper and lowercase
+		  var nameB = b.capLevel.toUpperCase(); // ignore upper and lowercase
+		  if (nameA > nameB) {
+		    return -1;
+		  }
+		  if (nameA < nameB) {
+		    return 1;
+		  }
 
-  // names must be equal
-  return 0;
-});
-
-
+		  // names must be equal
+		  return 0;
+		});*/
 	};
 	get model(){
 		return this._model;

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeout';
@@ -13,9 +14,9 @@ import 'rxjs/add/operator/timeout';
 export class NetworkService {
   _URL: string = 'https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld';
   VPN_NOT_CONNECTED: string = 'cisco_vpn_not_connected';
-  TIMEOUT: number = 2*1000; // 2 seconds
+  TIMEOUT: number = 6*1000; // 6 seconds
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private platform: Platform) {
   }
 
   checkConnection() {
@@ -33,9 +34,11 @@ export class NetworkService {
           resolve();
         }, err => {
           if (err == this.VPN_NOT_CONNECTED || err.status == 0) {
+            let errorMsg = 'Cisco VPN not connected !';
+            if(this.platform.is('ios')) errorMsg = 'Cisco VPN not connected ! Please kill the application and start again.';
             reject({
               'error': 'error',
-              'error_description': 'Cisco VPN not connected !'
+              'error_description': errorMsg
             });
           } else {
             resolve();
