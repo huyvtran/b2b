@@ -27,7 +27,7 @@ export class HomePage {
     "Defects": DefectDetails,
     "Deficiencies": DeficienciesDetails,
     "Customer Pain": CustomerPainDetails,
-    "Hardware Returns": HardwareDetails
+    "Hardware Returns (RMA)": HardwareDetails
   }
   info = "";
 

@@ -1,8 +1,7 @@
-import {Component} from '@angular/core';
-import {NavController, NavParams, Nav, Alert, Loading} from 'ionic-angular';
-import {HomePage} from '../home/home';
-import {B2BService} from '../../providers/b2b-service/b2b-service';
-import {AuthService} from '../../providers/auth-service/auth-service';
+import { Component } from '@angular/core';
+import { NavController, NavParams, Nav, Alert, Loading } from 'ionic-angular';
+import { HomePage } from '../home/home';
+import { AuthService } from '../../providers/auth-service/auth-service';
 import { MenuController, Events } from 'ionic-angular';
 
 @Component({
@@ -11,8 +10,8 @@ import { MenuController, Events } from 'ionic-angular';
 export class LoginPage {
   credentials: Object = {};
   rememberMe: boolean = true;
-  private info = "";
-  constructor(private navCtrl: NavController, private authService:AuthService, private b2bService: B2BService, private menuCtrl: MenuController, public events: Events) {
+
+  constructor(private navCtrl: NavController, private authService: AuthService, private menuCtrl: MenuController, private events: Events) {
     // If we navigated to this page, we will have an item available as a nav param
     this.credentials = {};
     this.menuCtrl.swipeEnable(false);
@@ -29,12 +28,17 @@ export class LoginPage {
     });
     this.navCtrl.present(loading);
     this.authService.authenticate(this.credentials, this.rememberMe).then(data => {
-      loading.data.content = 'Loading data...';
-      this.events.publish('user:authed');
+      loading.onDismiss(() => {
+        var self = this;
+        setTimeout(()=> {
+          self.events.publish('user:authed');
+        }, 50);
+      });
+      loading.dismiss();
     }, err => {
       loading.dismiss();
 	    var loginErrorMessage = err.error_description;
-      if(err.error_description.indexOf('fail to process username & password') != -1) {
+      if(loginErrorMessage && loginErrorMessage.indexOf('fail to process username & password') != -1) {
         loginErrorMessage = 'Username or Password is Invalid.';
       }
 

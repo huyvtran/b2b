@@ -10,11 +10,10 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class AuthService {
-  data: any;
+  data: Object;
   authorization: string;
   OAUTH_URL: string = 'https://cloudsso.cisco.com/as/token.oauth2';
   //OAUTH_URL: string = 'https://cloudsso-test.cisco.com/as/token.oauth2';
-
   props: Array<string> = ['access_token', 'refresh_token', 'token_type', 'expires_in'];
   propsPrefix: string = '$b2b$';
   ENV: string = 'dev'; // dev, cisco, prod
@@ -27,9 +26,7 @@ export class AuthService {
   authenticate(credentials, rememberMe) {
     if(credentials.username) credentials.username = credentials.username.trim();
 
-    //let creds = "client_id=m6hgwkg3893tycmttefe7wsn&client_secret=m7qpUM3YrACgEZtcHx4RGVgw&grant_type=password&username=" + credentials.username + "&password=" + credentials.password;
-    let creds = "client_id=BackToBasics&client_secret=hl4w1j2QU2shnRjIf5Ir2naDOs5IhDFo1zSIgpeGVIC6ogDbmllgQ3DFUwSgjUXl&grant_type=password&username=" + credentials.username + "&password=" + credentials.password +"&scope=" + "Read Write";
-    //let creds = "client_id=BackToBasics&client_secret=hl4w1j2QU2shnRjIf5Ir2naDOs5IhDFo1zSIgpeGVIC6ogDbmllgQ3DFUwSgjUXl&grant_type=password&username=" + credentials.username + "&password=" + credentials.password ;
+    let creds = "client_id=BackToBasics&client_secret=hl4w1j2QU2shnRjIf5Ir2naDOs5IhDFo1zSIgpeGVIC6ogDbmllgQ3DFUwSgjUXl&grant_type=password&username=" + credentials.username + "&password=" + credentials.password + "&scope=" + "Read Write";
 
     this.clearStorage();
 
@@ -56,8 +53,8 @@ export class AuthService {
         }, err => {
           if (err.status == 0) {
             reject({
-              'error': 'error',
-              'error_description': 'Something went wrong, please try again !'
+              'error': 'Error',
+              'error_description': 'Access control not enabled for this origin.'
             });
           } else {
             reject(JSON.parse(err._body));
@@ -81,6 +78,13 @@ export class AuthService {
     } else {
       this.authorization = null;
     }
+  }
+
+  implicitLogin(data) {
+    this.clearStorage();
+    this.data = data;
+    this.saveData(this.data, false);
+    this.loadData();
   }
 
   isAuthenticated() {
@@ -110,7 +114,7 @@ export class AuthService {
       if (value == null) value = '';
       storage[key] = value;
     } catch (err) {
-      console.log('Cannot access local/session storage: ', err);
+      //console.log('Cannot access local/session storage: ', err);
     }
   }
 

@@ -27,87 +27,63 @@ class Back2Basic {
   rootPage: any = LandingPage;
   plateforms: Array<{ title: string }>;
   private info = "";
-  oldCategories:any = null;
+  oldCategories:Object = null;
   loading:any = null;
+  AUTH_TYPE: string = 'password'; // implicit, password
 
-  //preference = [{label:'CAPS',value:true},{label:'Cases',value:true},{label:'Defects',value:false},{label:'Deficiencies',value:true},{label:'Customer Pain',value:true},{label:'Hardware Returns',value:true}];
   constructor(
     private platform: Platform,
     private menu: MenuController,
     public b2bService: B2BService,
     public events: Events,
-    private authService:AuthService,
-    private netService:NetworkService    
+    private authService: AuthService,
+    private netService: NetworkService
   ) {
-    this.initializeApp();    
+    this.initializeApp();
 
     this.events.subscribe('user:authed', () => {
       // arg is an array of parameters, so grab our first and only arg
-      this.loadData();
+      this.loadData(true);
     });
   }
 
   ngOnInit() {
-    this.loading = Loading.create({
-      content: "Checking certificate's security..."
-    });
-    this.nav.present(this.loading);
-
+    this.showLoading("Checking certificate's security...");
     this.checkConn();
+  }
+
+  showLoading(msg) {
+    if(this.loading == null) {
+      this.loading = Loading.create({
+        content: msg
+      });
+      this.nav.present(this.loading);
+    } else {
+      this.loading.data.content = msg;
+    }
+  }
+
+  hideLoading() {
+    if(this.loading) {
+      this.loading.onDismiss(() => {
+        this.loading = null;
+      });
+      this.loading.dismiss();
+    }
   }
 
   checkConn() {
     this.netService.checkConnection().then(res => {
-      //this.checkAuth();
       this.checkCertPinning();
     }, err => {
-      this.loading.dismiss();
+      this.hideLoading();
       this.showAlert(err.error_description);
-    });
-  }
-
-  checkAuth() {
-    if(this.authService.isAuthenticated()) {
-      this.loading.data.content = 'Loading data...';
-      var self = this;
-      setTimeout(()=> {
-        self.loadData();
-      }, 50);      
-    } else {
-      this.loading.dismiss();
-      this.rootPage = LoginPage;
-    }
-  }
-
-  loadData() {
-    // set our menu list
-    this.b2bService.load().then(respone => {
-      this.plateforms = respone.products;
-      this.activePlateform = this.plateforms[0];
-      this.preferencesModel(this.activePlateform);
-      this.activePlateform['info'] = respone.info || "";
-      this.b2bService.setSelectedPlatform(this.activePlateform);
-      this.info = respone.info || "";
-      this.gotoHomePage();
-      if(this.loading) this.loading.dismiss();
-    });
-  }
-
-  gotoHomePage() {
-    this.nav.setRoot(HomePage, { page: this.b2bService.getSelectedPlatform(),info:this.info });
-  }
-
-  initializeApp() {
-    this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-	    StatusBar.styleDefault();
     });
   }
 
   checkCertPinning() {
     this.platform.ready().then(() => {
-      if(!window['plugins']['sslCertificateChecker']) {
+      if(!window['plugins'] || !window['plugins']['sslCertificateChecker']) {
         this.checkAuth();
         return;
       }
@@ -116,15 +92,70 @@ class Back2Basic {
       var fingerprint = "5a ae a8 21 4a 91 ad f7 63 40 c9 4b 39 54 86 3e 73 6f 39 fa";
       var self = this;
       window['plugins']['sslCertificateChecker'].check(
-            function(message) {
+            function(msg) {
               self.checkAuth();
             },
-            function(message) {
-              this.loading.dismiss();
-              this.showAlert("Certificate mismatched ! Please kill the application and start again.");
+            function(msg) {
+              self.hideLoading();
+              self.showAlert("SSL certificate mismatched ! Please kill the application and start again.");
             },
             server,
             fingerprint);
+    });
+  }
+
+  checkAuth() {
+    if(this.authService.isAuthenticated()) {
+      this.loading.data.content = 'Loading data...';
+      var self = this;
+      setTimeout(()=> {
+        self.loadData(false);
+      }, 50);
+    } else {
+      this.hideLoading();
+      if(this.AUTH_TYPE == 'password') {
+        this.rootPage = LoginPage;
+      } else {
+        this.implicitLogin();
+      }
+    }
+  }
+
+  loadData(isByLogin) {
+    this.showLoading('Loading data...');
+    // set our menu list
+    this.b2bService.load().then(res => {
+      this.plateforms = res.products;
+      this.activePlateform = this.plateforms[0];
+      this.preferencesModel(this.activePlateform);
+      this.activePlateform['info'] = res.info || "";
+      this.b2bService.setSelectedPlatform(this.activePlateform);
+      this.info = res.info || "";
+      this.loading.onDismiss(() => {
+        this.gotoHomePage();
+        this.loading = null;
+      });
+      var self = this;
+      setTimeout(()=> {
+        if(self.loading) self.loading.dismiss();
+      }, 100);
+    }, err => {
+      this.hideLoading();
+      if(isByLogin) this.showAlert('Data load failed !, Please try again.');
+      this.authService.logout();
+      this.rootPage = LoginPage;
+    });
+  }
+
+  gotoHomePage() {
+    this.nav.setRoot(HomePage, { page: this.b2bService.getSelectedPlatform(), info: this.info });
+  }
+
+  initializeApp() {
+    this.platform.ready().then(() => {
+      // Okay, so the platform is ready and our plugins are available.
+      // Here you can do any higher level native things you might need.
+	    StatusBar.styleDefault();
     });
   }
 
@@ -147,28 +178,30 @@ class Back2Basic {
   }
 
   /*
-  ** Displaying a toast message on the screen
-  @params message: message which needs to be displayed
-          position: position on screen , center, bottom. 
-  */
+   * Displaying a toast message on the screen.
+   */
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(
       toast => {
       }
     );
   }
+
   /*
-  ** Open any Page baed on the click performed.
-  */
+   * Open any Page baed on the click performed.
+   */
   openPage(page) {
     // close the menu when clicking a link from the menu
     this.menu.close();
-    
+
     this.oldCategories = {};
     var self = this;
-    this.activePlateform.categories.forEach(function(item) {
-      self.oldCategories[item.name] = item.value;
-    });
+
+    if(this.activePlateform && this.activePlateform.categories) {
+      this.activePlateform.categories.forEach(function(item) {
+        self.oldCategories[item.name] = item.value;
+      });
+    }
     this.activePlateform = page;
     this.preferencesModel(this.activePlateform);
     this.b2bService.setSelectedPlatform(page);
@@ -177,16 +210,18 @@ class Back2Basic {
 
   preferencesModel(page) {
     var self = this;
-    page.categories.forEach(function(item) {
-      item.value = (self.oldCategories && self.oldCategories.hasOwnProperty(item.name)) ? self.oldCategories[item.name] : true;
-    });
+    if(page && page.categories) {
+      page.categories.forEach(function(item) {
+        item.value = (self.oldCategories && self.oldCategories.hasOwnProperty(item.name)) ? self.oldCategories[item.name] : true;
+      });
+    }
   }
 
   /*
-  ** for removing SP and SP-
-  */
+   * for removing SP and SP-
+   */
   correctName(label){
-    if(label.startsWith("SP ")){
+    if(label && label.startsWith("SP ")) {
       var i = 3;
       if (label.startsWith("SP -")) {
         i = 5;
@@ -197,29 +232,70 @@ class Back2Basic {
   }
 
   /*
-  ** Go to login Page
-  */
+   * Go to login Page.
+   */
   logout() {
     this.oldCategories = null;
     this.authService.logout();
     this.menu.close();
-    this.nav.push(LoginPage);
+    if(this.AUTH_TYPE == 'password') {
+      this.nav.push(LoginPage);
+    } else {
+      this.nav.push(LandingPage);
+      this.implicitLogin();
+    }
   }
 
   /*
-  ** Exit Application
-  */
+   * Exit Application.
+   */
   exitApp() {
     this.platform.exitApp();
   }
 
   /*
-  ** Go to Help Page
-  */
+   * Go to Help Page.
+   */
   openHelpPage() {
     // close the menu when clicking a link from the menu
     this.menu.close();
     this.nav.push(HelpPage);
+  }
+
+  public implicitLogin() {
+    this.platform.ready().then(() => {
+        this.ciscoLogin().then(res => {
+            this.authService.implicitLogin(res);
+            this.loadData(false);
+        }, (err) => {
+            this.showAlert(err);
+        });
+    });
+  }
+
+  public ciscoLogin(): Promise<any> {
+      return new Promise(function(resolve, reject) {
+          var browserRef = window.cordova.InAppBrowser.open("https://cloudsso.cisco.com/as/authorization.oauth2?response_type=token&client_id=d5sqnwvbe329pxbgwm68ncr2&redirect_uri=http://localhost/callback", "_self", "location=no,clearsessioncache=yes,clearcache=yes");
+          browserRef.addEventListener("loadstart", (event) => {
+              if ((event.url).indexOf("http://localhost/callback") === 0) {
+                  browserRef.removeEventListener("exit", (event) => {});
+                  browserRef.close();
+                  var responseParameters = ((event.url).split("#")[1]).split("&");
+                  var parsedResponse = {};
+                  for (var i = 0; i < responseParameters.length; i++) {
+                      parsedResponse[responseParameters[i].split("=")[0]] = responseParameters[i].split("=")[1];
+                  }
+                  if (parsedResponse["access_token"] !== undefined && parsedResponse["access_token"] !== null) {
+                      resolve(parsedResponse);
+                  } else {
+                      reject("Problem authenticating with Cisco");
+                  }
+              }
+          });
+          browserRef.addEventListener("exit", function(event) {
+              reject("The Cisco sign in flow was canceled");
+          });
+      });
   }
 
 }

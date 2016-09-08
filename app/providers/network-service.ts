@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Platform } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeout';
@@ -16,11 +15,10 @@ export class NetworkService {
   VPN_NOT_CONNECTED: string = 'cisco_vpn_not_connected';
   TIMEOUT: number = 6*1000; // 6 seconds
 
-  constructor(private http: Http, private platform: Platform) {
+  constructor(private http: Http) {
   }
 
   checkConnection() {
-    // don't have the data yet
     return new Promise((resolve, reject) => {
       let headers = new Headers();
       headers.append('Cache-Control', 'no-cache');
@@ -28,17 +26,15 @@ export class NetworkService {
         headers: headers
       });
       this.http.get(this._URL, options)
-		.timeout(this.TIMEOUT, this.VPN_NOT_CONNECTED)
+		    .timeout(this.TIMEOUT, this.VPN_NOT_CONNECTED)
         .map(res => res.json())
         .subscribe(data => {
           resolve();
         }, err => {
           if (err == this.VPN_NOT_CONNECTED || err.status == 0) {
-            let errorMsg = 'Please ensure connectivity to Cisco Network !';
-            if(this.platform.is('ios')) errorMsg = 'Please ensure connectivity to Cisco Network';
             reject({
-              'error': 'error',
-              'error_description': errorMsg
+              'error': 'Error',
+              'error_description': 'Please ensure connectivity to Cisco Network'
             });
           } else {
             resolve();

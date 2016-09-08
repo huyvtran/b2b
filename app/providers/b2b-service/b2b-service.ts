@@ -38,8 +38,6 @@ export class B2BService {
     this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld', {
         headers: headers
     })
-
-
     .map(res => res.json())
         .subscribe(data => {
           // we've got back the raw data, now generate the core schedule data
@@ -52,15 +50,7 @@ export class B2BService {
           // and save the data for later reference
           //this.data = data;
           console.log("This is static data");
-
-          //in case data url auth fail in any scenario.....
-          headers.append('Authorization', 'Basic c2t1bWFyOTpBdWdfMjAxNg==');
-          headers.append('Cache-Control', 'no-cache')
-          this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld', {
-          headers: headers
-          })
-          //------------------------------------------------
-          //reject(err);
+          reject(err);
         });
     });
   }
