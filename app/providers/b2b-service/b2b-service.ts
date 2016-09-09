@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
-import {AuthService} from '../auth-service/auth-service';
+import { AuthService } from '../auth-service/auth-service';
 
 /*
   Generated class for the B2BService provider.
@@ -12,12 +12,13 @@ import {AuthService} from '../auth-service/auth-service';
 @Injectable()
 export class B2BService {
   data: any;
-  capListData:any;
-  trendsList:any;
-  _platform:any;
-  _selectedPrefrences=[];
+  capListData: any;
+  trendsList: any;
+  _platform: any;
+  _selectedPrefrences = [];
+  PRODUCTS_SUMMARY_URL: string = 'https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld';
 
-  constructor(private http: Http, private authService:AuthService) {
+  constructor(private http: Http, private authService: AuthService) {
     this.data = null;
     this.capListData = {};
   }
@@ -27,34 +28,28 @@ export class B2BService {
       // already loaded data
       return Promise.resolve(this.data);
     }
-
     // don't have the data yet
     return new Promise((resolve, reject) => {
-    //this.http.get('mock-json/data.json')
-
     var headers = new Headers();
     headers.append('Authorization', this.authService.getAuthorization());
-    headers.append('Cache-Control', 'no-cache')
-    this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld', {
+    headers.append('Cache-Control', 'no-cache');
+    this.http.get(this.PRODUCTS_SUMMARY_URL, {
         headers: headers
     })
     .map(res => res.json())
         .subscribe(data => {
           // we've got back the raw data, now generate the core schedule data
           // and save the data for later reference
-          console.log("Got Data");
           this.data = data;
           resolve(this.data);
-        },err => {
-          // we've got back the raw data, now generate the core schedule data
-          // and save the data for later reference
-          //this.data = data;
-          console.log("This is static data");
+        }, err => {
+          this.data = null;
           reject(err);
         });
     });
   }
- // Method for loading data for caps category only
+
+  // Method for loading data for caps category only
   loadCapList(category, subCategory){
     //category = category.toLowerCase();
     //subCategory = subCategory.toLowerCase();

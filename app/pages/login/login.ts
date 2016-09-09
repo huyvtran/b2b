@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Nav, Alert, Loading } from 'ionic-angular';
+import { NavController, MenuController, Events, Alert } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { AuthService } from '../../providers/auth-service/auth-service';
-import { MenuController, Events } from 'ionic-angular';
 
 @Component({
   templateUrl: 'build/pages/login/login.html'
@@ -22,21 +21,11 @@ export class LoginPage {
   }
 
   authenticate() {
-    let loading = Loading.create({
-      content: 'Logging in...',
-      dismissOnPageChange: true
-    });
-    this.navCtrl.present(loading);
+    this.events.publish('user:logging_in');
     this.authService.authenticate(this.credentials, this.rememberMe).then(data => {
-      loading.onDismiss(() => {
-        var self = this;
-        setTimeout(()=> {
-          self.events.publish('user:authed');
-        }, 50);
-      });
-      loading.dismiss();
+      this.events.publish('user:login_success');
     }, err => {
-      loading.dismiss();
+      this.events.publish('user:login_failed');
 	    var loginErrorMessage = err.error_description;
       if(loginErrorMessage && loginErrorMessage.indexOf('fail to process username & password') != -1) {
         loginErrorMessage = 'Username or Password is Invalid.';

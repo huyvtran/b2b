@@ -16,3 +16,9 @@ Please run below commands before creating a Build
 ionic plugin add cordova-plugin-inappbrowser
 cordova plugin add cordova-plugin-sslcertificatechecker
 —————————————————
+
+10 Sep 2016 ———————————— 
+
+Just follow the “Code building steps” above.
+
+—————————————— 

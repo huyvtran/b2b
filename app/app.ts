@@ -27,9 +27,9 @@ class Back2Basic {
   rootPage: any = LandingPage;
   plateforms: Array<{ title: string }>;
   private info = "";
-  oldCategories:Object = null;
+  oldCategories: Object = null;
   loading:any = null;
-  AUTH_TYPE: string = 'password'; // implicit, password
+  AUTH_TYPE: string = 'browserLogin'; // browserLogin, customLogin
 
   constructor(
     private platform: Platform,
@@ -40,20 +40,28 @@ class Back2Basic {
     private netService: NetworkService
   ) {
     this.initializeApp();
+    this.addEvents();    
+  }
 
-    this.events.subscribe('user:authed', () => {
+  addEvents() {
+    this.events.subscribe('user:logging_in', () => {
+      this.showLoading("Logging in...");
+    });
+    this.events.subscribe('user:login_success', () => {
       // arg is an array of parameters, so grab our first and only arg
       this.loadData(true);
+    });
+    this.events.subscribe('user:login_failed', () => {
+      this.hideLoading();
     });
   }
 
   ngOnInit() {
-    this.showLoading("Checking certificate's security...");
     this.checkConn();
   }
 
   showLoading(msg) {
-    if(this.loading == null) {
+    if(!this.loading) {
       this.loading = Loading.create({
         content: msg
       });
@@ -64,30 +72,37 @@ class Back2Basic {
   }
 
   hideLoading() {
-    if(this.loading) {
+    try {
+      if(!this.loading) return;
       this.loading.onDismiss(() => {
         this.loading = null;
       });
       this.loading.dismiss();
+    } catch(e) {
+      console.log('Error: hideLoading');
     }
   }
 
   checkConn() {
+    this.showLoading("Checking connection...");
     this.netService.checkConnection().then(res => {
       this.checkCertPinning();
     }, err => {
       this.hideLoading();
-      this.showAlert(err.error_description);
+      this.showRetryAlert(err.error_description);
     });
   }
 
   checkCertPinning() {
+    this.showLoading("Checking certificate's security...");
     this.platform.ready().then(() => {
       if(!window['plugins'] || !window['plugins']['sslCertificateChecker']) {
         this.checkAuth();
         return;
       }
 
+      //var server = "https://wwwin-spb2b.cisco.com";
+      //var fingerprint = "51 F1 9D F2 81 B9 A8 0E F0 45 89 33 50 9B 02 C9 55 5D 2B F1";
       var server = "https://cloudsso.cisco.com";
       var fingerprint = "5a ae a8 21 4a 91 ad f7 63 40 c9 4b 39 54 86 3e 73 6f 39 fa";
       var self = this;
@@ -97,7 +112,7 @@ class Back2Basic {
             },
             function(msg) {
               self.hideLoading();
-              self.showAlert("SSL certificate mismatched ! Please kill the application and start again.");
+              self.showRetryAlert("SSL certificate mismatched ! Please kill the application and start again.");
             },
             server,
             fingerprint);
@@ -106,14 +121,10 @@ class Back2Basic {
 
   checkAuth() {
     if(this.authService.isAuthenticated()) {
-      this.loading.data.content = 'Loading data...';
-      var self = this;
-      setTimeout(()=> {
-        self.loadData(false);
-      }, 50);
+      this.loadData(false);
     } else {
-      this.hideLoading();
-      if(this.AUTH_TYPE == 'password') {
+      if(this.AUTH_TYPE == 'customLogin') {
+        this.hideLoading();
         this.rootPage = LoginPage;
       } else {
         this.implicitLogin();
@@ -125,25 +136,30 @@ class Back2Basic {
     this.showLoading('Loading data...');
     // set our menu list
     this.b2bService.load().then(res => {
-      this.plateforms = res.products;
+      this.plateforms = res['products'];
       this.activePlateform = this.plateforms[0];
       this.preferencesModel(this.activePlateform);
-      this.activePlateform['info'] = res.info || "";
+      this.activePlateform['info'] = res['info'] || "";
       this.b2bService.setSelectedPlatform(this.activePlateform);
-      this.info = res.info || "";
-      this.loading.onDismiss(() => {
-        this.gotoHomePage();
-        this.loading = null;
-      });
-      var self = this;
+      this.info = res['info'] || "";
+      this.gotoHomePage();
       setTimeout(()=> {
-        if(self.loading) self.loading.dismiss();
-      }, 100);
-    }, err => {
-      this.hideLoading();
-      if(isByLogin) this.showAlert('Data load failed !, Please try again.');
+        this.hideLoading();
+      }, 50);
+    }, err => { 
       this.authService.logout();
-      this.rootPage = LoginPage;
+      if(isByLogin) {
+        this.hideLoading();
+        this.showAlert('Data load failed ! Please try again.');
+      } else {
+        if(this.AUTH_TYPE == 'customLogin') {
+          this.hideLoading();
+          this.nav.setRoot(LoginPage);
+        } else {
+          this.nav.setRoot(LandingPage);
+          this.implicitLogin();
+        }
+      }
     });
   }
 
@@ -169,10 +185,36 @@ class Back2Basic {
             text: 'OK',
             role: 'cancel',
             handler: () => {
-               this.exitApp();
+               //this.exitApp();
             }
           }
         ]
+      });
+    this.nav.present(alert);
+  }
+
+  showRetryAlert(msg) {
+    var buttonsArr = [{
+            text: 'Retry',
+            role: 'cancel',
+            handler: () => {
+               this.checkConn();
+            }
+          }];
+    if(!this.platform.is('ios')) {
+      buttonsArr.push({
+            text: 'Exit',
+            role: 'cancel',
+            handler: () => {
+               this.exitApp();
+            }
+          });
+    }
+    let alert = Alert.create({
+        title: '',
+        message: msg,
+        enableBackdropDismiss: false,
+        buttons: buttonsArr
       });
     this.nav.present(alert);
   }
@@ -238,10 +280,10 @@ class Back2Basic {
     this.oldCategories = null;
     this.authService.logout();
     this.menu.close();
-    if(this.AUTH_TYPE == 'password') {
-      this.nav.push(LoginPage);
+    if(this.AUTH_TYPE == 'customLogin') {
+      this.nav.setRoot(LoginPage);
     } else {
-      this.nav.push(LandingPage);
+      this.nav.setRoot(LandingPage);
       this.implicitLogin();
     }
   }
@@ -250,7 +292,9 @@ class Back2Basic {
    * Exit Application.
    */
   exitApp() {
-    this.platform.exitApp();
+    if(this.platform.is('android')) {
+      this.platform.exitApp();
+    }
   }
 
   /*
@@ -263,21 +307,29 @@ class Back2Basic {
   }
 
   public implicitLogin() {
+    this.showLoading("Loading...");
     this.platform.ready().then(() => {
         this.ciscoLogin().then(res => {
             this.authService.implicitLogin(res);
             this.loadData(false);
         }, (err) => {
-            this.showAlert(err);
+            this.hideLoading();
+            this.showRetryAlert(err);
         });
     });
   }
 
   public ciscoLogin(): Promise<any> {
+      var pageTarget = "_self";
+      var redirect_uri = "https://localhost/callback"; //https://localhost/callback, backtobasics://oauth2callback
+      if(this.platform.is('ios')) pageTarget = "_blank";
+      var self = this;
       return new Promise(function(resolve, reject) {
-          var browserRef = window.cordova.InAppBrowser.open("https://cloudsso.cisco.com/as/authorization.oauth2?response_type=token&client_id=d5sqnwvbe329pxbgwm68ncr2&redirect_uri=http://localhost/callback", "_self", "location=no,clearsessioncache=yes,clearcache=yes");
+          var browserRef = window.cordova.InAppBrowser.open("https://cloudsso.cisco.com/as/authorization.oauth2?response_type=token&client_id=m6hgwkg3893tycmttefe7wsn&redirect_uri=" + redirect_uri, pageTarget, "location=no,clearsessioncache=yes,clearcache=yes");
           browserRef.addEventListener("loadstart", (event) => {
-              if ((event.url).indexOf("http://localhost/callback") === 0) {
+              if ((event.url).indexOf(redirect_uri) === 0) {
+                  browserRef.removeEventListener("loadstop", (event) => {});
+                  browserRef.removeEventListener("loaderror", (event) => {});
                   browserRef.removeEventListener("exit", (event) => {});
                   browserRef.close();
                   var responseParameters = ((event.url).split("#")[1]).split("&");
@@ -292,12 +344,20 @@ class Back2Basic {
                   }
               }
           });
+          browserRef.addEventListener("loadstop", function(event) {
+            self.hideLoading();
+            browserRef.removeEventListener("loadstop", (event) => {});
+            //console.log("loadstop");
+          });
+          browserRef.addEventListener("loaderror", function(event) {
+            //console.log("loaderror");
+            //reject("Not able to load Cisco sign in page");
+          });
           browserRef.addEventListener("exit", function(event) {
               reject("The Cisco sign in flow was canceled");
           });
       });
   }
-
 }
 
 ionicBootstrap(Back2Basic, [B2BService, AuthService, NetworkService]);

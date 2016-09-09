@@ -16,7 +16,7 @@ export class AuthService {
   //OAUTH_URL: string = 'https://cloudsso-test.cisco.com/as/token.oauth2';
   props: Array<string> = ['access_token', 'refresh_token', 'token_type', 'expires_in'];
   propsPrefix: string = '$b2b$';
-  ENV: string = 'dev'; // dev, cisco, prod
+  ENV: string = 'prod'; // dev, cisco, prod
 
   constructor(private http: Http) {
     this.data = null;
@@ -26,7 +26,7 @@ export class AuthService {
   authenticate(credentials, rememberMe) {
     if(credentials.username) credentials.username = credentials.username.trim();
 
-    let creds = "client_id=BackToBasics&client_secret=hl4w1j2QU2shnRjIf5Ir2naDOs5IhDFo1zSIgpeGVIC6ogDbmllgQ3DFUwSgjUXl&grant_type=password&username=" + credentials.username + "&password=" + credentials.password + "&scope=" + "Read Write";
+    let creds = "client_id=m6hgwkg3893tycmttefe7wsn&client_secret=m7qpUM3YrACgEZtcHx4RGVgw&grant_type=password&username=" + credentials.username + "&password=" + credentials.password;
 
     this.clearStorage();
 
@@ -83,7 +83,7 @@ export class AuthService {
   implicitLogin(data) {
     this.clearStorage();
     this.data = data;
-    this.saveData(this.data, false);
+    this.saveData(this.data, true);
     this.loadData();
   }
 
