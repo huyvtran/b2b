@@ -17,8 +17,4 @@ ionic plugin add cordova-plugin-inappbrowser
 cordova plugin add cordova-plugin-sslcertificatechecker
 —————————————————
 
-10 Sep 2016 ———————————— 
-
-Just follow the “Code building steps” above.
-
-—————————————— 
+12 Sep — follow code building steps specially plist replacement.—

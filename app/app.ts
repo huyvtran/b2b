@@ -30,6 +30,8 @@ class Back2Basic {
   oldCategories: Object = null;
   loading:any = null;
   AUTH_TYPE: string = 'browserLogin'; // browserLogin, customLogin
+  isAlertPresent: boolean = false;
+  UNAUTHORIZED: number = 401;
 
   constructor(
     private platform: Platform,
@@ -53,6 +55,13 @@ class Back2Basic {
     });
     this.events.subscribe('user:login_failed', () => {
       this.hideLoading();
+    });
+    this.events.subscribe('data:load_error', (arg) => {
+      if(arg && arg[0] && arg[0].status == this.UNAUTHORIZED) {
+        this.showAlert("Authorization required/Session expired ! Please login again.", arg[0].status);
+      } else {
+        //this.showAlert("Error while loading data !", -1);
+      }
     });
   }
 
@@ -79,7 +88,7 @@ class Back2Basic {
       });
       this.loading.dismiss();
     } catch(e) {
-      console.log('Error: hideLoading');
+      //console.log('Error: hideLoading');
     }
   }
 
@@ -101,10 +110,12 @@ class Back2Basic {
         return;
       }
 
-      //var server = "https://wwwin-spb2b.cisco.com";
-      //var fingerprint = "51 F1 9D F2 81 B9 A8 0E F0 45 89 33 50 9B 02 C9 55 5D 2B F1";
       var server = "https://cloudsso.cisco.com";
       var fingerprint = "5a ae a8 21 4a 91 ad f7 63 40 c9 4b 39 54 86 3e 73 6f 39 fa";
+      if(this.platform.is('ios')) {
+        server = "https://wwwin-spb2b.cisco.com:8443";
+        fingerprint = "51 F1 9D F2 81 B9 A8 0E F0 45 89 33 50 9B 02 C9 55 5D 2B F1";
+      }
       var self = this;
       window['plugins']['sslCertificateChecker'].check(
             function(msg) {
@@ -150,7 +161,7 @@ class Back2Basic {
       this.authService.logout();
       if(isByLogin) {
         this.hideLoading();
-        this.showAlert('Data load failed ! Please try again.');
+        this.showAlert('Error while loading data ! Please try again.', -1);
       } else {
         if(this.AUTH_TYPE == 'customLogin') {
           this.hideLoading();
@@ -171,11 +182,16 @@ class Back2Basic {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-	    StatusBar.styleDefault();
+      if(window.cordova) {
+        StatusBar.styleDefault();
+      }
     });
   }
 
-  showAlert(msg) {
+  showAlert(msg, statusCode) {
+    if(this.isAlertPresent) return;
+    this.isAlertPresent = true;
+
     let alert = Alert.create({
         title: '',
         message: msg,
@@ -185,7 +201,13 @@ class Back2Basic {
             text: 'OK',
             role: 'cancel',
             handler: () => {
-               //this.exitApp();
+              this.isAlertPresent = false;
+              if(statusCode == this.UNAUTHORIZED) {
+                this.authService.logout();
+                setTimeout(()=> {
+                  this.checkAuth();
+                }, 250);
+              }
             }
           }
         ]
@@ -194,11 +216,15 @@ class Back2Basic {
   }
 
   showRetryAlert(msg) {
+    if(this.isAlertPresent) return;
+    this.isAlertPresent = true;
+
     var buttonsArr = [{
             text: 'Retry',
             role: 'cancel',
             handler: () => {
-               this.checkConn();
+              this.isAlertPresent = false;
+              this.checkConn();
             }
           }];
     if(!this.platform.is('ios')) {
@@ -206,7 +232,7 @@ class Back2Basic {
             text: 'Exit',
             role: 'cancel',
             handler: () => {
-               this.exitApp();
+              this.exitApp();
             }
           });
     }
@@ -223,6 +249,7 @@ class Back2Basic {
    * Displaying a toast message on the screen.
    */
   showToast(message, position) {
+    if(!window.cordova) return;
     Toast.show(message, "short", position).subscribe(
       toast => {
       }
@@ -347,14 +374,12 @@ class Back2Basic {
           browserRef.addEventListener("loadstop", function(event) {
             self.hideLoading();
             browserRef.removeEventListener("loadstop", (event) => {});
-            //console.log("loadstop");
           });
           browserRef.addEventListener("loaderror", function(event) {
-            //console.log("loaderror");
             //reject("Not able to load Cisco sign in page");
           });
           browserRef.addEventListener("exit", function(event) {
-              reject("The Cisco sign in flow was canceled");
+            reject("The Cisco sign in flow was canceled");
           });
       });
   }

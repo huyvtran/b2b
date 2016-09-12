@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {CORE_DIRECTIVES} from '@angular/common';
-import {NavController, NavParams, ActionSheet, Platform} from 'ionic-angular';
+import {NavController, NavParams, ActionSheet, Platform, Events} from 'ionic-angular';
 import {PieChart} from '../../components/pie-chart/pie-chart';
 import {MultiSeriesChart} from '../../components/multi-series-chart/multi-series-chart';
 import {SummaryDetail} from '../../components/summary-detail/summary-detail';
@@ -27,14 +27,18 @@ export class CasesDetails {
   info = "";
   noDataText: string;
 
-  constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform) {
+  constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform, private events: Events) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
     this.selectedIndex = navParams.get('index');
     this.selectedSubCategory = this.selectedItem.subCategories[this.selectedIndex].name;
     this.pageTitle = navParams.get('title');
+  }
+
+  ngOnInit() {
     this.initializeData({ value: this.selectedIndex });
   }
+
   initializeData(data) {
     this.pieChartDataProvider = [];
     this.trendsList = [];
@@ -67,8 +71,9 @@ export class CasesDetails {
         this.casesList = res.subCategoryDetails;
         this.tableHeaderText = this.selectedSubCategory + " Cases";
       }
-      console.log(this.info);
-    })
+    }, err => {
+      this.events.publish('data:load_error', err);
+    });
   }
 
   selectionChangedHandler(data) {
@@ -138,7 +143,6 @@ export class CasesDetails {
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(
       toast => {
-        console.log(toast);
       }
     );
   }

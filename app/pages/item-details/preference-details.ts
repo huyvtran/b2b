@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {CORE_DIRECTIVES} from '@angular/common';
-import {NavController, NavParams, ActionSheet, Platform} from 'ionic-angular';
+import {NavController, NavParams, ActionSheet, Platform, Events} from 'ionic-angular';
 import {PieChart} from '../../components/pie-chart/pie-chart';
 import {MultiSeriesChart} from '../../components/multi-series-chart/multi-series-chart';
 import {SummaryDetail} from '../../components/summary-detail/summary-detail';
@@ -27,14 +27,17 @@ export class PreferenceDetail {
   subCategories: string;
   selectedIndex: number;
   info="";
-  noDataText:string;  
-  constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform) {
+  noDataText:string;
+  constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform, private events: Events) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
 	  this.selectedIndex = navParams.get('index');
 	  this.subCategories = this.selectedItem.subCategories[this.selectedIndex].name;
-    this.pageTitle = navParams.get('title');	
-    this.initializeData({ value:  this.selectedIndex});
+    this.pageTitle = navParams.get('title');
+  }
+
+  ngOnInit() {
+    this.initializeData({ value: this.selectedIndex});
   }
 
   prepareChartData(data) {
@@ -84,9 +87,10 @@ export class PreferenceDetail {
       this.capList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
-      this.info = res.info;      
-      
-    })
+      this.info = res.info;
+    }, err => {
+      this.events.publish('data:load_error', err);
+    });
   }
   /**
   *  Displaying a toast message on the screen
@@ -96,7 +100,6 @@ export class PreferenceDetail {
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(
       toast => {
-        console.log(toast);
       }
     );
   }

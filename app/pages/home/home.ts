@@ -84,7 +84,6 @@ export class HomePage {
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(
       toast => {
-        console.log(toast);
       }
     );
   }
@@ -120,9 +119,7 @@ export class HomePage {
       date = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
     info += '<b>Last Refreshed: </b>' + (date).toLocaleString() + '</br></br>';
     //---------------------------------------
-    console.log(date);
     //info += '<b>Last Refreshed: </b>'+(new Date(data.lastRefreshDate)).toLocaleString()+'</br></br>';
-    console.log(info + "----------inside info -------------");
     if (data.aggregationDetails.length > 1) {
       info += '<b>Aggregated view for:</b><ol>';
       for (let i = 0; i < data.aggregationDetails.length; i++) {

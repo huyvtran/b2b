@@ -24,10 +24,6 @@ export class B2BService {
   }
 
   load() {
-    if (this.data) {
-      // already loaded data
-      return Promise.resolve(this.data);
-    }
     // don't have the data yet
     return new Promise((resolve, reject) => {
     var headers = new Headers();
@@ -50,9 +46,7 @@ export class B2BService {
   }
 
   // Method for loading data for caps category only
-  loadCapList(category, subCategory){
-    //category = category.toLowerCase();
-    //subCategory = subCategory.toLowerCase();
+  loadCapList(category, subCategory) {
     category = category;
     subCategory = subCategory;
     var productRef = "product_" + this._platform.ID;
@@ -69,7 +63,7 @@ export class B2BService {
       this.capListData[productRef][category] = {};
     }
 
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve, reject)=>{
     var headers = new Headers();
     headers.append('Authorization', this.authService.getAuthorization());
     headers.append('Cache-Control', 'no-cache')
@@ -80,31 +74,14 @@ export class B2BService {
       .subscribe(data => {
         this.capListData[productRef][category][subCategory] = data;
         resolve(this.capListData[productRef][category][subCategory]);
-        console.log("Got Data from API");
-      },err => {
-        /*
-        Modifications in variable name to add underscore in place of space to make it 
-        in sync with json file name. This change is done only for static data.
-        */
-        subCategory = subCategory.replace(" ","_");
-        category = category.replace(" ","_");
-        this.http.get('mock-json/'+category+'_'+subCategory+'.json')
-        .map(res => res.json())
-        .subscribe(data => {
-          console.log("Static Data");
-          this.capListData[productRef][category][subCategory] = data;
-          resolve(this.capListData[productRef][category][subCategory]);
-        },err => {
-         reject(err);
-        })
+      }, err => {
+        reject(err);
       })
     })
   }
-  // Method for loading data for all categories coming from the JSON(except CAPS).
-  loadOtherList(category, subCategory){
-    //category = category.toLowerCase();
-    //subCategory = subCategory.toLowerCase();
 
+  // Method for loading data for all categories coming from the JSON(except CAPS).
+  loadOtherList(category, subCategory) {
     var productRef = "product_" + this._platform.ID;
     if(this.capListData[productRef]){
       if(this.capListData[productRef][category]){
@@ -119,7 +96,7 @@ export class B2BService {
       this.capListData[productRef][category] = {};
     }
 
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve, reject)=>{
     var headers = new Headers();
     headers.append('Authorization', this.authService.getAuthorization());
     headers.append('Cache-Control', 'no-cache')
@@ -130,42 +107,25 @@ export class B2BService {
       .subscribe(data => {
         this.capListData[productRef][category][subCategory] = data;
         resolve(this.capListData[productRef][category][subCategory]);
-        console.log("Got Data from API");
-      },err => {
-        /*
-        Modifications in variable name to add underscore in place of space to make it 
-        in sync with json file name. This change is done only for static data.
-        */
-        subCategory = subCategory.replace(" ","_");
-        category = category.replace(" ","_");
-        this.http.get('mock-json/'+category+'_'+subCategory+'.json')
-        .map(res => res.json())
-        .subscribe(data => {
-          console.log("Static Data");
-          category = category.replace("_"," ");
-          this.capListData[productRef][category][subCategory] = data;
-          resolve(this.capListData[productRef][category][subCategory]);
-        },err => {
-         reject(err);
-        })
+      }, err => {
+        reject(err);
       })
     })
   }
-  
 
-  setSelectedPlatform(platform){
+  setSelectedPlatform(platform) {
     this._platform = platform;
   }
 
-  getSelectedPlatform(){
+  getSelectedPlatform() {
     return this._platform;
   }
 
-  setSelectedPrefrences(prefrences){
+  setSelectedPrefrences(prefrences) {
     this._selectedPrefrences = prefrences;
   }
 
-  getSelectedPrefrences(){
+  getSelectedPrefrences() {
     return this._selectedPrefrences;
   }
 }
