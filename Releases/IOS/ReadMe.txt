@@ -1,3 +1,5 @@
+﻿Run the ios-build.sh script present in root folder on terminal 
+command example - $ sudo sh ios-build.sh
 
 Code Building steps —————————
 
@@ -18,3 +20,5 @@ cordova plugin add cordova-plugin-sslcertificatechecker
 —————————————————
 
 12 Sep — follow code building steps specially plist replacement.—
+
+
