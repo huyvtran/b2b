@@ -35,23 +35,27 @@
                 <div class="chart-view chart-container">
                     <pie-chart *ngIf="pieChartDataProvider.length>1" [dataProvider]="pieChartDataProvider"></pie-chart>
                 </div>
-                <div class="list-view" *ngIf="selectedSubCategory=='Open'">
-                    <table style="width:100%">
+                <div class="list-view" *ngIf="selectedSubCategory=='Open'" style="width:100%;">
+                    <table style="width:100%;">
                         <thead>
                             <tr>
-                                <th>CFD</th>
-                                <th>SR Related</th>
+                                <th>{{rmaOpenTableData.natureType}}</th>
+                                <th># of RMAs</th>
+                                <th>{{rmaOpenTableData.topCustType}}</th>
+                                <th># of RMAs</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let m of casesList">
-                                <td>{{m.subType}}</td>
-                                <td>{{m.value}}</td>
+                            <tr *ngFor="let m of rmaOpenTableData.data">
+                                <td>{{m.natureSubType}}</td>
+                                <td>{{m.natureValue}}</td>
+                                <td>{{m.topSubType}}</td>
+                                <td>{{m.topValue}}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="list-view" *ngIf="selectedSubCategory=='Resolve Time'">
+                <div class="list-view" *ngIf="selectedSubCategory=='Resolve Time'" style="float:clear">
                     <table style="width:100%">
                         <thead>
                             <tr>

@@ -18,6 +18,7 @@ export class HardwareDetails {
   pageTitle: any;
   casesList = [];
   trendsList = [];
+  rmaOpenTableData = {};
   selectedSubCategory: string;
   pieChartDataProvider = [];
   tableHeaderText: string;
@@ -40,15 +41,16 @@ export class HardwareDetails {
   }
 
   initializeData(data) {
+    this.rmaOpenTableData = {};
     this.casesList = [];
     this.pieChartDataProvider = [];
-    this.info = "";    
-    this.trendsList = []; 
-    
-    //Replacing 'd' with blank to display data for values having 'd' in it and 
-    //check if it can be converted to a valid number or not. 
+    this.info = "";
+    this.trendsList = [];
+
+    //Replacing 'd' with blank to display data for values having 'd' in it and
+    //check if it can be converted to a valid number or not.
     var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
-    
+
     //Cases to check what text to display on No Data Screen
 
     if (subCategoryItemvalue == "N") {
@@ -60,7 +62,7 @@ export class HardwareDetails {
     }
     this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
 
-    
+
     //Managing Header text for table and chart
     if (this.selectedItem.subCategories[data.value].name == "Resolve Time") {
 
@@ -77,13 +79,51 @@ export class HardwareDetails {
       this.tableHeaderText = "Open " + this.selectedItem.subCategories[data.value].name;
     }
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
-      this.casesList = res.subCategoryDetails;
+      this.rmaOpenTableData = this.setRMAOpenTableData(res.subCategoryDetails);
+      //this.casesList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.info = res.info;
       this.trendsList = res.trendDetails;
     }, err => {
       this.events.publish('data:load_error', err);
     });
+  }
+
+  setRMAOpenTableData(data) {
+    var arr = [];
+    var l = data.length;
+    for(var i=0; i<l; i++){
+      if(arr.indexOf(data[i].type) == -1){
+        arr.push(data[i].type);
+      }
+      arr.sort();
+    }
+    var o = {};
+    var a = [];
+    o["natureType"] = arr[0];
+    o["topCustType"] = arr[1];
+    var a1 = [];
+    var a2 = [];
+    for(var m=0; m<l; m++){
+      if((o["natureType"] == data[m].type) && (data[m].subType != "Others")){
+        a1.push({"subType": data[m].subType, "value": data[m].value});
+      }
+      else if((o["topCustType"] == data[m].type) && (data[m].subType != "Others")){
+        a2.push({"subType": data[m].subType, "value": data[m].value});
+      }
+    }
+    var len = a1.length > a2.length ? a1.length : a2.length;
+    for(var k=0; k<len; k++)
+    {
+        var typeObj = {};
+        typeObj["natureSubType"] = (a1[k] && a1[k].subType) ? a1[k].subType : "";
+        typeObj["natureValue"] = (a1[k] && a1[k].value) ? a1[k].value : "";
+        typeObj["topSubType"] = (a2[k] && a2[k].subType) ? a2[k].subType : "";
+        typeObj["topValue"] = (a2[k] && a2[k].value) ? a2[k].value : "";
+        a.push(typeObj);
+    }
+    o["data"] = a;
+    return o;
   }
 
   selectionChangedHandler(data) {
@@ -125,7 +165,7 @@ export class HardwareDetails {
   /*
   ** Displaying a toast message on the screen
   @params message: message which needs to be displayed
-          position: position on screen , center, bottom. 
+          position: position on screen , center, bottom.
   */
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(

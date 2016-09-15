@@ -4,9 +4,9 @@
 cp -f release-signing.properties platforms/android/release-signing.properties
 cordova plugin rm cordova-plugin-console
 ionic build android --release
-zipalign -v 4 platforms/android/build/outputs/apk/android-release.apk platforms/android/build/outputs/apk/$1.apk
-mv -f platforms/android/build/outputs/apk/$1.apk Releases/Android/
-
+#zipalign -v 4 platforms/android/build/outputs/apk/android-release.apk platforms/android/build/outputs/apk/$1.apk
+3mv -f platforms/android/build/outputs/apk/$1.apk Releases/Android/
+mv -f platforms/android/build/outputs/apk/android-release.apk Releases/Android/
 if [ $2 == "true" ]; then
     git add Releases/Android/$1.apk
 	git commit -m "$1"

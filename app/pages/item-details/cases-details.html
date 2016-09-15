@@ -40,11 +40,11 @@
                         <thead>
                             <tr>
                                 <th>Customer Impact</th>
-                                <th># of SRs</th>                                
+                                <th># of SRs</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let m of casesList">                                
+                            <tr *ngFor="let m of casesList">
                                 <td>{{m.subType}}</td>
                                 <td>{{m.value}}</td>
                             </tr>
@@ -57,18 +57,18 @@
                             <tr>
                                 <th>Resolution Code</th>
                                 <th># of SRs</th>
-                                <th>Close Time(days)</th>  
+                                <th>Close Time(days)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let m of casesList">                                
+                            <tr *ngFor="let m of casesList">
                                 <td>{{m.subType}}</td>
                                 <td>{{m["#ofSRs"]}}</td>
                                 <td>{{m["CloseTime"]}}</td>
                             </tr>
                         </tbody>
                     </table>
-                </div>                
+                </div>
             </switch-view>
         </div>
     </collapsible-pane>

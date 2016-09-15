@@ -46,8 +46,8 @@ export class CasesDetails {
     this.casesList = [];
     //Managing Header text for table and chart
     this.chartHeaderText = "Incoming and Open Case Trend";
-    //Replacing 'd' with blank to display data for values having 'd' in it and 
-    //check if it can be converted to a valid number or not. 
+    //Replacing 'd' with blank to display data for values having 'd' in it and
+    //check if it can be converted to a valid number or not.
     var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
 
     //Cases to check what text to display on No Data Screen
@@ -107,15 +107,12 @@ export class CasesDetails {
     for (let i = 0; i < data.length; i++) {
       let t = data[i].subType;
       if (tmpObj[t]) {
-        if (!tmpObj[t][data[i].type.replace(/ /g, '')]) {
-          tmpObj[t][data[i].type.replace(/ /g, '')] = 0;
-        }
-        tmpObj[t][data[i].type.replace(/ /g, '')] += (isNaN(data[i].value) ? 0 : data[i].value);
+        tmpObj[t][data[i].type.replace(/ /g, '')] = data[i].value;
       } else {
         tmpObj[t] = {
           subType: t
         }
-        tmpObj[t][data[i].type.replace(/ /g, '')] = (isNaN(data[i].value) ? 0 : data[i].value)
+        tmpObj[t][data[i].type.replace(/ /g, '')] = data[i].value
       }
     }
     for (let i in tmpObj) {
@@ -138,7 +135,7 @@ export class CasesDetails {
     /*
   ** Displaying a toast message on the screen
   @params message: message which needs to be displayed
-          position: position on screen , center, bottom. 
+          position: position on screen , center, bottom.
   */
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(

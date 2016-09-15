@@ -35,19 +35,19 @@
 				<table style="width:100%">
 					<thead>
 						<tr>
-							<th>CFD</th>
-							<th>SR Related</th>
-														 
+							<th>{{impactObj}}</th>
+							<th>Resolution Time(Days)</th>
+
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let m of casesList">                                
+						<tr *ngFor="let m of casesList">
 							<td>{{m.subType}}</td>
 							<td>{{m.value}}</td>
 						</tr>
 					</tbody>
 				</table>
-			</div> 
+			</div>
             <switch-view *ngIf="selectedSubCategory!='Resolve Time'">
                 <div class="chart-view chart-container">
                     <pie-chart *ngIf="pieChartDataProvider.length>1" [dataProvider]="pieChartDataProvider"></pie-chart>
@@ -56,12 +56,12 @@
                     <table style="width:100%">
                         <thead>
                             <tr>
-                                <th>Impact Characterization</th>
-                                <th>Deficiencies</th>                                
+                                <th>{{impactObj}}</th>
+                                <th>Deficiencies</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let m of casesList">                                
+                            <tr *ngFor="let m of casesList">
                                 <td>{{m.subType}}</td>
                                 <td>{{m.value}}</td>
                             </tr>
@@ -72,37 +72,37 @@
                     <table style="width:100%">
                         <thead>
                             <tr>
-                                <th>Impact Characterization</th>
+                                <th>{{impactObj}}</th>
                                 <th>Resolution Time(Days)</th>
-                                                             
+
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let m of casesList">                                
+                            <tr *ngFor="let m of casesList">
                                 <td>{{m.subType}}</td>
                                 <td>{{m.value}}</td>
                             </tr>
                         </tbody>
                     </table>
-                </div> 
+                </div>
                 <div class="list-view" *ngIf="selectedSubCategory=='Critical Impact'">
                     <table style="width:100%">
                         <thead>
                             <tr>
                                 <th>Critical Impact</th>
                                 <th># of Deficiencies</th>
-                                                          
+
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let m of casesList">                                
+                            <tr *ngFor="let m of casesList">
                                 <td>{{m.subType}}</td>
                                 <td>{{m.value}}</td>
-                             
+
                             </tr>
                         </tbody>
                     </table>
-                </div>                     
+                </div>
             </switch-view>
         </div>
     </collapsible-pane>

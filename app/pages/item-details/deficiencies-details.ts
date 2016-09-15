@@ -16,6 +16,7 @@ import {Toast} from 'ionic-native';
 export class DeficienciesDetails {
   selectedItem: any;
   pageTitle: any;
+  impactObj = {};
   casesList = [];
   trendsList = [];
   selectedSubCategory: string;
@@ -39,15 +40,16 @@ export class DeficienciesDetails {
   }
 
   initializeData(data) {
+    this.impactObj = {};
     this.casesList = [];
     this.pieChartDataProvider = [];
-    this.info = "";    
-    this.trendsList = []; 
+    this.info = "";
+    this.trendsList = [];
 
-    //Replacing 'd' with blank to display data for values having 'd' in it and 
-    //check if it can be converted to a valid number or not. 
+    //Replacing 'd' with blank to display data for values having 'd' in it and
+    //check if it can be converted to a valid number or not.
     var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
-     
+
      //Cases to check what text to display on No Data Screen
     if (subCategoryItemvalue == "N") {
       this.noDataText = "Under Construction"
@@ -73,13 +75,29 @@ export class DeficienciesDetails {
       this.tableHeaderText = "Open " + this.selectedItem.subCategories[data.value].name + " Deficiencies";
     }
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
-      this.casesList = res.subCategoryDetails;
+      this.impactObj = this.getImpactCharKey(res.subCategoryDetails);
+      this.casesList = this.setImpactCharKey(res.subCategoryDetails);
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
-      this.info = res.info;    
-      this.trendsList = res.trendDetails;  
+      this.info = res.info;
+      this.trendsList = res.trendDetails;
     }, err => {
       this.events.publish('data:load_error', err);
     })
+  }
+
+  getImpactCharKey(data) {
+    return data[0].type;
+  }
+
+  setImpactCharKey(data) {
+    var arr = [];
+    var l = data.length;
+    for(var i=0; i<l; i++){
+      if("Others" != data[i].subType){
+        arr.push({"subType": data[i].subType, "value": data[i].value});
+      }
+    }
+    return arr;
   }
 
   selectionChangedHandler(data) {
@@ -121,7 +139,7 @@ export class DeficienciesDetails {
   /*
   ** Displaying a toast message on the screen
   @params message: message which needs to be displayed
-          position: position on screen , center, bottom. 
+          position: position on screen , center, bottom.
   */
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(
@@ -131,8 +149,8 @@ export class DeficienciesDetails {
   }
 
 
- 
-  
+
+
   setVisibilityOfNoDataScreen(subCategoryValue) {
     if (!isNaN(subCategoryValue)) {
       this.isVisible = true;

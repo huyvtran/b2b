@@ -16,6 +16,7 @@ import {Toast} from 'ionic-native';
 export class DefectDetails {
   selectedItem: any;
   pageTitle: any;
+  impactObj = {};
   casesList = [];
   trendsList = [];
   selectedSubCategory: string;
@@ -39,15 +40,16 @@ export class DefectDetails {
   }
 
   initializeData(data) {
+    this.impactObj = {};
     this.casesList = [];
     this.pieChartDataProvider = [];
     this.trendsList = [];
-    this.info = "";   
+    this.info = "";
 
-    //Replacing 'd' with blank to display data for values having 'd' in it and 
-    //check if it can be converted to a valid number or not. 
+    //Replacing 'd' with blank to display data for values having 'd' in it and
+    //check if it can be converted to a valid number or not.
     var subCategoryItemvalue = this.selectedItem.subCategories[data.value].value.replace('d', '');
-    
+
     //Cases to check what text to display on No Data Screen
 
     if (subCategoryItemvalue == "N") {
@@ -57,7 +59,7 @@ export class DefectDetails {
       this.noDataText = "Data Not Available";
     }
     this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
-    
+
     //Managing Header text for table and chart
     if (this.selectedItem.subCategories[data.value].name == "Resolve Time") {
 
@@ -74,13 +76,29 @@ export class DefectDetails {
       this.tableHeaderText = "Open " + this.selectedItem.subCategories[data.value].name + " Defects";
     }
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
-      this.casesList = res.subCategoryDetails;
+    this.impactObj = this.getImpactCharKey(res.subCategoryDetails);
+    this.casesList = this.setImpactCharKey(res.subCategoryDetails);
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
-      this.info = res.info;      
+      this.info = res.info;
     }, err => {
       this.events.publish('data:load_error', err);
     });
+  }
+
+  getImpactCharKey(data) {
+    return data[0].type;
+  }
+
+  setImpactCharKey(data) {
+    var arr = [];
+    var l = data.length;
+    for(var i=0; i<l; i++){
+      if("Others" != data[i].subType){
+        arr.push({"subType": data[i].subType, "value": data[i].value});
+      }
+    }
+    return arr;
   }
 
   selectionChangedHandler(data) {
@@ -124,7 +142,7 @@ export class DefectDetails {
     /*
   ** Displaying a toast message on the screen
   @params message: message which needs to be displayed
-          position: position on screen , center, bottom. 
+          position: position on screen , center, bottom.
   */
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(
@@ -133,7 +151,7 @@ export class DefectDetails {
     );
   }
 
- 
+
   setVisibilityOfNoDataScreen(subCategoryValue) {
     if (!isNaN(subCategoryValue)) {
       this.isVisible = true;
