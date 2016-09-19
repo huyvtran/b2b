@@ -11,7 +11,7 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 		    </span>
 		</ion-item>
 		<div [ngClass]="{close:collapsed}">
-			<div class="wrraper-container"><ng-content select=".collapsible-pane-content"></ng-content></div>		    
+			<div class="wrraper-container"><ng-content select=".collapsible-pane-content"></ng-content></div>
 		</div>
 	`
 })
@@ -41,7 +41,7 @@ export class CollapsiblePane  {
 
 	headerClicked(){
 		this.headerTapped.emit({});
-				
+
 		if(this.disableCollapsible){
 			return;
 		}

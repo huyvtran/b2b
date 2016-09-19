@@ -57,6 +57,20 @@ export class PreferenceDetail {
     for (let i in tmpObj) {
       preparedData.push(tmpObj[i]);
     }
+    for(var i=0; i<preparedData.length; i++){
+      if(preparedData[i].name == "CAP ME"){
+          preparedData[i].name = "CAPs ME- Managed";
+      }
+      else if(preparedData[i].name == "CAP M"){
+          preparedData[i].name = "CAPs M- Moniter";
+      }
+      else if(preparedData[i].name == "CAP A"){
+          preparedData[i].name = "CAPs A";
+      }
+      else if(preparedData[i].name == "CAP B"){
+          preparedData[i].name = "CAPs B";
+      }
+    }
     return preparedData;
   }
 
@@ -65,7 +79,7 @@ export class PreferenceDetail {
     this.pieChartDataProvider = [];
     this.trendsList = [];
     this.info = "";
-    var subCategoryItemvalue=this.selectedItem.subCategories[data.value].value.replace('d','');    
+    var subCategoryItemvalue=this.selectedItem.subCategories[data.value].value.replace('d','');
     //Cases to check what text to display on No Data Screen
     if(subCategoryItemvalue=="N"){
       this.noDataText="Under Construction"
@@ -75,15 +89,15 @@ export class PreferenceDetail {
     }
     this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
     //Managing Header text for table and chart
-    if(this.selectedItem.subCategories[data.value].name == "Resolve Time"){               
+    if(this.selectedItem.subCategories[data.value].name == "Resolve Time"){
       this.chartHeaderText="Age Distribution of CAPs by Level"
-      this.tableHeaderText="CAP "+"Resolution Time";
+      this.tableHeaderText="CAPs "+"Resolution Time";
     }else{
-      this.chartHeaderText="Incoming and Open Cap Trend";
+      this.chartHeaderText="Incoming and Open CAPs Trend";
       this.tableHeaderText=this.selectedItem.subCategories[data.value].name +" CAPs";
-    } 
+    }
 
-    this.b2bService.loadCapList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {      
+    this.b2bService.loadCapList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
       this.capList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
@@ -95,7 +109,7 @@ export class PreferenceDetail {
   /**
   *  Displaying a toast message on the screen
   *  @params message: message which needs to be displayed
-  *  position: position on screen , center, bottom. 
+  *  position: position on screen , center, bottom.
   */
   showToast(message, position) {
     Toast.show(message, "short", position).subscribe(
@@ -119,7 +133,7 @@ export class PreferenceDetail {
     }
     return label;
   }
-  
+
   setVisibilityOfNoDataScreen(subCategoryValue) {
     if(!isNaN(subCategoryValue)){
         this.isVisible=true;

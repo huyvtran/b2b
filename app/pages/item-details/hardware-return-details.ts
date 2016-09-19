@@ -80,7 +80,7 @@ export class HardwareDetails {
     }
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
       this.rmaOpenTableData = this.setRMAOpenTableData(res.subCategoryDetails);
-      //this.casesList = res.subCategoryDetails;
+      this.casesList = this.b2bService.filterKeyFromData(res.subCategoryDetails);
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.info = res.info;
       this.trendsList = res.trendDetails;
@@ -102,6 +102,8 @@ export class HardwareDetails {
     var a = [];
     o["natureType"] = arr[0];
     o["topCustType"] = arr[1];
+    o["rma"] = "# of RMAs";
+
     var a1 = [];
     var a2 = [];
     for(var m=0; m<l; m++){

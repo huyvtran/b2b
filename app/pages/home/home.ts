@@ -47,7 +47,7 @@ export class HomePage {
   * @index: index of card in list
   */
   itemTapped(event, item, index) {
-    // Navigating to card detail page 
+    // Navigating to card detail page
     this.navCtrl.push(this.pages[item.name], {
       item: item,
       index: index,
@@ -109,7 +109,7 @@ export class HomePage {
   }
 
   /**
-  * Preparing HTML string for info 
+  * Preparing HTML string for info
   */
   prepareInfoData(data, _info) {
     let info = "";

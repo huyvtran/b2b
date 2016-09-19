@@ -76,7 +76,7 @@ export class DeficienciesDetails {
     }
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
       this.impactObj = this.getImpactCharKey(res.subCategoryDetails);
-      this.casesList = this.setImpactCharKey(res.subCategoryDetails);
+      this.casesList = this.b2bService.filterKeyFromData(res.subCategoryDetails);
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.info = res.info;
       this.trendsList = res.trendDetails;
@@ -86,18 +86,7 @@ export class DeficienciesDetails {
   }
 
   getImpactCharKey(data) {
-    return data[0].type;
-  }
-
-  setImpactCharKey(data) {
-    var arr = [];
-    var l = data.length;
-    for(var i=0; i<l; i++){
-      if("Others" != data[i].subType){
-        arr.push({"subType": data[i].subType, "value": data[i].value});
-      }
-    }
-    return arr;
+    return {"type" : data[0].type};
   }
 
   selectionChangedHandler(data) {

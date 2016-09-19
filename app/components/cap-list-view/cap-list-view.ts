@@ -6,23 +6,23 @@ import {NavParams} from 'ionic-angular';
 	selector:'cap-list-view',
 	template:`
 		<table style="width:100%">
-		  <thead>
-		  	<tr>
-			    <th>Cap ID</th>
+		  <tr>
+			    <th>CAPs ID</th>
 			    <th>Level</th>
 			    <th>Customer</th>
 			    <th>Age</th>
-		    </tr>
-		  </thead>
-		  <tbody>
+		  </tr>
+			</table>
+			<div class="inner_table">
+		  <table>
 			  <tr *ngFor="let m of model ">
 			    <td>{{m.caseNumber}}</td>
 			    <td>{{correctName(m.capLevel)}}</td>
 			    <td>{{m.customer}}</td>
 			    <td>{{m.age}}</td>
 			  </tr>
-		  </tbody>
-		</table>
+		  </table>
+		</div>
 	`
 })
 export class CapListView  {

@@ -31,61 +31,59 @@
     </div>
     <collapsible-pane [hidden]="!isVisible">
         <span class="collapsible-pane-title">{{tableHeaderText}}</span>
-        <div class="collapsible-pane-content">			
+        <div class="collapsible-pane-content">
             <switch-view>
                 <div class="chart-view chart-container">
                     <pie-chart *ngIf="pieChartDataProvider.length>1" [dataProvider]="pieChartDataProvider"></pie-chart>
                 </div>
                 <div class="list-view" *ngIf="selectedSubCategory=='Calls'">
                     <table style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Top Customers</th>
-                                <th># of Interactions</th>                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let m of casesList">                                
+                        <tr>
+                            <th>Top Customers</th>
+                            <th># of Interactions</th>
+                        </tr>
+                    </table>
+                    <div class="inner_table">
+                      <table>
+                            <tr *ngFor="let m of casesList">
                                 <td>{{m.subType}}</td>
                                 <td>{{m.value}}</td>
                             </tr>
-                        </tbody>
-                    </table>
+                      </table>
+                    </div>
                 </div>
                 <div class="list-view" *ngIf="selectedSubCategory=='Risks'">
                     <table style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Customers</th>
+                        <tr>
+                            <th>Customers</th>
                             <th># of Risk Reports</th>
-                                                             
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let m of casesList">                                
-                                <td>{{m.subType}}</td>
-                                <td>{{m.value}}</td>
-                            </tr>
-                        </tbody>
+                        </tr>
                     </table>
-                </div> 
+                    <div class="inner_table">
+                      <table>
+                        <tr *ngFor="let m of casesList">
+                            <td>{{m.subType}}</td>
+                            <td>{{m.value}}</td>
+                        </tr>
+                     </table>
+                   </div>
+                </div>
                 <div class="list-view" *ngIf="selectedSubCategory=='Escalations'">
                     <table style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Customers</th>
-                                <th># of Escalations</th>
-                                                          
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let m of casesList">                                
-                                <td>{{m.subType}}</td>
-                                <td>{{m.value}}</td>                             
-                            </tr>
-                        </tbody>
+                        <tr>
+                            <th>Customers</th>
+                            <th># of Escalations</th>
+                        </tr>
                     </table>
-                </div>                     
+                    <div class="inner_table">
+                      <table>
+                        <tr *ngFor="let m of casesList">
+                            <td>{{m.subType}}</td>
+                            <td>{{m.value}}</td>
+                        </tr>
+                     </table>
+                   </div>
+                </div>
             </switch-view>
         </div>
     </collapsible-pane>

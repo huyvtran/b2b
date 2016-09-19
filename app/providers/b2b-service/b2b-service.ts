@@ -113,6 +113,18 @@ export class B2BService {
     })
   }
 
+  // filter data to 'Others' key from array
+  filterKeyFromData(data){
+    var arr = [];
+    var l = data.length;
+    for(var i=0; i<l; i++){
+      if("Others" != data[i].subType){
+        arr.push({"subType": data[i].subType, "value": data[i].value});
+      }
+    }
+    return arr;
+  }
+
   setSelectedPlatform(platform) {
     this._platform = platform;
   }

@@ -68,7 +68,7 @@ export class CasesDetails {
         this.chartHeaderText = "Cumulative Resolution Trend";
         this.tableHeaderText = "Case " + "Resolution Time";
       } else {
-        this.casesList = res.subCategoryDetails;
+        this.casesList = this.b2bService.filterKeyFromData(res.subCategoryDetails);
         this.tableHeaderText = this.selectedSubCategory + " Cases";
       }
     }, err => {

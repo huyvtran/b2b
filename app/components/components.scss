@@ -35,9 +35,9 @@
 }
 
 cap-list-view{
-    table{        
+    table{
         tr{
-            border-bottom:1px solid grey;            
+            border-bottom:1px solid grey;
             td,th{
                 padding:5px;
                 text-align: left;
@@ -46,9 +46,9 @@ cap-list-view{
     }
 }
 generic-list-view{
-    table{        
+    table{
         tr{
-            border-bottom:1px solid grey;            
+            border-bottom:1px solid grey;
             td,th{
                 padding:5px;
                 text-align: left;
@@ -69,10 +69,10 @@ summary-detail{
             &.disable{
                 color: rgb(162,172,177);
             }
-        }        
+        }
     }
     h2{
         margin-top: 0;
-        
+
     }
 }

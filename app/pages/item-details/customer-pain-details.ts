@@ -41,11 +41,11 @@ export class CustomerPainDetails {
   initializeData(data) {
     this.casesList = [];
     this.pieChartDataProvider = [];
-    this.info = "";    
-    this.trendsList = []; 
-    
-    //Replacing 'd' with blank to display data for values having 'd' in it and 
-    //check if it can be converted to a valid number or not. 
+    this.info = "";
+    this.trendsList = [];
+
+    //Replacing 'd' with blank to display data for values having 'd' in it and
+    //check if it can be converted to a valid number or not.
     var subCategoryItemvalue=this.selectedItem.subCategories[data.value].value.replace('d','');
 
     //Cases to check what text to display on No Data Screen
@@ -57,25 +57,25 @@ export class CustomerPainDetails {
     }
     this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
      //Managing Header text for table and chart
-     if(this.selectedItem.subCategories[data.value].name == "Risks"){        
-     
+     if(this.selectedItem.subCategories[data.value].name == "Risks"){
+
       this.chartHeaderText="Open Field Risk Trend"
       this.tableHeaderText="Open Field Risks";
     }
-    else if(this.selectedItem.subCategories[data.value].name == "Calls"){        
-     
+    else if(this.selectedItem.subCategories[data.value].name == "Calls"){
+
       this.chartHeaderText="Interaction Trend for Open Cases";
       this.tableHeaderText="Interactions for Open Cases";
     }
     else{
       this.chartHeaderText="Open Customer Escalation Trend";
       this.tableHeaderText="Open Customer "+this.selectedItem.subCategories[data.value].name;
-    }  
+    }
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
-      this.casesList = res.subCategoryDetails;
+      this.casesList = this.b2bService.filterKeyFromData(res.subCategoryDetails);
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
-      this.info = res.info;      
+      this.info = res.info;
     }, err => {
       this.events.publish('data:load_error', err);
     });
@@ -122,7 +122,7 @@ export class CustomerPainDetails {
     /*
   ** Displaying a toast message on the screen
   @params message: message which needs to be displayed
-          position: position on screen , center, bottom. 
+          position: position on screen , center, bottom.
   */
    showToast(message, position) {
       Toast.show(message, "short", position).subscribe(
@@ -138,5 +138,5 @@ export class CustomerPainDetails {
       }
   }
 
-  
+
 }

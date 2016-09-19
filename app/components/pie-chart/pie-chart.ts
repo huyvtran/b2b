@@ -7,9 +7,9 @@ import { CHART_DIRECTIVES } from 'angular2-highcharts';
     template: '<chart style="width:100%;height:178px" [options]="options"></chart>'
 })
 export class PieChart {
-    private _data=[];   
+    private _data=[];
     @Input()
-    set dataProvider(data){        
+    set dataProvider(data){
         this._data = data;
         if(this.dataProvider.length){
             this.renderChart();
@@ -20,13 +20,13 @@ export class PieChart {
         return this._data;
     }
 
-    constructor() {        
+    constructor() {
         if(this.dataProvider.length){
             this.renderChart();
         }
     }
-    
-    renderChart() {        
+
+    renderChart() {
         this.options = {
             title: {
                 text: '',
@@ -45,7 +45,7 @@ export class PieChart {
             series: [{
                 type:'pie',
                 colorByPoint: true,
-                data: this.dataProvider                
+                data: this.dataProvider
             }],
             plotOptions: {
                 pie: {
@@ -56,7 +56,7 @@ export class PieChart {
                             if(str.length>8){
                                 str = str.match(/\b([A-Z])/g).join('');
                             }
-                            return '<em>'+this.point.y+'</em>';  
+                            return '<em>'+this.point.y+'</em>';
                         },
                         distance: 8,
                         style: { fontFamily: '\'Lato\', sans-serif', lineHeight: '16px', fontSize: '14px', fontWeight:'normal' }
@@ -70,7 +70,8 @@ export class PieChart {
                 verticalAlign: 'top',
                 useHTML:true,
                 labelFormatter: function() {
-                  let label = this.name.length>8?this.name.match(/\b([A-Z])/g).join(''):this.name;
+                  //let label = this.name.length>8?this.name.match(/\b([A-Z])/g).join(''):this.name;
+                  let label = this.name.length > 15 ? this.name.slice(0, 15)+"..." : this.name;
                   return label;
                 }
             }

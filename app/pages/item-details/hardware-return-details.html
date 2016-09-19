@@ -37,55 +37,57 @@
                 </div>
                 <div class="list-view" *ngIf="selectedSubCategory=='Open'" style="width:100%;">
                     <table style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th>{{rmaOpenTableData.natureType}}</th>
-                                <th># of RMAs</th>
-                                <th>{{rmaOpenTableData.topCustType}}</th>
-                                <th># of RMAs</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let m of rmaOpenTableData.data">
-                                <td>{{m.natureSubType}}</td>
-                                <td>{{m.natureValue}}</td>
-                                <td>{{m.topSubType}}</td>
-                                <td>{{m.topValue}}</td>
-                            </tr>
-                        </tbody>
+                      <tr>
+                          <th>{{rmaOpenTableData.natureType}}</th>
+                          <th>{{rmaOpenTableData.rma}}</th>
+                          <th style="width:25px;position: relative;"><div style="position: absolute;height:100%;border:1px solid #24a2de;bottom: 0px;top: 0px;"></div></th>
+                          <th>{{rmaOpenTableData.topCustType}}</th>
+                          <th>{{rmaOpenTableData.rma}}</th>
+                      </tr>
                     </table>
+                    <div class="inner_table">
+                      <table>
+                          <tr *ngFor="let m of rmaOpenTableData.data">
+                              <td>{{m.natureSubType}}</td>
+                              <td>{{m.natureValue}}</td>
+                              <td style="width:25px;position: relative;"><div style="position: absolute;height:100%;border:1px solid #24a2de;bottom: 0px;top: 0px;"></div></td>
+                              <td>{{m.topSubType}}</td>
+                              <td>{{m.topValue}}</td>
+                          </tr>
+                      </table>
+                   </div>
                 </div>
                 <div class="list-view" *ngIf="selectedSubCategory=='Resolve Time'" style="float:clear">
                     <table style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>CFD</th>
-                                <th>SR Related</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let m of casesList">
-                                <td>{{m.subType}}</td>
-                                <td>{{m.value}}</td>
-                            </tr>
-                        </tbody>
+                      <tr>
+                        <th>CFD</th>
+                        <th>SR Related</th>
+                      </tr>
                     </table>
+                    <div class="inner_table">
+                      <table>
+                        <tr *ngFor="let m of casesList">
+                            <td>{{m.subType}}</td>
+                            <td>{{m.value}}</td>
+                        </tr>
+                     </table>
+                   </div>
                 </div>
                 <div class="list-view" *ngIf="selectedSubCategory=='Critical Impact'">
                     <table style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>CFD</th>
-                                <th>SR Related</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let m of casesList">
-                                <td>{{m.subType}}</td>
-                                <td>{{m.value}}</td>
-                            </tr>
-                        </tbody>
+                        <tr>
+                            <th>CFD</th>
+                            <th>SR Related</th>
+                        </tr>
                     </table>
+                    <div class="inner_table">
+                      <table>
+                         <tr *ngFor="let m of casesList">
+                            <td>{{m.subType}}</td>
+                            <td>{{m.value}}</td>
+                        </tr>
+                     </table>
+                   </div>
                 </div>
             </switch-view>
         </div>
