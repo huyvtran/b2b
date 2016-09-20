@@ -32,6 +32,9 @@ class Back2Basic {
   AUTH_TYPE: string = 'browserLogin'; // browserLogin, customLogin
   isAlertPresent: boolean = false;
   UNAUTHORIZED: number = 401;
+  idleTimeout: number = 300*1000; // 5 min 
+  idleTimeoutID: number;
+  isHome: boolean = false;
 
   constructor(
     private platform: Platform,
@@ -42,10 +45,15 @@ class Back2Basic {
     private netService: NetworkService
   ) {
     this.initializeApp();
-    this.addEvents();    
+    this.addEvents();
+    this.checkIdle();
   }
 
   addEvents() {
+
+  this.events.subscribe('user:inactive', () => {
+      this.logout();
+    });
     this.events.subscribe('user:logging_in', () => {
       this.showLoading("Logging in...");
     });
@@ -67,6 +75,39 @@ class Back2Basic {
 
   ngOnInit() {
     this.checkConn();
+  }
+
+  checkIdle() {
+    var self = this;
+    var eventList = ["mousemove", "mousedown", "keypress", "keydown", "keyup", "DOMMouseScroll", "mousewheel", "touchmove", "MSPointerMove", "touchstart"];
+    for(var i = 0; i < eventList.length; i++) {
+      document.addEventListener(eventList[i], function() {
+        if(self.isHome) {
+          window.clearTimeout(self.idleTimeoutID);
+          self.goActive();
+        }
+      }, false);
+    }
+
+    if(this.isHome)
+      this.startTimer();
+  }
+
+  startTimer() {
+    //console.log(this.idleTimeout);
+    this.idleTimeoutID = setTimeout(()=> {
+        this.goInactive();
+      }, this.idleTimeout);
+  }
+
+  goActive() {
+    console.log('go active');
+    this.startTimer();
+  }
+
+  goInactive() {
+    console.log('go inactive');
+    this.events.publish('user:inactive');
   }
 
   showLoading(msg) {
@@ -157,7 +198,7 @@ class Back2Basic {
       setTimeout(()=> {
         this.hideLoading();
       }, 50);
-    }, err => { 
+    }, err => {
       this.authService.logout();
       if(isByLogin) {
         this.hideLoading();
@@ -176,6 +217,8 @@ class Back2Basic {
 
   gotoHomePage() {
     this.nav.setRoot(HomePage, { page: this.b2bService.getSelectedPlatform(), info: this.info });
+    this.isHome = true;
+    this.startTimer();
   }
 
   initializeApp() {
@@ -304,6 +347,7 @@ class Back2Basic {
    * Go to login Page.
    */
   logout() {
+    this.isHome = false;
     this.oldCategories = null;
     this.authService.logout();
     this.menu.close();
