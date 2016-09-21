@@ -26,6 +26,7 @@ export class CustomerPainDetails {
   isVisible: boolean;
   noDataText:string;
   info="";
+
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform, private events: Events) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
@@ -138,5 +139,8 @@ export class CustomerPainDetails {
       }
   }
 
-
+  headerTappedHandler(event){
+    var collapsed = event.collapsed || event.data;
+    this.b2bService.changeTableHeightHandler(collapsed);
+  }
 }

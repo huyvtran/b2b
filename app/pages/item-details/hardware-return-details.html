@@ -31,28 +31,28 @@
     <collapsible-pane [hidden]="!isVisible">
         <span class="collapsible-pane-title">{{tableHeaderText}}</span>
         <div class="collapsible-pane-content">
-            <switch-view>
+            <switch-view (itemTapped)="headerTappedHandler($event)">
                 <div class="chart-view chart-container">
                     <pie-chart *ngIf="pieChartDataProvider.length>1" [dataProvider]="pieChartDataProvider"></pie-chart>
                 </div>
                 <div class="list-view" *ngIf="selectedSubCategory=='Open'" style="width:100%;">
                     <table style="width:100%;">
                       <tr>
-                          <th>{{rmaOpenTableData.natureType}}</th>
-                          <th>{{rmaOpenTableData.rma}}</th>
-                          <th style="width:25px;position: relative;"><div style="position: absolute;height:100%;border:1px solid #24a2de;bottom: 0px;top: 0px;"></div></th>
-                          <th>{{rmaOpenTableData.topCustType}}</th>
-                          <th>{{rmaOpenTableData.rma}}</th>
+                          <th style="width:65px;">{{rmaOpenTableData.natureType}}</th>
+                          <th style="width:35px;">{{rmaOpenTableData.rma}}</th>
+                          <th style="width:10px;position: relative;"><div style="position: absolute;height:100%;border:1px solid #24a2de;bottom: 0px;top: 0px;"></div></th>
+                          <th style="width:100px;">{{rmaOpenTableData.topCustType}}</th>
+                          <th style="width:35px;">{{rmaOpenTableData.rma}}</th>
                       </tr>
                     </table>
                     <div class="inner_table">
                       <table>
                           <tr *ngFor="let m of rmaOpenTableData.data">
-                              <td>{{m.natureSubType}}</td>
-                              <td>{{m.natureValue}}</td>
-                              <td style="width:25px;position: relative;"><div style="position: absolute;height:100%;border:1px solid #24a2de;bottom: 0px;top: 0px;"></div></td>
-                              <td>{{m.topSubType}}</td>
-                              <td>{{m.topValue}}</td>
+                              <td style="width:65px;">{{m.natureSubType}}</td>
+                              <td style="width:35px;padding-left:10px;">{{m.natureValue}}</td>
+                              <td style="width:10px;position: relative;"><div style="position: absolute;height:100%;border:1px solid #24a2de;bottom: 0px;top: 0px;"></div></td>
+                              <td style="width:100px;">{{m.topSubType}}</td>
+                              <td style="width:35px;padding-left:10px;">{{m.topValue}}</td>
                           </tr>
                       </table>
                    </div>
@@ -92,7 +92,7 @@
             </switch-view>
         </div>
     </collapsible-pane>
-    <collapsible-pane [hidden]="!isVisible">
+    <collapsible-pane [hidden]="!isVisible" (headerTapped)="headerTappedHandler($event)">
         <span class="collapsible-pane-title">{{chartHeaderText}}</span>
         <div class="collapsible-pane-content chart-container">
             <multi-chart [dataProvider]="trendsList"></multi-chart>

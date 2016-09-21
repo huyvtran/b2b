@@ -154,4 +154,9 @@ export class CasesDetails {
       this.isVisible = false;
     }
   }
+
+  headerTappedHandler(event){
+    var collapsed = event.collapsed || event.data;
+    this.b2bService.changeTableHeightHandler(collapsed);
+  }
 }

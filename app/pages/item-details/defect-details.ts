@@ -140,12 +140,16 @@ export class DefectDetails {
     );
   }
 
-
   setVisibilityOfNoDataScreen(subCategoryValue) {
     if (!isNaN(subCategoryValue)) {
       this.isVisible = true;
     } else {
       this.isVisible = false;
     }
+  }
+
+  headerTappedHandler(event){
+    var collapsed = event.collapsed || event.data;
+    this.b2bService.changeTableHeightHandler(collapsed);
   }
 }

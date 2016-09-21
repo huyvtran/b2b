@@ -125,6 +125,25 @@ export class B2BService {
     return arr;
   }
 
+  changeTableHeightHandler(collapsed){
+    var listView = document.getElementsByClassName("list-view")[0];
+    var innerDiv = listView['children'][1];
+    if(collapsed){
+      listView['style'].height = "295px";
+      innerDiv['style'].height = "265px";
+    }
+    else{
+      listView['style'].height = "178px";
+      innerDiv['style'].height = "150px";
+    }
+    listView['style'].overflowY = "hidden";
+    innerDiv['style'].overflowY = "hidden";
+    setTimeout(() => {
+      //listView['style'].overflowY = "auto";
+      innerDiv['style'].overflowY = "auto";
+    }, 500);
+  }
+
   setSelectedPlatform(platform) {
     this._platform = platform;
   }

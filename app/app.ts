@@ -32,7 +32,7 @@ class Back2Basic {
   AUTH_TYPE: string = 'browserLogin'; // browserLogin, customLogin
   isAlertPresent: boolean = false;
   UNAUTHORIZED: number = 401;
-  idleTimeout: number = 300*1000; // 5 min 
+  idleTimeout: number = 300*1000; // 10 seconds
   idleTimeoutID: number;
   isHome: boolean = false;
 
@@ -46,7 +46,7 @@ class Back2Basic {
   ) {
     this.initializeApp();
     this.addEvents();
-    this.checkIdle();
+    //this.checkIdle();
   }
 
   addEvents() {

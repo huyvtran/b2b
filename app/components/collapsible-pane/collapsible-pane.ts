@@ -40,11 +40,10 @@ export class CollapsiblePane  {
 	}
 
 	headerClicked(){
-		this.headerTapped.emit({});
-
 		if(this.disableCollapsible){
 			return;
 		}
-		this._collapsed=!this._collapsed
+		this._collapsed=!this._collapsed;
+		this.headerTapped.emit({collapsed:this._collapsed});
 	}
 }

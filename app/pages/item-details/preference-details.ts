@@ -59,16 +59,16 @@ export class PreferenceDetail {
     }
     for(var i=0; i<preparedData.length; i++){
       if(preparedData[i].name == "CAP ME"){
-          preparedData[i].name = "CAPs ME- Managed";
+          preparedData[i].name = "CAP ME- Managed";
       }
       else if(preparedData[i].name == "CAP M"){
-          preparedData[i].name = "CAPs M- Moniter";
+          preparedData[i].name = "CAP M- Moniter";
       }
       else if(preparedData[i].name == "CAP A"){
-          preparedData[i].name = "CAPs A";
+          preparedData[i].name = "CAP A";
       }
       else if(preparedData[i].name == "CAP B"){
-          preparedData[i].name = "CAPs B";
+          preparedData[i].name = "CAP B";
       }
     }
     return preparedData;
@@ -91,9 +91,9 @@ export class PreferenceDetail {
     //Managing Header text for table and chart
     if(this.selectedItem.subCategories[data.value].name == "Resolve Time"){
       this.chartHeaderText="Age Distribution of CAPs by Level"
-      this.tableHeaderText="CAPs "+"Resolution Time";
+      this.tableHeaderText="CAP "+"Resolution Time";
     }else{
-      this.chartHeaderText="Incoming and Open CAPs Trend";
+      this.chartHeaderText="Incoming and Open Cap Trend";
       this.tableHeaderText=this.selectedItem.subCategories[data.value].name +" CAPs";
     }
 
@@ -140,5 +140,36 @@ export class PreferenceDetail {
       }else{
         this.isVisible=false;
       }
+  }
+
+// toggle the height of table and its parents for Cap-list-view
+  headerTappedHandler(event){
+    var collapsed = event.collapsed || event.data;
+    var capListViewParent = document.getElementsByClassName("list-view")[0];
+    var capListView = capListViewParent['children'][0];
+    var listView = capListView['children'][0];
+    var innerDiv = listView['children'][1];
+    if(collapsed){
+      capListViewParent['style'].height = "295px";
+      capListView['style'].height = "295px";
+      listView['style'].height = "295px";
+      innerDiv['style'].height = "265px";
+    }
+    else{
+      capListViewParent['style'].height = "178px";
+      capListView['style'].height = "178px";
+      listView['style'].height = "178px";
+      innerDiv['style'].height = "150px";
+    }
+    capListViewParent['style'].overflowY = "hidden";
+    capListView['style'].overflowY = "hidden";
+    listView['style'].overflowY = "hidden";
+    innerDiv['style'].overflowY = "hidden";
+    setTimeout(() => {
+      capListViewParent['style'].overflowY = "auto";
+      capListView['style'].overflowY = "auto";
+      listView['style'].overflowY = "auto";
+      innerDiv['style'].overflowY = "auto";
+    }, 500);
   }
 }
