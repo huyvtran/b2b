@@ -118,9 +118,9 @@ export class B2BService {
     var arr = [];
     var l = data.length;
     for(var i=0; i<l; i++){
-      if("Others" != data[i].subType){
+      //if("Others" != data[i].subType){
         arr.push({"subType": data[i].subType, "value": data[i].value});
-      }
+      //}
     }
     return arr;
   }

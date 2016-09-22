@@ -32,7 +32,7 @@ class Back2Basic {
   AUTH_TYPE: string = 'browserLogin'; // browserLogin, customLogin
   isAlertPresent: boolean = false;
   UNAUTHORIZED: number = 401;
-  idleTimeout: number = 300*1000; // 10 seconds
+  idleTimeout: number = 60*10*1000; // 10 min
   idleTimeoutID: number;
   isHome: boolean = false;
 
@@ -46,7 +46,7 @@ class Back2Basic {
   ) {
     this.initializeApp();
     this.addEvents();
-    //this.checkIdle();
+    this.checkIdle();
   }
 
   addEvents() {
@@ -101,12 +101,12 @@ class Back2Basic {
   }
 
   goActive() {
-    console.log('go active');
+    //console.log('go active');
     this.startTimer();
   }
 
   goInactive() {
-    console.log('go inactive');
+    //console.log('go inactive');
     this.events.publish('user:inactive');
   }
 

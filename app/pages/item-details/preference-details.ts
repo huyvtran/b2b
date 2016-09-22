@@ -59,16 +59,16 @@ export class PreferenceDetail {
     }
     for(var i=0; i<preparedData.length; i++){
       if(preparedData[i].name == "CAP ME"){
-          preparedData[i].name = "CAP ME- Managed";
+          preparedData[i].name = "CAPs ME- Managed";
       }
       else if(preparedData[i].name == "CAP M"){
-          preparedData[i].name = "CAP M- Moniter";
+          preparedData[i].name = "CAPs M- Moniter";
       }
       else if(preparedData[i].name == "CAP A"){
-          preparedData[i].name = "CAP A";
+          preparedData[i].name = "CAPs A";
       }
       else if(preparedData[i].name == "CAP B"){
-          preparedData[i].name = "CAP B";
+          preparedData[i].name = "CAPs B";
       }
     }
     return preparedData;
@@ -91,9 +91,9 @@ export class PreferenceDetail {
     //Managing Header text for table and chart
     if(this.selectedItem.subCategories[data.value].name == "Resolve Time"){
       this.chartHeaderText="Age Distribution of CAPs by Level"
-      this.tableHeaderText="CAP "+"Resolution Time";
+      this.tableHeaderText="CAPs "+"Resolution Time";
     }else{
-      this.chartHeaderText="Incoming and Open Cap Trend";
+      this.chartHeaderText="Incoming and Open CAPs Trend";
       this.tableHeaderText=this.selectedItem.subCategories[data.value].name +" CAPs";
     }
 
