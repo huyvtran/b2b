@@ -32,22 +32,22 @@
     <collapsible-pane [hidden]="!isVisible">
         <span class="collapsible-pane-title">{{tableHeaderText}}</span>
         <div class="collapsible-pane-content">
-            <switch-view (itemTapped)="headerTappedHandler($event)">
+            <switch-view>
                 <div class="chart-view chart-container">
                     <pie-chart *ngIf="pieChartDataProvider.length>1" [dataProvider]="pieChartDataProvider"></pie-chart>
                 </div>
                 <div class="list-view" *ngIf="selectedSubCategory=='Calls'">
                     <table style="width:100%">
                         <tr>
-                            <th>Top Customers</th>
+                            <th style="width:220px">Top Customers</th>
                             <th># of Interactions</th>
                         </tr>
                     </table>
                     <div class="inner_table">
                       <table>
                             <tr *ngFor="let m of casesList">
-                                <td>{{m.subType}}</td>
-                                <td>{{m.value}}</td>
+                                <td style="width:220px">{{m.subType}}</td>
+                                <td style="text-align:center">{{m.value}}</td>
                             </tr>
                       </table>
                     </div>
@@ -55,15 +55,15 @@
                 <div class="list-view" *ngIf="selectedSubCategory=='Risks'">
                     <table style="width:100%">
                         <tr>
-                            <th>Customers</th>
+                            <th style="width:220px">Customers</th>
                             <th># of Risk Reports</th>
                         </tr>
                     </table>
                     <div class="inner_table">
                       <table>
                         <tr *ngFor="let m of casesList">
-                            <td>{{m.subType}}</td>
-                            <td>{{m.value}}</td>
+                            <td style="width:220px">{{m.subType}}</td>
+                            <td style="text-align:center">{{m.value}}</td>
                         </tr>
                      </table>
                    </div>
@@ -71,15 +71,15 @@
                 <div class="list-view" *ngIf="selectedSubCategory=='Escalations'">
                     <table style="width:100%">
                         <tr>
-                            <th>Customers</th>
+                            <th style="width:220px">Customers</th>
                             <th># of Escalations</th>
                         </tr>
                     </table>
                     <div class="inner_table">
                       <table>
                         <tr *ngFor="let m of casesList">
-                            <td>{{m.subType}}</td>
-                            <td>{{m.value}}</td>
+                            <td style="width:220px">{{m.subType}}</td>
+                            <td style="text-align:center">{{m.value}}</td>
                         </tr>
                      </table>
                    </div>

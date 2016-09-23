@@ -29,7 +29,7 @@
     <collapsible-pane [hidden]="!isVisible">
         <span class="collapsible-pane-title">{{tableHeaderText}}</span>
         <div class="collapsible-pane-content">
-            <switch-view *ngIf='subCategories!="Resolve Time"' (itemTapped)="headerTappedHandler($event)">
+            <switch-view *ngIf='subCategories!="Resolve Time"'>
                 <div class="chart-view chart-container">
                     <pie-chart [dataProvider]="pieChartDataProvider"></pie-chart>
                 </div>

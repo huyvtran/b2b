@@ -48,7 +48,7 @@
 			 	</table>
        </div>
 			</div>
-            <switch-view *ngIf="selectedSubCategory!='Resolve Time'" (itemTapped)="headerTappedHandler($event)">
+            <switch-view *ngIf="selectedSubCategory!='Resolve Time'">
                 <div class="chart-view chart-container">
                     <pie-chart *ngIf="pieChartDataProvider.length>1" [dataProvider]="pieChartDataProvider"></pie-chart>
                 </div>
@@ -87,14 +87,14 @@
                 <div class="list-view" *ngIf="selectedSubCategory=='Critical Impact'">
                     <table style="width:100%">
                         <tr>
-                            <th>Critical Impact</th>
+                            <th style="width:240px">Critical Impact</th>
                             <th># of Defects</th>
                         </tr>
                     </table>
                     <div class="inner_table">
                       <table>
                         <tr *ngFor="let m of casesList">
-                            <td>{{m.subType}}</td>
+                            <td style="width:240px">{{m.subType}}</td>
                             <td>{{m.value}}</td>
                         </tr>
                       </table>

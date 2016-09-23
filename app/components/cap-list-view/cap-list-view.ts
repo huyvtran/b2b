@@ -8,18 +8,18 @@ import {NavParams} from 'ionic-angular';
 		<div class="list-view">
 			<table style="width:100%;font-size:12px;">
 		  	<tr>
-			    <th style="width:100px;">Cap ID</th>
-			    <th>Level</th>
-			    <th style="width:130px;">Customer</th>
+			    <th style="width:80px;">Cap ID</th>
+			    <th style="text-align:center">Level</th>
+			    <th style="width:160px;">Customer</th>
 			    <th>Age</th>
 		    </tr>
 			</table>
 			<div class="inner_table">
 			  <table style="font-size:12px;">
 				  <tr *ngFor="let m of model">
-				    <td style="width:100px;">{{m.caseNumber}}</td>
-				    <td>{{correctName(m.capLevel)}}</td>
-				    <td style="width:130px;">{{m.customer}}</td>
+				    <td style="width:80px;">{{m.caseNumber}}</td>
+				    <td style="text-align:center">{{correctName(m.capLevel)}}</td>
+				    <td style="width:160px;">{{m.customer}}</td>
 				    <td>{{m.age}}</td>
 				  </tr>
 			  </table>

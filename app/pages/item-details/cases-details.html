@@ -31,21 +31,21 @@
     <collapsible-pane [hidden]="!isVisible">
         <span class="collapsible-pane-title">{{tableHeaderText}}</span>
         <div class="collapsible-pane-content">
-            <switch-view (itemTapped)="headerTappedHandler($event)">
+            <switch-view>
                 <div class="chart-view chart-container">
                     <pie-chart *ngIf="pieChartDataProvider.length>1" [dataProvider]="pieChartDataProvider"></pie-chart>
                 </div>
                 <div class="list-view" *ngIf="selectedSubCategory=='Open'">
                     <table style="width:100%">
                         <tr>
-                          <th>Customer Impact</th>
+                          <th style="width:260px">Customer Impact</th>
                           <th># of SRs</th>
                         </tr>
                     </table>
                     <div class="inner_table">
                       <table>
                           <tr *ngFor="let m of casesList">
-                              <td>{{m.subType}}</td>
+                              <td  style="width:260px">{{m.subType}}</td>
                               <td>{{m.value}}</td>
                           </tr>
                       </table>
@@ -54,15 +54,15 @@
                 <div class="list-view" *ngIf="selectedSubCategory=='Resolve Time'">
                     <table style="width:100%">
                         <tr>
-                            <th>Resolution Code</th>
+                            <th style="width:170px">Resolution Code</th>
                             <th># of SRs</th>
-                            <th>Close Time(days)</th>
+                            <th>Close Time</th>
                         </tr>
                     </table>
                     <div class="inner_table">
                       <table>
                         <tr *ngFor="let m of casesList">
-                            <td>{{m.subType}}</td>
+                            <td style="width:170px">{{m.subType}}</td>
                             <td>{{m["#ofSRs"]}}</td>
                             <td>{{m["CloseTime"]}}</td>
                         </tr>
