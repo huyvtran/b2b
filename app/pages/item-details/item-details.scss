@@ -65,3 +65,16 @@
     text-align: center;
     margin-top: inherit;
 }
+
+div.typeChartParent{
+  width:775px;
+  overflow-x: auto;
+  // position:absolute;
+  // left:0px;
+  // -webkit-transition: 2s;
+  // -transition: 2s;
+  // border: 1px solid red;
+}
+.isCustomer{
+    left: 40px;
+}

@@ -11,6 +11,10 @@ import {HelpPage} from './pages/help/help';
 import {CollapsiblePane} from './components/collapsible-pane/collapsible-pane';
 import {Toast} from 'ionic-native';
 import {enableProdMode} from '@angular/core';
+import {Network} from 'ionic-native';
+
+declare var navigator: any;
+declare var Connection: any;
 enableProdMode();
 declare var window: any;
 
@@ -47,6 +51,7 @@ class Back2Basic {
     this.initializeApp();
     this.addEvents();
     this.checkIdle();
+    this.checkNetworkState();
   }
 
   addEvents() {
@@ -92,6 +97,42 @@ class Back2Basic {
     if(this.isHome)
       this.startTimer();
   }
+  checkNetworkState() {
+    var self = this;
+    document.addEventListener("offline", function() {
+        self.checkConnection();
+      }, false);
+    document.addEventListener("online", function() {
+        self.checkConnection();
+      }, false);
+  }
+
+ checkConnection() {
+    var networkState = navigator.connection.type;
+
+    var states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi connection';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.CELL]     = 'Cell generic connection';
+    states[Connection.NONE]     = 'No network connection';
+
+    
+    if(states[networkState]=="No network connection"){
+      console.log(states[networkState]);
+       this.showAlertToCloseApp("We lost internet connectivity, please check your connection");
+    }
+     if(states[networkState]=="WiFi connection"){
+      console.log(states[networkState]);
+       this.cancelAlert();
+    }
+   // this.showAlert("Connection type: "+ states[networkState]);
+  
+}
+
 
   startTimer() {
     //console.log(this.idleTimeout);
@@ -288,6 +329,22 @@ class Back2Basic {
     this.nav.present(alert);
   }
 
+  showAlertToCloseApp(msg) {
+   this.isAlertPresent = true;
+   let alert = Alert.create({
+      title: msg,
+      buttons: ['OK']
+    });
+    this.nav.present(alert);
+  }
+
+   cancelAlert() {
+        console.log("CANCEL!!");
+        setTimeout(() => this.nav.pop(), 1000);
+           this.isAlertPresent = false;
+
+    }
+
   /*
    * Displaying a toast message on the screen.
    */
@@ -349,7 +406,7 @@ class Back2Basic {
   logout() {
     this.isHome = false;
     this.oldCategories = null;
-    this.authService.logout();
+    //this.authService.logout();
     this.menu.close();
     if(this.AUTH_TYPE == 'customLogin') {
       this.nav.setRoot(LoginPage);

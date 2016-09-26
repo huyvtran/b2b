@@ -20,13 +20,15 @@ export class HardwareDetails {
   trendsList = [];
   rmaOpenTableData = {};
   selectedSubCategory: string;
-  pieChartDataProvider = [];
+  pieChartDataProvider_1 = [];
+  pieChartDataProvider_2 = [];
   tableHeaderText: string;
   chartHeaderText: string;
   selectedIndex: number;
   isVisible: boolean;
   info = "";
   noDataText: string;
+  byCustomer:boolean;
 
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform, private events: Events) {
     // If we navigated to this page, we will have an item available as a nav param
@@ -43,9 +45,11 @@ export class HardwareDetails {
   initializeData(data) {
     this.rmaOpenTableData = {};
     this.casesList = [];
-    this.pieChartDataProvider = [];
+    this.pieChartDataProvider_1 = [];
+    this.pieChartDataProvider_2 = [];
     this.info = "";
     this.trendsList = [];
+    this.byCustomer = false;
 
     //Replacing 'd' with blank to display data for values having 'd' in it and
     //check if it can be converted to a valid number or not.
@@ -81,7 +85,8 @@ export class HardwareDetails {
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
       this.rmaOpenTableData = this.setRMAOpenTableData(res.subCategoryDetails);
       this.casesList = this.b2bService.filterKeyFromData(res.subCategoryDetails);
-      this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
+      this.pieChartDataProvider_1 = this.prepareChartData(res.subCategoryDetails, "Nature of Return");
+      this.pieChartDataProvider_2 = this.prepareChartData(res.subCategoryDetails, "Top Customers");
       this.info = res.info;
       this.trendsList = res.trendDetails;
     }, err => {
@@ -133,23 +138,26 @@ export class HardwareDetails {
     this.initializeData(data);
   }
 
-  prepareChartData(data) {
+  prepareChartData(data, type) {
     var tmpObj = {};
     var preparedData = [];
     for (let i = 0; i < data.length; i++) {
-      let t = data[i].subType;
-      if (tmpObj[t]) {
-        tmpObj[t].y += (isNaN(data[i].value) ? 0 : data[i].value);
-      } else {
-        tmpObj[t] = {
-          name: t,
-          y: isNaN(data[i].value) ? 0 : (+data[i].value)
+      if(type == data[i].type)
+      {
+          let t = data[i].subType;
+          if (tmpObj[t]) {
+            tmpObj[t].y += (isNaN(data[i].value) ? 0 : data[i].value);
+          } else {
+            tmpObj[t] = {
+              name: t,
+              y: isNaN(data[i].value) ? 0 : (+data[i].value)
+            }
+          }
         }
       }
-    }
-    for (let i in tmpObj) {
-      i != "Others" && preparedData.push(tmpObj[i]);
-    }
+      for (let i in tmpObj) {
+        i != "Others" && preparedData.push(tmpObj[i]);
+      }
     return preparedData;
   }
 
@@ -187,5 +195,12 @@ export class HardwareDetails {
   headerTappedHandler(event){
     var collapsed = event.collapsed || event.data;
     this.b2bService.changeTableHeightHandler(collapsed);
+  }
+
+  // check it is a "by customer" or not for Open data table
+  isCustomer(value){
+    console.log("value " + value);
+    this.byCustomer = value;
+    console.log("byCustomer " + this.byCustomer);
   }
 }
