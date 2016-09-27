@@ -68,13 +68,32 @@
 
 div.typeChartParent{
   width:775px;
-  overflow-x: auto;
-  // position:absolute;
-  // left:0px;
-  // -webkit-transition: 2s;
-  // -transition: 2s;
-  // border: 1px solid red;
+  position:absolute;
+  left:0px;
+  -webkit-transition: left 1s ease-out;
+  transition: left 1s ease-out;
 }
-.isCustomer{
-    left: 40px;
+.isFailure{
+    left: -400px !important;
+}
+
+.pieChartTab{
+  height:30px;
+  background-color: #009edc;
+  div#pieChartTab_child_1, div#pieChartTab_child_2{
+    width: 50%;height: 30px;float: left;text-align: center;padding-top: 7px;background-color: #009edc;overflow: hidden;
+    div{
+      width: 10px;height: 10px;background-color: white;-webkit-transform: rotate(45deg);margin: -12px auto 4px;
+      transform: rotate(45deg);display: none;
+    }
+    a{
+      color: white;font-weight: bold;
+    }
+  }
+  div#pieChartTab_child_1.selectedTab, div#pieChartTab_child_2.selectedTab{
+    background-color: #056084;
+    .showIndicator{
+      display: block;
+    }
+  }
 }

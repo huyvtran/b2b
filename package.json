@@ -45,7 +45,8 @@
     "ionic-plugin-keyboard@~2.2.1",
     "cordova-plugin-x-toast",
     "cordova-plugin-inappbrowser",
-    "cordova-plugin-sslcertificatechecker"
+    "cordova-plugin-sslcertificatechecker",
+    "cordova-plugin-network-information"
   ],
   "cordovaPlatforms": []
 }

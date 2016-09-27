@@ -33,21 +33,21 @@
         <div class="collapsible-pane-content">
             <switch-view>
                 <div class="chart-view chart-container" style="overflow-x:hidden;">
-                    <!-- <div style="padding-left:5px;width:200px;">
-                      <a href="#" (click)="isCustomer(true)">By Customer</a>
-                      <a href="#" (click)="isCustomer(false)">By Failure</a>
-                    </div> -->
-                    <div style="width:400px;height:180px;overflow-x:auto">
-                      <div class="typeChartParent">
-                        <div style="float:left;">
-                          <span style="margin-left:15px;color: #009edc;">By Customer</span>
-                          <pie-chart *ngIf="pieChartDataProvider_1.length>1" [dataProvider]="pieChartDataProvider_1"></pie-chart>
-                        </div>
-                        <div style="float:left;">
-                          <span style="margin-left:15px;color: #009edc;">By Failure</span>
-                          <pie-chart *ngIf="pieChartDataProvider_2.length>1" [dataProvider]="pieChartDataProvider_2"></pie-chart>
-                        </div>
+                    <div style="width:400px;height:180px;">
+                      <div class="typeChartParent" [ngClass]="{'isFailure':byFailure}">
+                        <pie-chart style="width:50%;float:left;" *ngIf="pieChartDataProvider_1.length>1" [dataProvider]="pieChartDataProvider_1"></pie-chart>
+                        <pie-chart style="width:50%;float:left;" *ngIf="pieChartDataProvider_2.length>1" [dataProvider]="pieChartDataProvider_2"></pie-chart>
+                      </div>
                     </div>
+                    <div class="pieChartTab">
+                      <div id="pieChartTab_child_1" [ngClass]="{'selectedTab':!byFailure}">
+                        <div [ngClass]="{'showIndicator':!byFailure}"></div>
+                        <a href="#" (click)="isFailure(false)">By Customer</a>
+                      </div>
+                      <div id="pieChartTab_child_2" [ngClass]="{'selectedTab':byFailure}">
+                        <div [ngClass]="{'showIndicator':byFailure}"></div>
+                        <a href="#" (click)="isFailure(true)">By Failure</a>
+                      </div>
                     </div>
                 </div>
                 <div class="list-view" style="float:clear" *ngIf="selectedSubCategory=='Open'" style="width:100%;">

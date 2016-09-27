@@ -28,7 +28,7 @@ export class HardwareDetails {
   isVisible: boolean;
   info = "";
   noDataText: string;
-  byCustomer:boolean;
+  byFailure:boolean;
 
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform, private events: Events) {
     // If we navigated to this page, we will have an item available as a nav param
@@ -49,7 +49,7 @@ export class HardwareDetails {
     this.pieChartDataProvider_2 = [];
     this.info = "";
     this.trendsList = [];
-    this.byCustomer = false;
+    this.byFailure = false;
 
     //Replacing 'd' with blank to display data for values having 'd' in it and
     //check if it can be converted to a valid number or not.
@@ -197,10 +197,8 @@ export class HardwareDetails {
     this.b2bService.changeTableHeightHandler(collapsed);
   }
 
-  // check it is a "by customer" or not for Open data table
-  isCustomer(value){
-    console.log("value " + value);
-    this.byCustomer = value;
-    console.log("byCustomer " + this.byCustomer);
+  // check it is "by failure" or not for Open data table
+  isFailure(value){
+    this.byFailure = value;
   }
 }
