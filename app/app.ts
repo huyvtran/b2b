@@ -120,17 +120,16 @@ class Back2Basic {
     states[Connection.CELL]     = 'Cell generic connection';
     states[Connection.NONE]     = 'No network connection';
 
-    
+
     if(states[networkState]=="No network connection"){
-      console.log(states[networkState]);
-       this.showAlertToCloseApp("We lost internet connectivity, please check your connection");
+      //console.log(states[networkState]);
+       this.showAlertToCloseApp("Unable to reach Back To Basics server, please check your data connection!");
     }
      if(states[networkState]=="WiFi connection"){
-      console.log(states[networkState]);
+      //console.log(states[networkState]);
        this.cancelAlert();
     }
    // this.showAlert("Connection type: "+ states[networkState]);
-  
 }
 
 
@@ -339,7 +338,7 @@ class Back2Basic {
   }
 
    cancelAlert() {
-        console.log("CANCEL!!");
+        //console.log("CANCEL!!");
         setTimeout(() => this.nav.pop(), 1000);
            this.isAlertPresent = false;
 

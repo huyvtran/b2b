@@ -13,7 +13,7 @@
     <div class="header-info">
         <span class="title">{{correctName(pageTitle)}}</span>
         <div [hidden]="!info" (click)="showInfo=!showInfo" class="info-logo" style="background-color: #009edc; text-align: right;padding-right: 5px;">
-            <img style="width: 32%" src="./img/info-icon.png" />
+            <img style="width: 48px" src="./img/info-icon.png" />
         </div>
     </div>
 </ion-header>
@@ -33,7 +33,7 @@
         <div class="collapsible-pane-content">
             <switch-view>
                 <div class="chart-view chart-container" style="overflow-x:hidden;">
-                    <div style="width:400px;height:180px;">
+                    <div style="width:400px;height:160px;">
                       <div class="typeChartParent" [ngClass]="{'isFailure':byFailure}">
                         <pie-chart style="width:50%;float:left;" *ngIf="pieChartDataProvider_1.length>1" [dataProvider]="pieChartDataProvider_1"></pie-chart>
                         <pie-chart style="width:50%;float:left;" *ngIf="pieChartDataProvider_2.length>1" [dataProvider]="pieChartDataProvider_2"></pie-chart>

@@ -127,7 +127,10 @@ export class B2BService {
 
   changeTableHeightHandler(collapsed){
     var listView = document.getElementsByClassName("list-view")[0];
-    var innerDiv = listView['children'][1];
+    var innerDiv = (listView && listView['children'] && listView['children'][1]) ? listView['children'][1] : undefined;
+    if(innerDiv == undefined){
+      return;
+    }
     if(collapsed){
       listView['style'].height = "295px";
       innerDiv['style'].height = "265px";
