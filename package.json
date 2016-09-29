@@ -46,7 +46,11 @@
     "cordova-plugin-x-toast",
     "cordova-plugin-inappbrowser",
     "cordova-plugin-sslcertificatechecker",
-    "cordova-plugin-network-information"
+    "cordova-plugin-network-information",
+    {
+      "id": "cisco-plugin-mvf",
+      "locator": "Releases/Plugin/MVFPlugin"
+    }
   ],
   "cordovaPlatforms": []
 }

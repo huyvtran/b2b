@@ -186,6 +186,7 @@ class Back2Basic {
   checkCertPinning() {
     this.showLoading("Checking certificate's security...");
     this.platform.ready().then(() => {
+      this.checkForUpdate();
       if(!window['plugins'] || !window['plugins']['sslCertificateChecker']) {
         this.checkAuth();
         return;
@@ -223,7 +224,21 @@ class Back2Basic {
       }
     }
   }
-
+ checkForUpdate(){
+            // console.log(window['MVFPlugin']);
+            // console.log(window['MVFPlugin'].mandatoryCheck);
+        if (window['MVFPlugin']) {
+           console.log(window['MVFPlugin'].mandatoryCheck);
+                    window['MVFPlugin'].mandatoryCheck("Amit",
+                     function (res) {
+                       console.log("Success" +res);
+                    },
+                     function (err) {
+                        console.log("Error " +err);
+                    });
+                }
+                
+  }
   loadData(isByLogin) {
     this.showLoading('Loading data...');
     // set our menu list

@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com-MVF-plugins" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cisco-plugin-mvf"
+    version="0.0.1"
+    >
+    <name>MVFPlugin</name>
+    <js-module name="MVFPlugin" src="www/MVFPlugin.js">
+        <clobbers target="MVFPlugin" />
+    </js-module>
+    
+    
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="MVFPlugin">
+                <param name="android-package" value="cisco.plugin.mvf.MVFPlugin"/>
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        </config-file>
+        <source-file src="src/android/libs/vaf-library-1.0-SNAPSHOT.jar" framework="true" target-dir="libs"/>
+        <source-file src="src/android/MVFPlugin.java" target-dir="src/cisco/plugin/mvf"/>
+    </platform>
+
+    <platform name="ios">
+  <config-file target="config.xml" parent="/*">
+    <feature name="MVFPlugin">
+      <param name="ios-package" value="MVFPlugin" />
+    </feature>
+  </config-file>
+  <header-file src="src/ios/MVFPlugin.h" />
+  <source-file src="src/ios/MVFPlugin.m" />
+
+  <header-file src="src/ios/VAF_iOS/MandatoryUpdateAgent.h"/>
+  <source-file src="src/ios/VAF_iOS/libVAF.a" framework="true"/>
+
+</platform>
+
+</plugin>
