@@ -33,7 +33,6 @@ class Back2Basic {
   private info = "";
   oldCategories: Object = null;
   loading:any = null;
-  AUTH_TYPE: string = 'browserLogin'; // browserLogin, customLogin
   isAlertPresent: boolean = false;
   UNAUTHORIZED: number = 401;
   idleTimeout: number = 60*10*1000; // 10 min
@@ -216,7 +215,7 @@ class Back2Basic {
     if(this.authService.isAuthenticated()) {
       this.loadData(false);
     } else {
-      if(this.AUTH_TYPE == 'customLogin') {
+      if(this.authService.AUTH_TYPE == 'customLogin') {
         this.hideLoading();
         this.rootPage = LoginPage;
       } else {
@@ -228,16 +227,16 @@ class Back2Basic {
             // console.log(window['MVFPlugin']);
             // console.log(window['MVFPlugin'].mandatoryCheck);
         if (window['MVFPlugin']) {
-           console.log(window['MVFPlugin'].mandatoryCheck);
+           //console.log(window['MVFPlugin'].mandatoryCheck);
                     window['MVFPlugin'].mandatoryCheck("Amit",
                      function (res) {
-                       console.log("Success" +res);
+                       //console.log("Success" +res);
                     },
                      function (err) {
-                        console.log("Error " +err);
+                        //console.log("Error " +err);
                     });
                 }
-                
+
   }
   loadData(isByLogin) {
     this.showLoading('Loading data...');
@@ -259,7 +258,7 @@ class Back2Basic {
         this.hideLoading();
         this.showAlert('Error while loading data ! Please try again.', -1);
       } else {
-        if(this.AUTH_TYPE == 'customLogin') {
+        if(this.authService.AUTH_TYPE == 'customLogin') {
           this.hideLoading();
           this.nav.setRoot(LoginPage);
         } else {
@@ -422,7 +421,7 @@ class Back2Basic {
     this.oldCategories = null;
     //this.authService.logout();
     this.menu.close();
-    if(this.AUTH_TYPE == 'customLogin') {
+    if(this.authService.AUTH_TYPE == 'customLogin') {
       this.nav.setRoot(LoginPage);
     } else {
       this.nav.setRoot(LandingPage);

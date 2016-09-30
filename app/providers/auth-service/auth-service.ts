@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -17,8 +18,9 @@ export class AuthService {
   props: Array<string> = ['access_token', 'refresh_token', 'token_type', 'expires_in'];
   propsPrefix: string = '$b2b$';
   ENV: string = 'prod'; // dev, cisco, prod
+  AUTH_TYPE: string = 'browserLogin'; // browserLogin, customLogin
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private platform: Platform) {
     this.data = null;
     this.loadData();
   }
@@ -32,34 +34,72 @@ export class AuthService {
 
     // don't have the data yet
     return new Promise((resolve, reject) => {
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
-      let options = new RequestOptions({
-        headers: headers
-      });
-      this.http.post(this.OAUTH_URL, creds, options)
-        .map(res => res.json())
-        .subscribe(data => {
-          // we've got back the raw data, now generate the core schedule data
-          // and save the data for later reference
-          if(this.ENV === 'cisco') {
-            data.token_type = 'Basic';
-            data.access_token = window.btoa(credentials.username + ':' + credentials.password);
-          }
-          this.data = data;
-          this.saveData(this.data, rememberMe);
-          this.loadData();
-          resolve(this.data);
-        }, err => {
-          if (err.status == 0) {
-            reject({
-              'error': 'Error',
-              'error_description': 'Access control not enabled for this origin.'
+    if(this.AUTH_TYPE == "customLogin"){
+        var self = this;
+        this.platform.ready().then(() => {
+          if(window['Authentication']) {
+            window['Authentication'].login(credentials, function(res) {
+              var data = {};
+              data['token_type'] = 'Bearer';
+              data['access_token'] = res.accessToken;
+              data['refresh_token'] = res.refreshToken;
+              data['expires_in'] = res.expiresIn;
+              self.data = data;
+              self.saveData(data, rememberMe);
+              self.loadData();
+              resolve(data);
+            }, function(err) {
+              if(typeof err === 'string') {
+                setTimeout(()=> {
+                  reject({
+                    'error': 'Error',
+                    'error_description': err
+                  });
+                }, 50);
+              } else {
+                reject(err);
+              }
             });
           } else {
-            reject(JSON.parse(err._body));
+            setTimeout(()=> {
+              reject({
+                'error': 'Error',
+                'error_description': 'Plugin Authentication will not work on browser.'
+              });
+            }, 50);
           }
         });
+      }
+      else{
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
+        let options = new RequestOptions({
+          headers: headers
+        });
+        this.http.post(this.OAUTH_URL, creds, options)
+          .map(res => res.json())
+          .subscribe(data => {
+            // we've got back the raw data, now generate the core schedule data
+            // and save the data for later reference
+            if(this.ENV === 'cisco') {
+              data.token_type = 'Basic';
+              data.access_token = window.btoa(credentials.username + ':' + credentials.password);
+            }
+            this.data = data;
+            this.saveData(this.data, rememberMe);
+            this.loadData();
+            resolve(this.data);
+          }, err => {
+            if (err.status == 0) {
+              reject({
+                'error': 'Error',
+                'error_description': 'Access control not enabled for this origin.'
+              });
+            } else {
+              reject(JSON.parse(err._body));
+            }
+          });
+        }
     });
   }
 

@@ -50,6 +50,10 @@
     {
       "id": "cisco-plugin-mvf",
       "locator": "Releases/Plugin/MVFPlugin"
+    },
+    {
+      "id": "cisco-plugin-auth",
+      "locator": "Releases/Plugin/cisco-plugin-auth/"
     }
   ],
   "cordovaPlatforms": []

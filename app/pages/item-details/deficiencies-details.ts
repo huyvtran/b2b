@@ -63,7 +63,7 @@ export class DeficienciesDetails {
     if (this.selectedItem.subCategories[data.value].name == "Resolve Time") {
 
       this.chartHeaderText = "Cumulative Resolution Trend"
-      this.tableHeaderText = "Defieciency " + "Resolution Time";
+      this.tableHeaderText = "Deficiency " + "Resolution Time";
     }
     else if (this.selectedItem.subCategories[data.value].name == "Open") {
 

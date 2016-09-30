@@ -7,6 +7,10 @@ Need To install MVF plugin:
 	Run this command :
 	cordova plugin add Releases/Plugin/MVFPlugin
 
+Need To Auth_plugin:
+	cordova plugin add Releases/Plugin/cisco-plugin-auth
+
+
 
 Other Plugin - Must to Install 
 	ionic plugin add cordova-plugin-inappbrowser

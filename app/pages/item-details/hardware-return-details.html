@@ -32,8 +32,8 @@
         <span class="collapsible-pane-title">{{tableHeaderText}}</span>
         <div class="collapsible-pane-content">
             <switch-view>
-                <div class="chart-view chart-container" style="overflow-x:hidden;">
-                    <div style="width:400px;height:165px;">
+                <div class="chart-view chart-container" style="height:195px;overflow-x:hidden;">
+                    <div style="width:400px;height:170px;">
                       <div class="typeChartParent" [ngClass]="{'isFailure':byFailure}">
                         <pie-chart style="width:50%;float:left;" *ngIf="pieChartDataProvider_1.length>1" [dataProvider]="pieChartDataProvider_1"></pie-chart>
                         <pie-chart style="width:50%;float:left;" *ngIf="pieChartDataProvider_2.length>1" [dataProvider]="pieChartDataProvider_2"></pie-chart>
