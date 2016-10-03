@@ -18,7 +18,7 @@ export class AuthService {
   props: Array<string> = ['access_token', 'refresh_token', 'token_type', 'expires_in'];
   propsPrefix: string = '$b2b$';
   ENV: string = 'prod'; // dev, cisco, prod
-  AUTH_TYPE: string = 'browserLogin'; // browserLogin, customLogin
+  AUTH_TYPE: string = 'customLogin'; // browserLogin, customLogin
 
   constructor(private http: Http, private platform: Platform) {
     this.data = null;
