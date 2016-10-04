@@ -213,7 +213,15 @@ class Back2Basic {
 
   checkAuth() {
     if(this.authService.isAuthenticated()) {
-      this.loadData(false);
+      if (this.platform.is('ios') && window['TouchIDPlugin'])
+       {//alert("ios");
+         this.touchAuthentication();      
+        }
+      else
+      {
+        //alert("android");
+        this.loadData(false);
+      }
     } else {
       if(this.authService.AUTH_TYPE == 'customLogin') {
         this.hideLoading();
@@ -238,6 +246,36 @@ class Back2Basic {
                 }
 
   }
+  touchAuthentication(){
+     var self = this;
+   if (window['TouchIDPlugin']) {
+        window['TouchIDPlugin'].loginWithTouchID("credentials", function (res) {
+       // var self = this;
+        var data = {};
+        data['token_type'] = 'Bearer';
+        data['access_token'] = res.accessToken;
+        data['refresh_token'] = res.refreshToken;
+        data['expires_in'] = res.expiresIn;
+       // self.data = data;
+    
+        self.authService.implicitLogin(data);
+        self.loadData(false);
+
+       //window.plugins.toast.show('Hello there!', 'long', 'center', function(a){alert('toast Success: ' + a)}, function(b){alert('toast error: ' + b)});
+    }, function (err) {
+        
+      if (err== "touch id is not enabled") 
+      { alert(err);
+        self.loadData(false);
+      }
+      else
+      { 
+        //self.authService.logout();
+        self.loadData(false);
+      } 
+    });
+}
+}
   loadData(isByLogin) {
     this.showLoading('Loading data...');
     // set our menu list
