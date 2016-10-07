@@ -37,8 +37,10 @@ export class AuthService {
     if(this.AUTH_TYPE == "customLogin"){
         var self = this;
         this.platform.ready().then(() => {
-          if(window['Authentication']) {
-            window['Authentication'].login(credentials, function(res) {
+
+            if (this.platform.is('ios') && window['TouchIDPlugin'])
+              {//alert("ios");
+              window['TouchIDPlugin'].touchIDAuthentication(credentials, function(res) {
               var data = {};
               data['token_type'] = 'Bearer';
               data['access_token'] = res.accessToken;
@@ -49,18 +51,46 @@ export class AuthService {
               self.loadData();
               resolve(data);
             }, function(err) {
-              if(typeof err === 'string') {
+                if(typeof err === 'string') {
                 setTimeout(()=> {
                   reject({
                     'error': 'Error',
                     'error_description': err
                   });
                 }, 50);
-              } else {
+                } else {
                 reject(err);
-              }
-            });
-          } else {
+                    }
+                });
+
+               }
+            else if(window['Authentication']) {
+                 // code...
+              window['Authentication'].login(credentials, function(res) {
+              var data = {};
+              data['token_type'] = 'Bearer';
+              data['access_token'] = res.accessToken;
+              data['refresh_token'] = res.refreshToken;
+              data['expires_in'] = res.expiresIn;
+              self.data = data;
+              self.saveData(data, rememberMe);
+              self.loadData();
+              resolve(data);
+            }, function(err) {
+                  if(typeof err === 'string') {
+                    setTimeout(()=> {
+                      reject({
+                      'error': 'Error',
+                      'error_description': err
+                      });
+                    }, 50);
+                } else {
+                reject(err);
+                  }
+              });
+          
+               }
+            else {
             setTimeout(()=> {
               reject({
                 'error': 'Error',
@@ -68,6 +98,43 @@ export class AuthService {
               });
             }, 50);
           }
+
+          // if(window['Authentication']) {
+          //   window['Authentication'].login(credentials, function(res) {
+          //     var data = {};
+          //     data['token_type'] = 'Bearer';
+          //     data['access_token'] = res.accessToken;
+          //     data['refresh_token'] = res.refreshToken;
+          //     data['expires_in'] = res.expiresIn;
+          //     self.data = data;
+          //     self.saveData(data, rememberMe);
+          //     self.loadData();
+          //     resolve(data);
+          //   }, function(err) {
+          //     if(typeof err === 'string') {
+          //       setTimeout(()=> {
+          //         reject({
+          //           'error': 'Error',
+          //           'error_description': err
+          //         });
+          //       }, 50);
+          //     } else {
+          //       reject(err);
+          //     }
+          //   });
+          // } else {
+          //   setTimeout(()=> {
+          //     reject({
+          //       'error': 'Error',
+          //       'error_description': 'Plugin Authentication will not work on browser.'
+          //     });
+          //   }, 50);
+          // }
+
+
+
+
+
         });
       }
       else{
@@ -119,6 +186,7 @@ export class AuthService {
       this.authorization = null;
     }
   }
+
 
   implicitLogin(data) {
     this.clearStorage();

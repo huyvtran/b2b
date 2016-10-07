@@ -31,15 +31,32 @@
     <collapsible-pane [hidden]="!isVisible">
         <span class="collapsible-pane-title">{{tableHeaderText}}</span>
         <div class="collapsible-pane-content">
-            <switch-view>
-                <div class="chart-view chart-container" style="height:195px;overflow-x:hidden;">
-                    <div style="width:400px;height:170px;">
+
+       <div style="text-align:right;">
+            <span (click)="selectedView='list';" [ngClass]="{'view-icon-active':selectedView=='list'}" class="view-icon view-icon-active"><ion-icon name="list"></ion-icon></span>
+            <span (click)="selectedView='chart';" [ngClass]="{'view-icon-active':selectedView=='chart'}" class="view-icon"><ion-icon name="stats"></ion-icon></span>
+    </div>
+
+<div class="chart-view chart-container" style="height:195px;overflow-x:hidden;" *ngIf="selectedView=='chart'">
+    <div *ngIf="selectedSubCategory=='Open'">
+       <div class="chart-view chart-container" style="height:195px;overflow-x:hidden;">
+       <div style="width:400px;height:180px;">
+       <ion-slides [options]="mySlideOptions" >
+                          <ion-slide>
+                            <pie-chart style="width:50%;float:left;" *ngIf="pieChartDataProvider_1.length>1" [dataProvider]="pieChartDataProvider_1"></pie-chart>
+                          </ion-slide>
+                          <ion-slide>
+                             <pie-chart style="width:50%;float:left;" *ngIf="pieChartDataProvider_2.length>1" [dataProvider]="pieChartDataProvider_2"></pie-chart>
+                          </ion-slide> 
+                        </ion-slides>
+                        </div>
+                    <!-- 
                       <div class="typeChartParent" [ngClass]="{'isFailure':byFailure}">
                         <pie-chart style="width:50%;float:left;" *ngIf="pieChartDataProvider_1.length>1" [dataProvider]="pieChartDataProvider_1"></pie-chart>
                         <pie-chart style="width:50%;float:left;" *ngIf="pieChartDataProvider_2.length>1" [dataProvider]="pieChartDataProvider_2"></pie-chart>
                       </div>
-                    </div>
-                    <div class="pieChartTab">
+                    </div> -->
+                    <!-- <div class="pieChartTab">
                       <div id="pieChartTab_child_1" [ngClass]="{'selectedTab':!byFailure}">
                         <div [ngClass]="{'showIndicator':!byFailure}"></div>
                         <a href="#" (click)="isFailure(false)">By Customer</a>
@@ -48,9 +65,55 @@
                         <div [ngClass]="{'showIndicator':byFailure}"></div>
                         <a href="#" (click)="isFailure(true)">By Failure</a>
                       </div>
-                    </div>
+                    </div> -->
                 </div>
+    </div>
+          <div *ngIf="selectedSubCategory!=='Open'">
+             <pie-chart *ngIf="pieChartDataProvider_3.length>1" [dataProvider]="pieChartDataProvider_3"></pie-chart>
+          </div>
+    </div>
+
+
+      <div *ngIf="selectedView=='list'"> 
                 <div class="list-view" style="float:clear" *ngIf="selectedSubCategory=='Open'" style="width:100%;">
+                  <ion-slides [options]="mySlideOptions">
+                   <ion-slide>
+                      <table style="width:100%">
+                      <tr>
+                        <th style="width:220px;">{{rmaOpenTableData.natureType}}</th>
+                        <th style="width:35px;">{{rmaOpenTableData.rma}}</th>
+                         </tr>
+                          </table>
+                <div class="inner_table">
+                  <table>
+                     <tr *ngFor="let m of rmaOpenTableData.data">
+                         <td style="width:250px">{{m.natureSubType}}</td>
+                         <td >{{m.natureValue}}</td>
+                          </tr>
+                           </table>
+                     </div>
+                </ion-slide>
+
+                 <ion-slide>
+                      <table style="width:100%">
+                       <tr>
+                          <th style="width:220px;">{{rmaOpenTableData.topCustType}}</th>
+                          <th style="width:35px;">{{rmaOpenTableData.rma}}</th>
+                            </tr>
+                             </table>
+
+                  <div class="inner_table">
+                     <table>
+                       <tr *ngFor="let m of rmaOpenTableData.data">
+                         <td style="width:250px">{{m.topSubType}}</td>
+                         <td >{{m.topValue}}</td>
+                          </tr>
+                           </table>
+                     </div>
+                </ion-slide>
+             </ion-slides>
+            </div>
+            <!--  <div *ngIf="selectedView=='list'"> <div class="list-view" style="float:clear" *ngIf="selectedSubCategory=='Open'" style="width:100%;">
                     <table style="width:100%;">
                       <tr>
                           <th style="width:65px;">{{rmaOpenTableData.natureType}}</th>
@@ -71,12 +134,17 @@
                           </tr>
                       </table>
                    </div>
-                </div>
+                </div> -->
+                
+                
+
                 <div class="list-view" *ngIf="selectedSubCategory=='Resolve Time'" style="float:clear">
                     <table style="width:100%">
                       <tr>
-                        <th style="width:260px">CFD</th>
-                        <th>SR Related</th>
+                        <!-- <th style="width:260px">CFD</th>
+                        <th>SR Related</th> -->
+                        <th style="width:260px">{{rmaOpenTableData.type}}</th>
+                        <th>{{rmaOpenTableData.valueType || "SR Related"}}</th>
                       </tr>
                     </table>
                     <div class="inner_table">
@@ -104,7 +172,8 @@
                      </table>
                    </div>
                 </div>
-            </switch-view>
+          
+        </div>
         </div>
     </collapsible-pane>
     <collapsible-pane [hidden]="!isVisible" (headerTapped)="headerTappedHandler($event)">

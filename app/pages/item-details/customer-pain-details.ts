@@ -26,6 +26,7 @@ export class CustomerPainDetails {
   isVisible: boolean;
   noDataText:string;
   info="";
+  impactObj = {};
 
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform, private events: Events) {
     // If we navigated to this page, we will have an item available as a nav param
@@ -40,6 +41,7 @@ export class CustomerPainDetails {
   }
 
   initializeData(data) {
+    this.impactObj = {};
     this.casesList = [];
     this.pieChartDataProvider = [];
     this.info = "";
@@ -73,6 +75,7 @@ export class CustomerPainDetails {
       this.tableHeaderText="Open Customer "+this.selectedItem.subCategories[data.value].name;
     }
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
+      this.impactObj = this.getImpactCharKey(res.subCategoryDetails);
       this.casesList = this.b2bService.filterKeyFromData(res.subCategoryDetails);
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
@@ -80,6 +83,10 @@ export class CustomerPainDetails {
     }, err => {
       this.events.publish('data:load_error', err);
     });
+  }
+
+  getImpactCharKey(data) {
+    return {"type" : data[0].type, "valueType" : data[0].valueType};
   }
 
   selectionChangedHandler(data) {

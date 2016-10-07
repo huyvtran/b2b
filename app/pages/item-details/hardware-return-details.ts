@@ -8,6 +8,7 @@ import {CollapsiblePane} from '../../components/collapsible-pane/collapsible-pan
 import {SwitchViewContainer} from '../../components/switch-view/switch-view';
 import {B2BService} from '../../providers/b2b-service/b2b-service';
 import {Toast} from 'ionic-native';
+import { Slides } from 'ionic-angular';
 
 @Component({
   templateUrl: 'build/pages/item-details/hardware-return-details.html',
@@ -22,6 +23,7 @@ export class HardwareDetails {
   selectedSubCategory: string;
   pieChartDataProvider_1 = [];
   pieChartDataProvider_2 = [];
+  pieChartDataProvider_3 = [];
   tableHeaderText: string;
   chartHeaderText: string;
   selectedIndex: number;
@@ -29,6 +31,7 @@ export class HardwareDetails {
   info = "";
   noDataText: string;
   byFailure:boolean;
+  public selectedView = 'list';
 
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform, private events: Events) {
     // If we navigated to this page, we will have an item available as a nav param
@@ -47,6 +50,7 @@ export class HardwareDetails {
     this.casesList = [];
     this.pieChartDataProvider_1 = [];
     this.pieChartDataProvider_2 = [];
+    this.pieChartDataProvider_3 = [];
     this.info = "";
     this.trendsList = [];
     this.byFailure = false;
@@ -83,15 +87,23 @@ export class HardwareDetails {
       this.tableHeaderText = "Open " + this.selectedItem.subCategories[data.value].name;
     }
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
-      this.rmaOpenTableData = this.setRMAOpenTableData(res.subCategoryDetails);
+      if(this.selectedSubCategory == 'Open')
+        this.rmaOpenTableData = this.setRMAOpenTableData(res.subCategoryDetails);
+      else
+        this.rmaOpenTableData = this.getImpactCharKey(res.subCategoryDetails);
       this.casesList = this.b2bService.filterKeyFromData(res.subCategoryDetails);
       this.pieChartDataProvider_1 = this.prepareChartData(res.subCategoryDetails, "Nature of Return");
       this.pieChartDataProvider_2 = this.prepareChartData(res.subCategoryDetails, "Top Customers");
+      this.pieChartDataProvider_3 = this.prepareChartData(res.subCategoryDetails, "");
       this.info = res.info;
       this.trendsList = res.trendDetails;
     }, err => {
       this.events.publish('data:load_error', err);
     });
+  }
+
+  getImpactCharKey(data) {
+    return {"type" : data[0].type, "valueType" : data[0].valueType};
   }
 
   setRMAOpenTableData(data) {
@@ -107,7 +119,7 @@ export class HardwareDetails {
     var a = [];
     o["natureType"] = arr[0];
     o["topCustType"] = arr[1];
-    o["rma"] = "# of RMAs";
+    o["rma"] = data[0].valueType ? data[0].valueType : "# of RMAs";
 
     var a1 = [];
     var a2 = [];
@@ -141,25 +153,33 @@ export class HardwareDetails {
   prepareChartData(data, type) {
     var tmpObj = {};
     var preparedData = [];
-    for (let i = 0; i < data.length; i++) {
-      if(type == data[i].type)
+    for (let i = 0; i < data.length; i++)
+    {
+      if(type == data[i].type || type == "")
       {
-          let t = data[i].subType;
-          if (tmpObj[t]) {
-            tmpObj[t].y += (isNaN(data[i].value) ? 0 : data[i].value);
-          } else {
-            tmpObj[t] = {
-              name: t,
-              y: isNaN(data[i].value) ? 0 : (+data[i].value)
-            }
+        let t = data[i].subType;
+        if (tmpObj[t]) {
+          tmpObj[t].y += (isNaN(data[i].value) ? 0 : data[i].value);
+        } else {
+          tmpObj[t] = {
+            name: t,
+            y: isNaN(data[i].value) ? 0 : (+data[i].value)
           }
         }
       }
-      for (let i in tmpObj) {
-        i != "Others" && preparedData.push(tmpObj[i]);
-      }
+    }
+    for (let i in tmpObj) {
+      i != "Others" && preparedData.push(tmpObj[i]);
+    }
     return preparedData;
   }
+
+  mySlideOptions = {
+    initialSlide: 0,
+    loop: false,
+    pager: true
+  };
+
 
   //for removing SP and SP-
   correctName(label) {

@@ -35,8 +35,8 @@
 			<div class="list-view" *ngIf="selectedSubCategory=='Resolve Time'">
 				<table style="width:100%">
 					<tr>
-						<th>{{impactObj.key}}</th>
-						<th>{{impactObj.value}}</th>
+						<th>{{impactObj.type}}</th>
+						<th>{{impactObj.value || "Resolution time (Days)"}}</th>
 	        </tr>
 				</table>
         <div class="inner_table">
@@ -55,8 +55,8 @@
                 <div class="list-view" *ngIf="selectedSubCategory=='Open'">
                     <table style="width:100%">
                         <tr>
-                          <th>{{impactObj.key}}</th>
-                          <th>{{impactObj.value}}</th>
+                          <th>{{impactObj.type}}</th>
+                          <th>{{impactObj.value || "Resolution time (Days)"}}</th>
                         </tr>
                     </table>
                     <div class="inner_table">
@@ -71,8 +71,8 @@
                 <div class="list-view" *ngIf="selectedSubCategory=='Resolve Time'">
                     <table style="width:100%">
                         <tr>
-                          <th>{{impactObj.key}}</th>
-                          <th>{{impactObj.value}}</th>
+                          <th>{{impactObj.type}}</th>
+                          <th>{{impactObj.value || "Resolution time (Days)"}}</th>
                         </tr>
                     </table>
                     <div class="inner_table">
@@ -87,8 +87,10 @@
                 <div class="list-view" *ngIf="selectedSubCategory=='Critical Impact'">
                     <table style="width:100%">
                         <tr>
-                            <th style="width:240px">Critical Impact</th>
-                            <th># of Defects</th>
+                            <!-- <th style="width:240px">Critical Impact</th>
+                            <th># of Defects</th> -->
+                            <th style="width:240px">{{impactObj.type}}</th>
+                            <th>{{impactObj.value || "# of Defects"}}</th>
                         </tr>
                     </table>
                     <div class="inner_table">

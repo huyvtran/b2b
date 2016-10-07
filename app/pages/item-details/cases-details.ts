@@ -26,6 +26,7 @@ export class CasesDetails {
   isVisible: boolean = true;
   info = "";
   noDataText: string;
+  impactObj = {};
 
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform, private events: Events) {
     // If we navigated to this page, we will have an item available as a nav param
@@ -40,6 +41,7 @@ export class CasesDetails {
   }
 
   initializeData(data) {
+    this.impactObj = {};
     this.pieChartDataProvider = [];
     this.trendsList = [];
     this.info = "";
@@ -60,6 +62,7 @@ export class CasesDetails {
     this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
 
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
+      this.impactObj = this.getImpactCharKey(res.subCategoryDetails);
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
       this.info = res.info;
@@ -74,6 +77,10 @@ export class CasesDetails {
     }, err => {
       this.events.publish('data:load_error', err);
     });
+  }
+
+  getImpactCharKey(data) {
+    return {"type" : data[0].type, "valueType" : data[0].valueType};
   }
 
   selectionChangedHandler(data) {

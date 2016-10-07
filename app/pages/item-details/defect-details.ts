@@ -87,7 +87,7 @@ export class DefectDetails {
   }
 
   getImpactCharKey(data) {
-    return {"key" : data[0].type, "value" : "Resolution time (Days)"};
+    return {"type" : data[0].type, "valueType" : data[0].valueType};
   }
 
   selectionChangedHandler(data) {

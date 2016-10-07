@@ -86,7 +86,7 @@ export class DeficienciesDetails {
   }
 
   getImpactCharKey(data) {
-    return {"type" : data[0].type};
+    return {"type" : data[0].type, "valueType" : data[0].valueType};
   }
 
   selectionChangedHandler(data) {

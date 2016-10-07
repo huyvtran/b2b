@@ -39,8 +39,10 @@
                 <div class="list-view" *ngIf="selectedSubCategory=='Calls'">
                     <table style="width:100%">
                         <tr>
-                            <th style="width:220px">Top Customers</th>
-                            <th># of Interactions</th>
+                            <!-- <th style="width:220px">Top Customers</th>
+                            <th># of Interactions</th> -->
+                            <th style="width:240px">{{impactObj.type}}</th>
+                            <th>{{impactObj.valueType || "# of Interactions"}}</th>
                         </tr>
                     </table>
                     <div class="inner_table">
@@ -55,8 +57,10 @@
                 <div class="list-view" *ngIf="selectedSubCategory=='Risks'">
                     <table style="width:100%">
                         <tr>
-                            <th style="width:220px">Customers</th>
-                            <th># of Risk Reports</th>
+                            <!-- <th style="width:220px">Customers</th>
+                            <th># of Risk Reports</th> -->
+                            <th style="width:240px">{{impactObj.type}}</th>
+                            <th>{{impactObj.valueType || "# of Risk Reports"}}</th>
                         </tr>
                     </table>
                     <div class="inner_table">
@@ -71,8 +75,10 @@
                 <div class="list-view" *ngIf="selectedSubCategory=='Escalations'">
                     <table style="width:100%">
                         <tr>
-                            <th style="width:220px">Customers</th>
-                            <th># of Escalations</th>
+                            <!-- <th style="width:220px">Customers</th>
+                            <th># of Escalations</th> -->
+                            <th style="width:240px">{{impactObj.type}}</th>
+                            <th>{{impactObj.valueType || "# of Escalations"}}</th>
                         </tr>
                     </table>
                     <div class="inner_table">

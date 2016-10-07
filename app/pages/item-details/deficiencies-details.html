@@ -35,7 +35,7 @@
 				<table style="width:100%">
 					<tr>
 					    <th>{{impactObj.type}}</th>
-							<th>Resolution Time(Days)</th>
+							<th>{{impactObj.valueType || "Resolution Time(Days)"}}</th>
 					</tr>
 				</table>
         <div class="inner_table">
@@ -55,7 +55,7 @@
                     <table style="width:100%">
                         <tr>
                             <th style="width:240px">{{impactObj.type}}</th>
-                            <th>Deficiencies</th>
+                            <th>{{impactObj.valueType || "Deficiencies"}}</th>
                         </tr>
                     </table>
                     <div class="inner_table">
@@ -71,7 +71,7 @@
                     <table style="width:100%">
                         <tr>
                             <th>{{impactObj.type}}</th>
-                            <th>Resolution Time(Days)</th>
+                            <th>{{impactObj.valueType || "Resolution Time(Days)"}}</th>
                         </tr>
                     </table>
                     <div class="inner_table">
@@ -86,8 +86,8 @@
                 <div class="list-view" *ngIf="selectedSubCategory=='Critical Impact'">
                     <table style="width:100%">
                         <tr>
-                            <th style="width:220px">Critical Impact</th>
-                            <th># of Deficiencies</th>
+                            <th style="width:220px">{{impactObj.type}}</th>
+                            <th>{{impactObj.valueType || "# of Deficiencies"}}</th>
                         </tr>
                     </table>
                     <div class="inner_table">
