@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter } from '@angular/core';
 import {NavParams} from 'ionic-angular';
 
 
@@ -17,7 +17,7 @@ import {NavParams} from 'ionic-angular';
 			<div class="inner_table">
 			  <table style="font-size:12px;">
 				  <tr *ngFor="let m of model">
-				    <td style="width:80px;">{{m.caseNumber}}</td>
+				    <td style="width:80px;" (click)="selectedRow(m);">{{m.caseNumber}}</td>
 				    <td style="text-align:center">{{correctName(m.capLevel)}}</td>
 				    <td style="width:160px;">{{m.customer}}</td>
 				    <td>{{m.age}}</td>
@@ -29,6 +29,7 @@ import {NavParams} from 'ionic-angular';
 })
 export class CapListView  {
 	public _model:any = [];
+  	@Output()selectedItem = new EventEmitter();
 
 	@Input()
 	set model(model){   // model.sort belwo will provide a sorting logic for alphabets
@@ -57,4 +58,8 @@ export class CapListView  {
 		}
 		return label;
 	};
+	selectedRow(data){
+		//console.log(data);
+			this.selectedItem.emit({value:data});
+	}
 }

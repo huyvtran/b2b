@@ -34,12 +34,12 @@
                     <pie-chart [dataProvider]="pieChartDataProvider"></pie-chart>
                 </div>
                 <div class="list-view">
-                    <cap-list-view [model]="capList"></cap-list-view>
+                    <cap-list-view [model]="capList" (selectedItem)="tableItemClick($event)"></cap-list-view>
                 </div>
                 <!--max-height to set here overflow-->
             </switch-view>
             <div *ngIf='subCategories=="Resolve Time"' class="list-view">
-                <cap-list-view [model]="capList"></cap-list-view>
+                <cap-list-view [model]="capList" (selectedItem)="tableItemClick($event)"></cap-list-view>
             </div>
             <!--max-height to set here overflow-->
         </div>

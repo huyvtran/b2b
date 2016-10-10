@@ -31,6 +31,7 @@ export class HardwareDetails {
   info = "";
   noDataText: string;
   byFailure:boolean;
+
   public selectedView = 'list';
 
   constructor(private navCtrl: NavController, navParams: NavParams, private b2bService: B2BService, private platform: Platform, private events: Events) {

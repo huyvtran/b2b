@@ -9,6 +9,7 @@ import {SwitchViewContainer} from '../../components/switch-view/switch-view';
 import {CapListView} from '../../components/cap-list-view/cap-list-view';
 import {GenericListView} from '../../components/generic-list-view/generic-list-view';
 import {B2BService} from '../../providers/b2b-service/b2b-service';
+import {CapsItemDetails} from '../item-details/caps-item-details';
 import {Toast} from 'ionic-native';
 
 @Component({
@@ -140,6 +141,11 @@ export class PreferenceDetail {
       }else{
         this.isVisible=false;
       }
+  }
+  tableItemClick(event){
+        //console.log(event);
+    this.navCtrl.push(CapsItemDetails);
+    this.showToast("Got It "+event.value.caseNumber,"center");
   }
 
 // toggle the height of table and its parents for Cap-list-view
