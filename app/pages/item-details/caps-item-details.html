@@ -7,39 +7,42 @@
     </ion-navbar>
     <div style="background-color:#FFF;">
         <span class="title" style="font-size:large;color: #009edc;padding-left:10px">Open CAPs</span>
-        <span class="title" style="margin-left: 40px;">Manager Owner Santo Calvando</span>
-          <span class="title" style="margin-left: 160px;"><a href="tel:+1-1800-555-5555" class="button button-positive" style="margin-left: 5%; ">Call me</a>
-        <a href="mailto:abc@gmail.com" class="button button-positive">Mail</a></span>
-
-        </div>
+        <span class="title" style="margin-left: 2px;">Manager Owner Santo Calvando</span>
+        <a href="tel:+1-1800-555-5555"><img src="./img/call.png" height="20" width="20"></a>
+        <a href="mailto:abc@gmail.com" ><img src="./img/mail.png" height="20" width="20" ></a>
+    </div>
 </ion-header>
-<ion-content style="background-color:#f2f3f2">
-  <div class="item item-text-wrap" style="font-size: large;padding-top:5px;">
+<ion-content id="cap-item-content">
+  <div class="collapsible-pane-content">
+      <summary-detail [model]="selectedItem" [currentIndex]="selectedIndex"></summary-detail>
+  </div>
+  <div class="item item-text-wrap" style="font-size: large;padding-top:5px;display:block">
     Video Back Office Software Delivery Delays
   </div>
-<ion-slides pager>
-  <ion-slide>
-    <div class="item item-text-wrap" style="font-size: 12px;">
-      <h1>Executive Summary</h1>
-    </div>
-    <p style="font-size:10px;">Verizon and Cisco continue Video Back Office (VBO) testing in the Verizon lab. The expectation  is to have our solution installed and working on at least one Video Hub Office (VHO) in December, 2016.
-    <br/>The new methodology in testing within the Verizon lab has been successful over the last four months but we are now nearing the crucial phase of deployment onto VHO15 to test in a live environment. Staging for this is underway with Verizon and Cisco starting migration work September 19 and 26.</p>
-  </ion-slide>
-
-  <ion-slide>
-    <div class="item item-text-wrap" style="font-size: 12px;">
-      <h1>Customer Sentiment</h1>
-    </div>
-    <p style="font-size:10px;">While Verizon and Cisco continue to work in a collaborative manner to drive results the testing needs to be completed as quickly as possible or Verizon's Lee Hicks and Brian Trosper's sentiment will begin to erode.</p>
-  </ion-slide>
-
-  <ion-slide>
-    <div class="item item-text-wrap" style="font-size: 12px;">
-      <h1>Critical Reason</h1>
-    </div>
-    <p style="font-size:10px;">Multiple escalations to BU VP/SVP by account team and customer executives have failed to produce the successful delivery of the Video Back Office (VBO)&nbsp;system despite several get well plans. &nbsp;Based on continued delays, Verizon executives halted new Cisco&nbsp;video related business.</p>
-  </ion-slide>
-</ion-slides>
-
-
 </ion-content>
+  <ion-slides  id="cap-item-slides" pager>
+    <ion-slide>
+      <div class="item item-text-wrap" style="font-size: 12px;">
+        <h1>Executive Summary</h1>
+      </div>
+      <p>--This is Test Content --
+        <br/><br/>Verizon and Cisco continue Video Back Office (VBO) testing in the Verizon lab. The expectation  is to have our solution installed and working on at least one Video Hub Office (VHO) in December, 2016.
+      <br/><br/>The new methodology in testing within the Verizon lab has been successful over the last four months but we are now nearing the crucial phase of deployment onto VHO15 to test in a live environment. Staging for this is underway with Verizon and Cisco starting migration work September 19 and 26.</p>
+    </ion-slide>
+
+    <ion-slide>
+      <div class="item item-text-wrap" style="font-size: 12px;">
+        <h1>Customer Sentiment</h1>
+      </div>
+      <p>--This is Test Content --
+        <br/><br/>While Verizon and Cisco continue to work in a collaborative manner to drive results the testing needs to be completed as quickly as possible or Verizon's Lee Hicks and Brian Trosper's sentiment will begin to erode.</p>
+    </ion-slide>
+
+    <ion-slide>
+      <div class="item item-text-wrap" style="font-size: 12px;">
+        <h1>Critical Reason</h1>
+      </div>
+      <p>--This is Test Content --
+        <br/><br/>Multiple escalations to BU VP/SVP by account team and customer executives have failed to produce the successful delivery of the Video Back Office (VBO)&nbsp;system despite several get well plans. &nbsp;Based on continued delays, Verizon executives halted new Cisco&nbsp;video related business.</p>
+    </ion-slide>
+  </ion-slides>

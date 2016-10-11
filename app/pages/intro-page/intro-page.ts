@@ -1,5 +1,5 @@
 import { HomePage } from '../home/home';
-import { NavController, MenuController, Events, Alert ,Page} from 'ionic-angular';
+import { NavController, MenuController, Events, Page} from 'ionic-angular';
 
 
 @Page({

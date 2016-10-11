@@ -36,11 +36,12 @@
     }
 }
 .swiper-container-horizontal > .swiper-pagination{
-  
+
 top: 92%;
 width: 100%;
 
 left: -10%;
+display: block;
 }
 
 .list-view {
@@ -104,4 +105,30 @@ div.typeChartParent{
       display: block;
     }
   }
+}
+
+#cap-item-content scroll-content{
+  overflow: hidden;
+  margin-top: 100px;
+  background-color:#f2f3f2;
+}
+
+#cap-item-slides{
+  margin-top: 220px;
+  p{
+    font-size: 12px;
+    padding-left: 10px;
+  }
+}
+
+#cap-item-slides .swiper-container{
+  display: table-row;
+}
+
+#cap-item-slides .swiper-container .slide-zoom{
+  text-align: left;
+}
+
+ .swiper-container-horizontal > .swiper-pagination{
+  left: 0;
 }

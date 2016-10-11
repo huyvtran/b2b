@@ -145,7 +145,7 @@ export class PreferenceDetail {
   tableItemClick(event){
         //console.log(event);
     this.navCtrl.push(CapsItemDetails);
-    this.showToast("Got It "+event.value.caseNumber,"center");
+    
   }
 
 // toggle the height of table and its parents for Cap-list-view

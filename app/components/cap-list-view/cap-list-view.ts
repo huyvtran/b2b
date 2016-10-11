@@ -17,7 +17,7 @@ import {NavParams} from 'ionic-angular';
 			<div class="inner_table">
 			  <table style="font-size:12px;">
 				  <tr *ngFor="let m of model">
-				    <td style="width:80px;" (click)="selectedRow(m);">{{m.caseNumber}}</td>
+				    <td style="width:80px;color:blue" (click)="selectedRow(m);">{{m.caseNumber}}</td>
 				    <td style="text-align:center">{{correctName(m.capLevel)}}</td>
 				    <td style="width:160px;">{{m.customer}}</td>
 				    <td>{{m.age}}</td>

@@ -1,8 +1,6 @@
 import { HomePage } from '../home/home';
-import { NavController, MenuController, Events, Alert ,Page} from 'ionic-angular';
-import { Slides } from 'ionic-angular';
+import { NavController, MenuController, Events, Page} from 'ionic-angular';
 import {SummaryDetail} from '../../components/summary-detail/summary-detail';
-
 
 @Page({
     templateUrl: 'build/pages/item-details/caps-item-details.html',
