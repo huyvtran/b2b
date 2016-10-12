@@ -11,7 +11,8 @@ Need To Auth_plugin:
 	cordova plugin add Releases/Plugin/cisco-plugin-auth
 
 Need To install TouchId Plugin
-cordova plugin add Releases/Plugin/TouchIDPlugin
+
+
 
 Other Plugin - Must to Install 
 	ionic plugin add cordova-plugin-inappbrowser

@@ -23,6 +23,7 @@
 
 
 - (void) touchIDAuthentication:(CDVInvokedUrlCommand *)command;
+-(void)enableTouchIDOption :(CDVInvokedUrlCommand *)cmd;
 
 @property(nonatomic) NSString *saveUserName;
 @property(nonatomic) NSString *savePassword;
@@ -32,5 +33,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *signInButton;
 @property (nonatomic,retain) TouchIDManager *touchIDManager;
 @property (nonatomic,retain)  KeychainItemWrapper *currentUser;
+@property (nonatomic) BOOL userSelectTouchID;
+@property(nonatomic) NSString *keychainUserName;
+@property(nonatomic) NSString *keychainPassword;
 
 @end

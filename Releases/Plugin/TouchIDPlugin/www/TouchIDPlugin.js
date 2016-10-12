@@ -10,5 +10,11 @@ TouchIDPlugin.loginWithTouchID = function(credentials, successCallback, errorCal
     cordova.exec(
       successCallback, errorCallback,
       "TouchIDPlugin", "loginWithTouchID", [credentials.username, credentials.password]);
-}
+},
+
+TouchIDPlugin.enableTouchIDOption = function(successCallback, errorCallback) {
+    cordova.exec(
+      successCallback, errorCallback,
+      "TouchIDPlugin", "enableTouchIDOption");
+    }
 module.exports = TouchIDPlugin;

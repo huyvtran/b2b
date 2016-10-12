@@ -90,6 +90,9 @@ export class HardwareDetails {
     this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
       if(this.selectedSubCategory == 'Open')
         this.rmaOpenTableData = this.setRMAOpenTableData(res.subCategoryDetails);
+      else if (this.selectedSubCategory == 'Resolve Time'){
+        this.rmaOpenTableData = this.setRMAResolveTimeTableData(res.subCategoryDetails);
+        }
       else
         this.rmaOpenTableData = this.getImpactCharKey(res.subCategoryDetails);
       this.casesList = this.b2bService.filterKeyFromData(res.subCategoryDetails);
@@ -116,6 +119,7 @@ export class HardwareDetails {
       }
       arr.sort();
     }
+    debugger
     var o = {};
     var a = [];
     o["natureType"] = arr[0];
@@ -145,6 +149,47 @@ export class HardwareDetails {
     o["data"] = a;
     return o;
   }
+
+  setRMAResolveTimeTableData(data) {
+    var arr = [];
+    var l = data.length;
+    for(var i=0; i<l; i++){
+      if(arr.indexOf(data[i].type) == -1){
+        arr.push(data[i].type);
+      }
+      arr.sort();
+    }
+    debugger
+    var o = {};
+    var a = [];
+    o["natureType"] = arr[0];
+    o["topCustType"] = arr[1];
+    o["rma"] = data[0].valueType ? data[0].valueType : "SR Related";
+
+    var a1 = [];
+    var a2 = [];
+    for(var m=0; m<l; m++){
+      if((o["natureType"] == data[m].type) && (data[m].subType != "Others")){
+        a1.push({"subType": data[m].subType, "value": data[m].value});
+      }
+      else if((o["topCustType"] == data[m].type) && (data[m].subType != "Others")){
+        a2.push({"subType": data[m].subType, "value": data[m].value});
+      }
+    }
+    var len = a1.length > a2.length ? a1.length : a2.length;
+    for(var k=0; k<len; k++)
+    {
+        var typeObj = {};
+        typeObj["natureSubType"] = (a1[k] && a1[k].subType) ? a1[k].subType : "";
+        typeObj["natureValue"] = (a1[k] && a1[k].value) ? a1[k].value : "";
+        typeObj["topSubType"] = (a2[k] && a2[k].subType) ? a2[k].subType : "";
+        typeObj["topValue"] = (a2[k] && a2[k].value) ? a2[k].value : "";
+        a.push(typeObj);
+    }
+    o["data"] = a;
+    return o;
+  }
+
 
   selectionChangedHandler(data) {
     this.selectedSubCategory = this.selectedItem.subCategories[data.value].name;
@@ -176,7 +221,7 @@ export class HardwareDetails {
   }
 
   mySlideOptions = {
-    initialSlide: 0,
+    initialSlide: 1,
     loop: false,
     pager: true
   };

@@ -7,7 +7,6 @@ import {AuthService} from './providers/auth-service/auth-service';
 import {NetworkService} from './providers/network-service';
 import {HomePage} from './pages/home/home';
 import {LandingPage} from './pages/landing/landing';
-import {IntroPage} from './pages/intro-page/intro-page';
 import {HelpPage} from './pages/help/help';
 import {CollapsiblePane} from './components/collapsible-pane/collapsible-pane';
 import {Toast} from 'ionic-native';
@@ -64,27 +63,6 @@ class Back2Basic {
     });
     this.events.subscribe('user:login_success', () => {
       // arg is an array of parameters, so grab our first and only arg
-
-      if(localStorage['isTutorialEnabled']=== undefined){
-        localStorage['isTutorialEnabled'] = "yes";
-      }
-      //console.log("isFirstTime "+localStorage['isTutorialEnabled']);
-      if(localStorage['isTutorialEnabled']=='yes'){
-            //localStorage['isTutorialEnabled'] = "no";
-            this.loadTutorialScreen();
-      }else{
-        this.loadData(true);
-      }
-
-      // if(isFirstTime){
-      //   this.loadTutorialScreen();
-      // }else{
-      //   this.loadData(true);
-      // }
-
-    });
-    this.events.subscribe('user:go_to_home', () => {
-      // arg is an array of parameters, so grab our first and only arg
       this.loadData(true);
     });
     this.events.subscribe('user:login_failed', () => {
@@ -101,6 +79,7 @@ class Back2Basic {
 
   ngOnInit() {
     this.checkConn();
+    //this.checkAuthNew();
   }
 
   checkIdle() {
@@ -210,6 +189,7 @@ class Back2Basic {
       this.checkForUpdate();
       if(!window['plugins'] || !window['plugins']['sslCertificateChecker']) {
         this.checkAuth();
+        //this.checkAuthNew();
         return;
       }
 
@@ -232,26 +212,41 @@ class Back2Basic {
             fingerprint);
     });
   }
-  loadTutorialScreen(){
-    this.hideLoading();
-    this.nav.setRoot(IntroPage);
-
-  }
-  checkAuth() {
-    if(this.authService.isAuthenticated()) {
-      if (this.platform.is('ios') && window['TouchIDPlugin'])
-       {//alert("ios");
-         this.touchAuthentication();
+  checkAuthNew()
+  {
+ 
+  if (this.platform.is('ios') && window['TouchIDPlugin'])
+       {
+     
+         this.checkTouch();     
         }
       else
       {
-        //alert("android");
+        alert("android");
+        this.loadData(false);
+      }
+
+  }
+
+  checkAuth() {
+    if(this.authService.isAuthenticated()) {
+      if (this.platform.is('ios') && window['TouchIDPlugin'])
+         {      
+           this.checkTouch();     
+          }
+      else
+      {        
         this.loadData(false);
       }
     } else {
       if(this.authService.AUTH_TYPE == 'customLogin') {
-        this.hideLoading();
+       this.hideLoading();
+       if (this.platform.is('ios') && window['TouchIDPlugin']){
+          this.checkTouch();     
+       }else{
         this.rootPage = LoginPage;
+       }
+        
       } else {
         this.implicitLogin();
       }
@@ -272,6 +267,44 @@ class Back2Basic {
                 }
 
   }
+  showUserHomePage()
+  {
+    //var self=this;
+    this.loadData(false);
+
+  }
+openTouchIDDialogOrLoginPage()
+{
+  var self=this;
+  //alert("openTouchID ");
+  this.showLoading('Logging In..');
+     window['TouchIDPlugin'].loginWithTouchID("credentials", function (res) {
+        // self.hideLoading();
+        self.showUserHomePage();
+
+    }, function (err) {
+        // login page
+        self.hideLoading();
+    self.loadData(false);      
+    });  
+}
+ checkTouch()
+ {
+
+  var self=this;
+  if (window['TouchIDPlugin']) {
+    window['TouchIDPlugin'].enableTouchIDOption(function (res) {
+    //if OK Pressed then login page
+
+   // self.hideLoading();
+    self.loadData(false);
+
+  }, function (err) {
+      self.openTouchIDDialogOrLoginPage();
+    });
+  }
+}
+
   touchAuthentication(){
      var self = this;
    if (window['TouchIDPlugin']) {
@@ -283,22 +316,22 @@ class Back2Basic {
         data['refresh_token'] = res.refreshToken;
         data['expires_in'] = res.expiresIn;
        // self.data = data;
-
+    
         self.authService.implicitLogin(data);
         self.loadData(false);
 
        //window.plugins.toast.show('Hello there!', 'long', 'center', function(a){alert('toast Success: ' + a)}, function(b){alert('toast error: ' + b)});
     }, function (err) {
-
-      if (err== "touch id is not enabled")
-      { alert(err);
+        
+      if (err== "touch id is not enabled") 
+      { 
         self.loadData(false);
       }
       else
-      {
+      { 
         //self.authService.logout();
         self.loadData(false);
-      }
+      } 
     });
 }
 }

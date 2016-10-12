@@ -127,23 +127,43 @@ export class B2BService {
 
   changeTableHeightHandler(collapsed){
     var listView = document.getElementsByClassName("list-view")[0];
-    var innerDiv = (listView && listView['children'] && listView['children'][1]) ? listView['children'][1] : undefined;
+    var innerDiv:any;
+    /*var innerDiv = (listView && listView['children'] && listView['children'][1]) ? listView['children'][1] : undefined;
+    if(!innerDiv){
+      innerDiv = listView.getElementsByClassName("inner_table");
+    }*/
+    innerDiv = listView.getElementsByClassName("inner_table");
     if(innerDiv == undefined){
       return;
     }
+    console.log(innerDiv);
+    debugger
+    //alert("Coming here");
     if(collapsed){
       listView['style'].height = "295px";
-      innerDiv['style'].height = "265px";
+      Array.from(innerDiv).forEach(d => {
+        d['style'].height = "265px";
+      })
+      //innerDiv['style'].height = "265px";
     }
     else{
       listView['style'].height = "178px";
-      innerDiv['style'].height = "150px";
+      Array.from(innerDiv).forEach(d => {
+        d['style'].height = "150px";
+      })
+      //innerDiv['style'].height = "150px";
     }
     listView['style'].overflowY = "hidden";
-    innerDiv['style'].overflowY = "hidden";
+    //innerDiv['style'].overflowY = "hidden";
+    Array.from(innerDiv).forEach(d => {
+      d['style'].overflowY = "hidden";
+    })
     setTimeout(() => {
       //listView['style'].overflowY = "auto";
-      innerDiv['style'].overflowY = "auto";
+      //innerDiv['style'].overflowY = "auto";
+      Array.from(innerDiv).forEach(d => {
+        d['style'].overflowY = "auto";
+      })
     }, 500);
   }
 
