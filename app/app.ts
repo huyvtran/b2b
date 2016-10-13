@@ -7,6 +7,7 @@ import {AuthService} from './providers/auth-service/auth-service';
 import {NetworkService} from './providers/network-service';
 import {HomePage} from './pages/home/home';
 import {LandingPage} from './pages/landing/landing';
+import {IntroPage} from './pages/intro-page/intro-page';
 import {HelpPage} from './pages/help/help';
 import {CollapsiblePane} from './components/collapsible-pane/collapsible-pane';
 import {Toast} from 'ionic-native';
@@ -63,10 +64,21 @@ class Back2Basic {
     });
     this.events.subscribe('user:login_success', () => {
       // arg is an array of parameters, so grab our first and only arg
-      this.loadData(true);
+      if(localStorage['isTutorialEnabled']=== undefined){
+        localStorage['isTutorialEnabled'] = "yes";
+      }
+      if(localStorage['isTutorialEnabled']=='yes'){
+            //localStorage['isTutorialEnabled'] = "no";
+            this.loadTutorialScreen();
+      }else{
+        this.loadData(true);
+      }
     });
     this.events.subscribe('user:login_failed', () => {
       this.hideLoading();
+    });
+    this.events.subscribe('user:go_to_home', () => {
+      this.loadData(true);
     });
     this.events.subscribe('data:load_error', (arg) => {
       if(arg && arg[0] && arg[0].status == this.UNAUTHORIZED) {
@@ -211,6 +223,11 @@ class Back2Basic {
             server,
             fingerprint);
     });
+  }
+    loadTutorialScreen(){
+    this.hideLoading();
+    this.nav.setRoot(IntroPage);
+
   }
   checkAuthNew()
   {

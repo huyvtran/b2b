@@ -54,10 +54,6 @@
     {
       "id": "cisco-plugin-auth",
       "locator": "Releases/Plugin/cisco-plugin-auth/"
-    },
-    {
-      "id": "http://schemas.android.com/apk/res/android",
-      "locator": "Releases/Plugin/TouchIDPlugin"
     }
   ],
   "cordovaPlatforms": []
