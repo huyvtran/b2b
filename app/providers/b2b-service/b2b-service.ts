@@ -16,7 +16,8 @@ export class B2BService {
   trendsList: any;
   _platform: any;
   _selectedPrefrences = [];
-  PRODUCTS_SUMMARY_URL: string = 'https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld';
+  PRODUCTS_SUMMARY_URL_: string = 'https://wwwin-spb2b.cisco.com/back2basics/webServices/productsSummaryOld';
+  PRODUCTS_SUMMARY_URL: string = 'https://wwwin-spb2b-stage.cisco.com/back2basics/webService/productSummary';
 
   constructor(private http: Http, private authService: AuthService) {
     this.data = null;
@@ -37,10 +38,28 @@ export class B2BService {
           // we've got back the raw data, now generate the core schedule data
           // and save the data for later reference
           this.data = data;
+          console.log(this.data);
           resolve(this.data);
         }, err => {
-          this.data = null;
-          reject(err);
+
+           this.http.get('mock-json/data.json')
+                    .map(res => res.json())
+                        .subscribe(data => {
+                          // we've got back the raw data, now generate the core schedule data
+                          // and save the data for later reference
+                          console.log("THIS is STATIC DATA");
+                          this.data = data;
+                          console.log(this.data);
+                          resolve(this.data);
+                        },err => {
+                          // we've got back the raw data, now generate the core schedule data
+                          // and save the data for later reference
+                          //this.data = data;
+                          this.data = null;
+                          reject(err);
+                          });
+          
+         
         });
     });
   }
@@ -49,7 +68,9 @@ export class B2BService {
   loadCapList(category, subCategory) {
     category = category;
     subCategory = subCategory;
-    var productRef = "product_" + this._platform.ID;
+        console.log(this._platform);
+
+    var productRef = "product_" + this._platform.product;
     if(this.capListData[productRef]){
       if(this.capListData[productRef][category]){
         if(this.capListData[productRef][category][subCategory]){
@@ -67,7 +88,7 @@ export class B2BService {
     var headers = new Headers();
     headers.append('Authorization', this.authService.getAuthorization());
     headers.append('Cache-Control', 'no-cache')
-     this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productSubCategoryDetails?productId='+ this._platform.ID +'&category='+category+'&subCategory='+subCategory, {
+     this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productSubCategoryDetails?productId='+ this._platform.product +'&category='+category+'&subCategory='+subCategory, {
         headers: headers
       })
       .map(res => res.json())
@@ -82,7 +103,8 @@ export class B2BService {
 
   // Method for loading data for all categories coming from the JSON(except CAPS).
   loadOtherList(category, subCategory) {
-    var productRef = "product_" + this._platform.ID;
+    console.log(this._platform);
+    var productRef = "product_" + this._platform.product;
     if(this.capListData[productRef]){
       if(this.capListData[productRef][category]){
         if(this.capListData[productRef][category][subCategory]){
@@ -100,7 +122,7 @@ export class B2BService {
     var headers = new Headers();
     headers.append('Authorization', this.authService.getAuthorization());
     headers.append('Cache-Control', 'no-cache')
-     this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productSubCategoryDetails?productId='+ this._platform.ID +'&category='+category+'&subCategory='+subCategory, {
+     this.http.get('https://wwwin-spb2b.cisco.com/back2basics/webServices/productSubCategoryDetails?productId='+ this._platform.product +'&category='+category+'&subCategory='+subCategory, {
         headers: headers
       })
       .map(res => res.json())

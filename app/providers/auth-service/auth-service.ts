@@ -38,9 +38,9 @@ export class AuthService {
         var self = this;
         this.platform.ready().then(() => {
 
-            if (this.platform.is('ios') && window['TouchIDPlugin'])
+            if (this.platform.is('ios') && window['Authentication'])
               {//alert("ios");
-              window['TouchIDPlugin'].touchIDAuthentication(credentials, function(res) {
+              window['Authentication'].touchIDAuthentication(credentials, function(res) {
               var data = {};
               data['token_type'] = 'Bearer';
               data['access_token'] = res.accessToken;

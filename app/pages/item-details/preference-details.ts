@@ -33,7 +33,7 @@ export class PreferenceDetail {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
 	  this.selectedIndex = navParams.get('index');
-	  this.subCategories = this.selectedItem.subCategories[this.selectedIndex].name;
+	  this.subCategories = this.selectedItem.subCategories[this.selectedIndex].subCategory;
     this.pageTitle = navParams.get('title');
   }
 
@@ -90,18 +90,24 @@ export class PreferenceDetail {
     }
     this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
     //Managing Header text for table and chart
-    if(this.selectedItem.subCategories[data.value].name == "Resolve Time"){
+    if(this.selectedItem.subCategories[data.value].subCategory == "Resolve Time"){
       this.chartHeaderText="Age Distribution of CAPs by Level"
       this.tableHeaderText="CAPs "+"Resolution Time";
     }else{
       this.chartHeaderText="Incoming and Open CAPs Trend";
-      this.tableHeaderText=this.selectedItem.subCategories[data.value].name +" CAPs";
+      this.tableHeaderText=this.selectedItem.subCategories[data.value].subCategory +" CAPs";
     }
 
-    this.b2bService.loadCapList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
+    this.b2bService.loadCapList(this.selectedItem.name, this.selectedItem.subCategories[data.value].subCategory).then(res => {
+      debugger
+          console.log(this.selectedItem.name+"   "+this.selectedItem.subCategories[data.value].subCategory);
+
       this.capList = res.subCategoryDetails;
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
+      console.log(this.capList);
+      console.log(this.pieChartDataProvider);
+      console.log(this.trendsList);
       this.info = res.info;
     }, err => {
       this.events.publish('data:load_error', err);
@@ -120,7 +126,7 @@ export class PreferenceDetail {
   }
   selectionChangedHandler(data) {
     this.initializeData(data);
-    this.subCategories = this.selectedItem.subCategories[data.value].name;
+    this.subCategories = this.selectedItem.subCategories[data.value].subCategory;
   }
 
   //for removing SP and SP-

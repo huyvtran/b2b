@@ -1,49 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    id="cisco-plugin-auth"
-    version="0.0.1">
-    <name>Authentication</name>
-    <description>Cordova native authentication plugin for Android, iOS</description>
-    <license></license>
-    <keywords>cordova,authentication</keywords>
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com-TouchID-plugin" version="0.0.1" 
+xmlns="http://apache.org/cordova/ns/plugins/1.0" 
+xmlns:android="http://schemas.android.com/apk/res/android">
+  <name>TouchIDPlugin</name>
+  <js-module name="Authentication" src="www/Authentication.js">
+    <clobbers target="Authentication" />
+  </js-module>
 
-    <js-module src="www/authentication.js" name="Authentication">
-        <clobbers target="Authentication" />
-    </js-module>
+<!-- android -->
+<platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+        <feature name="Authentication">
+            <param name="android-package" value="com.cisco.authentication.Authentication"/>
+        </feature>
+    </config-file>
+    <source-file src="src/android/libs/OAuth.jar" framework="true" target-dir="libs"/>
+    <source-file src="src/android/config.nprd" target-dir="assets"/>
+    <source-file src="src/android/Authentication.java" target-dir="src/com/cisco/authentication"/>
+</platform>
 
-    <!-- android -->
-    <platform name="android">
-        <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="Authentication">
-                <param name="android-package" value="com.cisco.authentication.Authentication"/>
-            </feature>
-        </config-file>
-        <source-file src="src/android/libs/OAuth.jar" framework="true" target-dir="libs"/>
-        <source-file src="src/android/config.nprd" target-dir="assets"/>
-        <source-file src="src/android/Authentication.java" target-dir="src/com/cisco/authentication"/>
-    </platform>
-    
-    
-    <!-- ios -->
-    <platform name="ios">
-        <config-file target="config.xml" parent="/*">
-            <feature name="Authentication">
-                <param name="ios-package" value="Authentication"/>
-            </feature>
-        </config-file>
-        <header-file src="src/ios/Authentication.h" />
-        <source-file src="src/ios/Authentication.m" />
-        <!-- Auth library files -->
-        <header-file src="src/ios/OAuthLibrary/AuthController.h"/>
-        <header-file src="src/ios/OAuthLibrary/ChangePasscodeHandler.h"/>
-        <header-file src="src/ios/OAuthLibrary/KeychainItemWrapper.h"/>
-        <header-file src="src/ios/OAuthLibrary/PasscodeManager.h"/>
-        <header-file src="src/ios/OAuthLibrary/PasscodeUnlock.h"/>
-        <header-file src="src/ios/OAuthLibrary/SplashViewController.h"/>
-        <header-file src="src/ios/OAuthLibrary/TouchIDManager.h"/>
-        <header-file src="src/ios/OAuthLibrary/UserStatusCheck.h"/>
-        <source-file src="src/ios/OAuthLibrary/Config.plist"/>
-        <source-file src="src/ios/OAuthLibrary/libOAuthLibrary.a" framework="true"/>
-    </platform>
+   <platform name="ios">
+  <config-file target="config.xml" parent="/*">
+    <feature name="Authentication">
+      <param name="ios-package" value="Authentication" />
+    </feature>
+  </config-file>
+  <header-file src="src/ios/Authentication.h" />
+  <source-file src="src/ios/Authentication.m" />
+
+
+
+<!-- Auth library files -->
+<header-file src="src/ios/OAuthLibrary/AuthController.h"/>
+<header-file src="src/ios/OAuthLibrary/ChangePasscodeHandler.h"/>
+<header-file src="src/ios/OAuthLibrary/KeychainItemWrapper.h"/>
+<header-file src="src/ios/OAuthLibrary/PasscodeManager.h"/>
+<header-file src="src/ios/OAuthLibrary/PasscodeUnlock.h"/>
+<header-file src="src/ios/OAuthLibrary/SplashViewController.h"/>
+<header-file src="src/ios/OAuthLibrary/TouchIDManager.h"/>
+<header-file src="src/ios/OAuthLibrary/UserStatusCheck.h"/>
+<source-file src="src/ios/OAuthLibrary/Config.plist"/>
+<source-file src="src/ios/OAuthLibrary/libOAuthLibrary.a" framework="true"/>
+
+</platform>
 </plugin>
+

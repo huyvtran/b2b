@@ -32,7 +32,7 @@ export class CasesDetails {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
     this.selectedIndex = navParams.get('index');
-    this.selectedSubCategory = this.selectedItem.subCategories[this.selectedIndex].name;
+    this.selectedSubCategory = this.selectedItem.subCategories[this.selectedIndex].subCategory;
     this.pageTitle = navParams.get('title');
   }
 
@@ -60,11 +60,14 @@ export class CasesDetails {
       this.noDataText = "Data Not Available";
     }
     this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
-
-    this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
+    console.log(this.selectedItem.name+"   "+this.selectedItem.subCategories[data.value].subCategory);
+    this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].subCategory).then(res => {
       this.impactObj = this.getImpactCharKey(res.subCategoryDetails);
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
       this.trendsList = res.trendDetails;
+      console.log(this.impactObj);
+      console.log(this.pieChartDataProvider);
+      console.log(this.trendsList);
       this.info = res.info;
       if (this.selectedSubCategory == "Resolve Time") {
         this.casesList = this.prepareDataForTable(res.subCategoryDetails);
@@ -84,7 +87,7 @@ export class CasesDetails {
   }
 
   selectionChangedHandler(data) {
-    this.selectedSubCategory = this.selectedItem.subCategories[data.value].name;
+    this.selectedSubCategory = this.selectedItem.subCategories[data.value].subCategory;
     this.initializeData(data);
   }
 

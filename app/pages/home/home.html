@@ -29,7 +29,7 @@
                 <ion-row wrap>
                     <div (click)="itemTapped($event, c, i)" [ngClass]="{'disabled-metric':v.value=='N'}" class="item-card" [hidden]="c.subCategories.length==0" *ngFor="let v of c.subCategories; let i = index">
                         <h1 [hidden]="v.value=='N'" [ngClass]="{warning:c.name=='CAPS' && v.value!=0 && v.value!='---'}">{{v.value}}</h1>
-                        <span>{{v.name}}</span>
+                        <span>{{v.subCategory}}</span>
                     </div>
                 </ion-row>
             </ion-card-content>

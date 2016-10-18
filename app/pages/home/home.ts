@@ -62,6 +62,7 @@ export class HomePage {
   * Added 'visible' property in card object, which is being used for filtering
   */
   initializeItems() {
+    debugger
     this.page.categories.forEach(function(item) {
       item.visible = true;
     });
@@ -111,6 +112,7 @@ export class HomePage {
   /**
   * Preparing HTML string for info
   */
+  debugger;
   prepareInfoData(data, _info) {
     let info = "";
     //BUG -the data is showing random behaviour on IOS so changing according to below one and its works fine.

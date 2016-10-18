@@ -29,9 +29,15 @@ class Back2Basic {
   activePlateform: any = {
     categories: []
   };
+
+  activeCategory: any = {
+    subCategories: []
+  };
   rootPage: any = LandingPage;
   plateforms: Array<{ title: string }>;
+  qualityMetricsSummary: Array<{ title: string }>;
   private info = "";
+  //dummyArr:any;
   oldCategories: Object = null;
   loading:any = null;
   isAlertPresent: boolean = false;
@@ -77,9 +83,7 @@ class Back2Basic {
     this.events.subscribe('user:login_failed', () => {
       this.hideLoading();
     });
-    this.events.subscribe('user:go_to_home', () => {
-      this.loadData(true);
-    });
+    
     this.events.subscribe('data:load_error', (arg) => {
       if(arg && arg[0] && arg[0].status == this.UNAUTHORIZED) {
         this.showAlert("Authorization required/Session expired ! Please login again.", arg[0].status);
@@ -87,11 +91,17 @@ class Back2Basic {
         //this.showAlert("Error while loading data !", -1);
       }
     });
+
+   this.events.subscribe('user:go_to_home', () => {
+      // arg is an array of parameters, so grab our first and only arg
+      this.loadData(true);
+    });
+
+    
   }
 
   ngOnInit() {
     this.checkConn();
-    //this.checkAuthNew();
   }
 
   checkIdle() {
@@ -201,7 +211,6 @@ class Back2Basic {
       this.checkForUpdate();
       if(!window['plugins'] || !window['plugins']['sslCertificateChecker']) {
         this.checkAuth();
-        //this.checkAuthNew();
         return;
       }
 
@@ -229,25 +238,11 @@ class Back2Basic {
     this.nav.setRoot(IntroPage);
 
   }
-  checkAuthNew()
-  {
- 
-  if (this.platform.is('ios') && window['TouchIDPlugin'])
-       {
-     
-         this.checkTouch();     
-        }
-      else
-      {
-        alert("android");
-        this.loadData(false);
-      }
-
-  }
+  
 
   checkAuth() {
     if(this.authService.isAuthenticated()) {
-      if (this.platform.is('ios') && window['TouchIDPlugin'])
+      if (this.platform.is('ios') && window['Authentication'])
          {      
            this.checkTouch();     
           }
@@ -258,7 +253,7 @@ class Back2Basic {
     } else {
       if(this.authService.AUTH_TYPE == 'customLogin') {
        this.hideLoading();
-       if (this.platform.is('ios') && window['TouchIDPlugin']){
+       if (this.platform.is('ios') && window['Authentication']){
           this.checkTouch();     
        }else{
         this.rootPage = LoginPage;
@@ -294,14 +289,14 @@ openTouchIDDialogOrLoginPage()
 {
   var self=this;
   //alert("openTouchID ");
-  this.showLoading('Logging In..');
-     window['TouchIDPlugin'].loginWithTouchID("credentials", function (res) {
+  //this.showLoading('Logging In..');
+     window['Authentication'].loginWithTouchID("credentials", function (res) {
         // self.hideLoading();
         self.showUserHomePage();
 
     }, function (err) {
         // login page
-        self.hideLoading();
+        //fself.hideLoading();
     self.loadData(false);      
     });  
 }
@@ -309,8 +304,8 @@ openTouchIDDialogOrLoginPage()
  {
 
   var self=this;
-  if (window['TouchIDPlugin']) {
-    window['TouchIDPlugin'].enableTouchIDOption(function (res) {
+  if (window['Authentication']) {
+    window['Authentication'].enableTouchIDOption(function (res) {
     //if OK Pressed then login page
 
    // self.hideLoading();
@@ -322,42 +317,119 @@ openTouchIDDialogOrLoginPage()
   }
 }
 
-  touchAuthentication(){
-     var self = this;
-   if (window['TouchIDPlugin']) {
-        window['TouchIDPlugin'].loginWithTouchID("credentials", function (res) {
-       // var self = this;
-        var data = {};
-        data['token_type'] = 'Bearer';
-        data['access_token'] = res.accessToken;
-        data['refresh_token'] = res.refreshToken;
-        data['expires_in'] = res.expiresIn;
-       // self.data = data;
-    
-        self.authService.implicitLogin(data);
-        self.loadData(false);
+ createSubCatagories(data)
+ {
+    var products = data.products;
+    var productsLen = products ? products.length : 0;
+    var qualityMetricsSummary = data.qualityMetricsSummary;
+    var qualityMetricsSummaryLen = qualityMetricsSummary ? qualityMetricsSummary.length : 0;
 
-       //window.plugins.toast.show('Hello there!', 'long', 'center', function(a){alert('toast Success: ' + a)}, function(b){alert('toast error: ' + b)});
-    }, function (err) {
+debugger
+    for(var i=0; i<productsLen;i++)
+    {    var dummyArr = [];
+
+        var productId = products[i]["product"];
+        products[i].categories = [];
+        //var ArrCategory = [];
+        for(var j=0; j<qualityMetricsSummaryLen;j++)
+        {
+            if(productId == qualityMetricsSummary[j]["product"])
+            {
+              products[i].categories.push(qualityMetricsSummary[j]);
+            }
+        }
+        var arrCatagoriesDuplicate = products[i].categories;
+        products[i].categories =[];
+        debugger
+        var categoriesList = arrCatagoriesDuplicate;
+        //var dummyArr = [];
+        var dummyObj = {name:"",subCategories:[]};
+        var subCategoryArr =[];
+        var uniqueArr =[];
+        for(var k=0; k<categoriesList.length;k++)
+        {
+
+          subCategoryArr.push(categoriesList[k].category);
+          uniqueArr = subCategoryArr.filter( this.onlyUnique );
+        }
+
+       for(var l=0;l<uniqueArr.length;l++)
+       {
+          var dummyObjtest = {name:"",subCategories:[]};
+          dummyObjtest.name= uniqueArr[l];
+         // delete products[i].categories;
+         for(var k=0; k<categoriesList.length;k++)
+          {
+            if(uniqueArr[l] == categoriesList[k].category)
+            {
+              dummyObjtest.subCategories.push(categoriesList[k]);
+            }
+          
+          }  
+          dummyArr.push(dummyObjtest);
+          products[i].categories.push(dummyObjtest);
+
+       }
+
         
-      if (err== "touch id is not enabled") 
-      { 
-        self.loadData(false);
+
+  }
+  return products;
+}
+ 
+ onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+  parseProductData(data){
+  var products = data.products;
+  var productsLen = products ? products.length : 0;
+  var qualityMetricsSummary = data.qualityMetricsSummary;
+  var qualityMetricsSummaryLen = qualityMetricsSummary ? qualityMetricsSummary.length : 0;
+  var i = 0;
+  debugger
+  for (; i < productsLen; ++i) {
+    var j = 0,
+      categories = products[i].categories = [];
+    for (; j < qualityMetricsSummaryLen; ++j) {
+      var category = qualityMetricsSummary[j];
+      if (category.product == products[i].product) {
+        var categoryObj, k = 0,
+          categoriesLen = categories.length;
+        for (; k < categoriesLen; ++k) {
+          if (categories[k].name == category.name) {
+            categoryObj = categories[k];
+          }
+        }
+        if (categoryObj) {
+          var subCategoryObj = {};
+          subCategoryObj['name'] = category.name;
+          subCategoryObj['value'] = category.value;
+          subCategoryObj['lastRefreshDate'] = category.lastRefreshDate;
+          categoryObj.subCategories.push(subCategoryObj);
+        } else {
+          categoryObj = {};
+          categoryObj.name = category.name;
+          categoryObj.subCategories = [];
+          category.push(categoryObj);
+        }
       }
-      else
-      { 
-        //self.authService.logout();
-        self.loadData(false);
-      } 
-    });
-}
-}
+    }
+  }
+  }
+  
   loadData(isByLogin) {
     this.showLoading('Loading data...');
     // set our menu list
     this.b2bService.load().then(res => {
-      this.plateforms = res['products'];
+      this.plateforms = this.createSubCatagories(res);
+      this.qualityMetricsSummary=res['qualityMetricsSummary'];
+      //this.createSubCatagories(res);
+      //console.log("Products "+res['products']);
+      debugger
       this.activePlateform = this.plateforms[0];
+      console.log(this.activePlateform);
+      //this.activePlateform.category=this.createSubCatagories(res);
+      console.log(this.activePlateform);
       this.preferencesModel(this.activePlateform);
       this.activePlateform['info'] = res['info'] || "";
       this.b2bService.setSelectedPlatform(this.activePlateform);

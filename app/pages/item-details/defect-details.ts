@@ -31,7 +31,7 @@ export class DefectDetails {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
     this.selectedIndex = navParams.get('index');
-    this.selectedSubCategory = this.selectedItem.subCategories[this.selectedIndex].name;
+    this.selectedSubCategory = this.selectedItem.subCategories[this.selectedIndex].subCategory;
     this.pageTitle = navParams.get('title');
   }
 
@@ -61,21 +61,21 @@ export class DefectDetails {
     this.setVisibilityOfNoDataScreen(subCategoryItemvalue);
 
     //Managing Header text for table and chart
-    if (this.selectedItem.subCategories[data.value].name == "Resolve Time") {
+    if (this.selectedItem.subCategories[data.value].subCategory == "Resolve Time") {
 
       this.chartHeaderText = "Cumulative Resolution Trend"
       this.tableHeaderText = "Defects " + "Resolution Time";
     }
-    else if (this.selectedItem.subCategories[data.value].name == "Open") {
+    else if (this.selectedItem.subCategories[data.value].subCategory == "Open") {
 
       this.chartHeaderText = "Incoming and Open Defect Trend";
       this.tableHeaderText = "Open " + "Defects";
     }
     else {
       this.chartHeaderText = "Incoming and Open " + this.selectedItem.subCategories[data.value].name + " Trend";
-      this.tableHeaderText = "Open " + this.selectedItem.subCategories[data.value].name + " Defects";
+      this.tableHeaderText = "Open " + this.selectedItem.subCategories[data.value].subCategory + " Defects";
     }
-    this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].name).then(res => {
+    this.b2bService.loadOtherList(this.selectedItem.name, this.selectedItem.subCategories[data.value].subCategory).then(res => {
     this.impactObj = this.getImpactCharKey(res.subCategoryDetails);
     this.casesList = this.b2bService.filterKeyFromData(res.subCategoryDetails);
       this.pieChartDataProvider = this.prepareChartData(res.subCategoryDetails);
@@ -91,7 +91,7 @@ export class DefectDetails {
   }
 
   selectionChangedHandler(data) {
-    this.selectedSubCategory = this.selectedItem.subCategories[data.value].name;
+    this.selectedSubCategory = this.selectedItem.subCategories[data.value].subCategory;
     this.initializeData(data);
   }
 
